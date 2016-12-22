@@ -12,7 +12,6 @@
 @interface ForgetPasswordViewController : UIViewController
 {
     IBOutlet UITextField *emailId;
-    
     IBOutlet UIButton *submit;
     IBOutlet UIButton *existingAccount;
     NSMutableData * receivedData;

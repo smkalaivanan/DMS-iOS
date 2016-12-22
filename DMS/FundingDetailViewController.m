@@ -21,7 +21,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface FundingDetailViewController ()
-
+{
+    NSArray * name;
+    NSArray * dealer;
+}
 @end
 
 @implementation FundingDetailViewController
@@ -30,6 +33,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewDidLoad];
     
     ObjShared = [SharedClass sharedInstance];
+    
+    name=[[NSArray alloc]initWithObjects:@"Dealer Name",@"Mobile",@"E-mail",@"Date of Applied",@"Amount",@"City",@"Loan for",@"Status", nil];
+    dealer=[[NSArray alloc]initWithObjects:@"ABC-0001",@"12341234",@"abc@gmail.com",@"11-11-2016",@"Rs 5,00,000",@"Chennai",@"Renault Duster",@"On going", nil];
+
 
     // Do any additional setup after loading the view.
 }
@@ -130,12 +137,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //    NSLog(@"selected");
 }
 
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return ObjShared.collectionZ;
+}
+
 
 #pragma UITableView-Sample
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return name.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,6 +155,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     static NSString * cellIdentifier = @"FundingDetailTableViewCell";
     
     FundingDetailTableViewCell *fundingCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+    
+    fundingCell.detail.text=[NSString stringWithFormat:@"%@ :",[name objectAtIndex:indexPath.row]];
+    fundingCell.name.text=[NSString stringWithFormat:@"%@",[dealer objectAtIndex:indexPath.row]];
+    
+    fundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     return fundingCell;
     

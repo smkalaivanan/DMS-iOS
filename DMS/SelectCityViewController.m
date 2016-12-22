@@ -11,14 +11,10 @@
 
 @interface SelectCityViewController ()<SharedDelegate>
 {
-    NSDictionary *animals;
-    NSArray *animalSectionTitles;
-    NSArray *animalIndexTitles;
     NSMutableArray *dummyArray,*searchArray;
     NSArray *city;
     NSString *searchTextString;
     NSArray *popular;
-
 }
 @end
 
@@ -87,7 +83,8 @@
                 [searchArray addObject:item];
             }
         }
-    } else
+    }
+    else
     {
         searchArray = dummyArray;
     }
@@ -95,12 +92,14 @@
     [cityList reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma UITableView-Sample
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -125,8 +124,11 @@
     // Configure the cell...
     cell.textLabel.text = [[searchArray objectAtIndex:indexPath.row]objectForKey:@"city"];
 
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ObjShared.Cityname=[NSString stringWithFormat:@"%@",[[searchArray objectAtIndex:indexPath.row]objectForKey:@"city"]];
@@ -150,19 +152,20 @@
     cell.icon.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@",[popular objectAtIndex:indexPath.row],@".png"]];
 //    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
 //    cell.foorLabel.text = [ObjShared.footerText objectAtIndex:indexPath.row];
-    
-   
     return cell;
 }
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ObjShared.Cityname=[NSString stringWithFormat:@"%@",[popular objectAtIndex:indexPath.row]];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return ObjShared.collectionZ;

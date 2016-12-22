@@ -34,7 +34,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @implementation SavedcarViewController
 
 - (void)viewDidLoad
-
 {
     [super viewDidLoad];
     search_Dict=[[NSDictionary alloc]init];
@@ -44,7 +43,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
 
     [self callMethod];
-    [self likeArray];
+//    [self likeArray];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -238,7 +237,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return YES;
 }
+
 #pragma mark -W.S Delegate Call
+
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
     
@@ -258,7 +259,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+        [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
     }
     
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
@@ -266,9 +267,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         
     }
 }
+
 - (void) failResponseFromServer
 {
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 

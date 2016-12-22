@@ -17,7 +17,7 @@
 #import "MyQueriesViewController.h"
 #import "SavedcarViewController.h"
 #import "DashboardCollectionViewCell.h"
-
+#import "SiteViewController.h"
 
 
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -116,6 +116,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = (id)self;
     
     [showWithoutFooter setTitle:ObjShared.Cityname forState:UIControlStateNormal];
+    [showWithMultipleSelection setTitle:ObjShared.sityName forState:UIControlStateNormal];
+
 
     NSLog(@"city--->%@",ObjShared.Cityname);
     NSLog(@"hello world");
@@ -421,11 +423,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (IBAction)showWithMultipleSelection:(id)sender
 {
-    CZPickerView *picker = [[CZPickerView alloc] initWithHeaderTitle:@"Car Sites" cancelButtonTitle:@"Cancel" confirmButtonTitle:@"Confirm"];
-    picker.delegate = self;
-    picker.dataSource = self;
-    picker.allowMultipleSelection = YES;
-    [picker show];
+//    CZPickerView *picker = [[CZPickerView alloc] initWithHeaderTitle:@"Car Sites" cancelButtonTitle:@"Cancel" confirmButtonTitle:@"Confirm"];
+//    picker.delegate = self;
+//    picker.dataSource = self;
+//    picker.allowMultipleSelection = YES;
+//    [picker show];
+    
+    
+    SiteViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SiteViewController"];
+    [self presentViewController:cityVC animated:YES completion: nil];
+
 }
 - (IBAction)showWithoutFooter:(id)sender
 {
@@ -581,7 +588,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 - (void) failResponseFromServer
 {
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 

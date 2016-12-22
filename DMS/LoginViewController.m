@@ -74,24 +74,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // Dispose of any resources that can be recreated.
 }
 
-#pragma AlertController
--(void)alert
-{
-    UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@""
-                                          message:sub
-                                          preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* ok = [UIAlertAction
-                         actionWithTitle:@"OK"
-                         style:UIAlertActionStyleDefault
-                         handler:nil];
-    [alertController addAction:ok];
-    
-    [self presentViewController:alertController
-                       animated:YES
-                     completion:nil];
-}
-
 #pragma Button Action
 
 -(IBAction)submitPressed:(id)sender
@@ -100,13 +82,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
     if(userName.text.length==0)
     {
-        sub=[NSString stringWithFormat:@"Please enter the Email-Id"];
-        [self alert];
+        [AppDelegate showAlert:@"" withMessage:@"Please enter the Email-Id"];
     }
     else if(password.text.length==0)
     {
-        sub=[NSString stringWithFormat:@"Please enter the Password"];
-        [self alert];
+        [AppDelegate showAlert:@"" withMessage:@"Please enter the Password"];
     }
     else
     {
@@ -120,6 +100,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     RegisterViewController *registerVc =[self.storyboard instantiateViewControllerWithIdentifier:@"RegisterViewController"];
     [[self navigationController] pushViewController:registerVc animated:YES];
 }
+
 -(IBAction)forgotPasswordPressed:(id)sender
 {
     ForgetPasswordViewController *forgotPasswordVc =[self.storyboard instantiateViewControllerWithIdentifier:@"ForgetPasswordViewController"];
@@ -142,9 +123,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 #pragma mark -W.S Delegate Call
+
 - (void) successfulResponseFromServer:(NSDictionary *)dictor
 {
-    
     NSLog(@"in success");
 
     NSLog(@"Dict--->%@",dictor);
@@ -160,22 +141,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         }
         else if ([[dictor objectForKey:@"Result"]isEqualToString:@"0"])
         {
-             [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+             [AppDelegate showAlert:@"Invalid User" withMessage:[NSString stringWithFormat:@"%@",[dictor objectForKey:@"message"]]];
         }
         else if (![[NSString stringWithFormat:@"%@",[dictor objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dictor != nil)
         {
             
         }
     
-    activity.hidden = YES;
-
 }
+
 - (void) failResponseFromServer
 {
-    
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
-    activity.hidden = YES;
-
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 @end

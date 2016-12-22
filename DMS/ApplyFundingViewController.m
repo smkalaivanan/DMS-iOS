@@ -29,15 +29,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @implementation ApplyFundingViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     ObjShared = [SharedClass sharedInstance];
 
-    
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -151,6 +152,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     static NSString * cellIdentifier = @"ApplyFundingTableViewCell";
     
     ApplyFundingTableViewCell *fundingCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+    fundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     return fundingCell;
     

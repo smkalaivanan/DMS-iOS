@@ -17,6 +17,7 @@
 @end
 
 @implementation ForgetPasswordViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -132,17 +133,12 @@
 #pragma mark -W.S Delegate Call
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
-    
     NSLog(@"in success");
-    
     NSLog(@"Dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
-        
         [AppDelegate showAlert:@"Success" withMessage:[dict objectForKey:@"message"]];
         [self.navigationController popViewControllerAnimated:YES];
-
-        
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
@@ -156,15 +152,11 @@
     }
     
 //    activity.hidden = YES;
-
 }
+
 - (void) failResponseFromServer
 {
-    
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
-    
-//    activity.hidden = YES;
-
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 

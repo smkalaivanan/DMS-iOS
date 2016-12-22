@@ -26,6 +26,7 @@
 		4546A9081DDDC17300040E5B /* MFSideMenuShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4546A9051DDDC17300040E5B /* MFSideMenuShadow.m */; };
 		4546A90C1DDDC20700040E5B /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4546A90B1DDDC20700040E5B /* DashboardViewController.m */; };
 		454BD04B1DF14E8A005C21C4 /* current-password.png in Resources */ = {isa = PBXBuildFile; fileRef = 454BD04A1DF14E8A005C21C4 /* current-password.png */; };
+		454EA0101E09101C006C8927 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 454EA00F1E09101C006C8927 /* up.png */; };
 		4556C01F1E03F25B0024D349 /* Ahmedabad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4556C0151E03F25B0024D349 /* Ahmedabad.png */; };
 		4556C0201E03F25B0024D349 /* Bangalore.png in Resources */ = {isa = PBXBuildFile; fileRef = 4556C0161E03F25B0024D349 /* Bangalore.png */; };
 		4556C0211E03F25B0024D349 /* Chennai.png in Resources */ = {isa = PBXBuildFile; fileRef = 4556C0171E03F25B0024D349 /* Chennai.png */; };
@@ -94,7 +95,17 @@
 		FA6C39941DF145BE00FC9F24 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6C39931DF145BE00FC9F24 /* ChangePasswordViewController.m */; };
 		FA76FD101DF92DCE00B78EEA /* SavedcarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA76FD0F1DF92DCE00B78EEA /* SavedcarViewController.m */; };
 		FA76FD141DF937AE00B78EEA /* SelectCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA76FD131DF937AE00B78EEA /* SelectCityViewController.m */; };
+		FA78C41F1E0A557100E46333 /* bid-closed.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C4191E0A557100E46333 /* bid-closed.png */; };
+		FA78C4201E0A557100E46333 /* bid-ongoing.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C41A1E0A557100E46333 /* bid-ongoing.png */; };
+		FA78C4211E0A557100E46333 /* Bid-postingkey.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C41B1E0A557100E46333 /* Bid-postingkey.png */; };
+		FA78C4221E0A557100E46333 /* bid-won.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C41C1E0A557100E46333 /* bid-won.png */; };
+		FA78C4231E0A557100E46333 /* queries-link.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C41D1E0A557100E46333 /* queries-link.png */; };
+		FA78C4241E0A557100E46333 /* queries-time.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C41E1E0A557100E46333 /* queries-time.png */; };
+		FA78C4261E0A686600E46333 /* compare1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C4251E0A686600E46333 /* compare1.png */; };
+		FA78C4281E0A686E00E46333 /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C4271E0A686E00E46333 /* filter.png */; };
+		FA78C42A1E0A687E00E46333 /* sort.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C4291E0A687E00E46333 /* sort.png */; };
 		FA7C1B381DFAC1B500377438 /* SelectcityCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7C1B371DFAC1B500377438 /* SelectcityCollectionViewCell.m */; };
+		FA847F8A1E0BB75A002B3785 /* SiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA847F891E0BB75A002B3785 /* SiteViewController.m */; };
 		FAA3BDF61DE2C0E200A15F75 /* 0-search-field.png in Resources */ = {isa = PBXBuildFile; fileRef = FAA3BDF51DE2C0E200A15F75 /* 0-search-field.png */; };
 		FAA3BDF91DE2C2C000A15F75 /* menuIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = FAA3BDF81DE2C2C000A15F75 /* menuIcon.png */; };
 		FAA3BDFB1DE2C36B00A15F75 /* car-image.png in Resources */ = {isa = PBXBuildFile; fileRef = FAA3BDFA1DE2C36B00A15F75 /* car-image.png */; };
@@ -135,7 +146,6 @@
 		FAAB88A01DE5C728007553F2 /* SharedClass.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAB889F1DE5C728007553F2 /* SharedClass.m */; };
 		FABE39551DEEE18A0090075E /* SideDrawerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FABE39541DEEE1890090075E /* SideDrawerTableViewCell.m */; };
 		FAC21DB91E02582300778FBE /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = FAC21DB71E02582300778FBE /* filter.png */; };
-		FAC21DBA1E02582300778FBE /* sort.png in Resources */ = {isa = PBXBuildFile; fileRef = FAC21DB81E02582300778FBE /* sort.png */; };
 		FAC21DBC1E025E7000778FBE /* won.png in Resources */ = {isa = PBXBuildFile; fileRef = FAC21DBB1E025E7000778FBE /* won.png */; };
 		FAC21DBF1E02655400778FBE /* BidsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC21DBE1E02655400778FBE /* BidsDetailViewController.m */; };
 		FAC21DC31E0271AE00778FBE /* ApplyFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC21DC21E0271AE00778FBE /* ApplyFundingViewController.m */; };
@@ -203,6 +213,7 @@
 		4546A90A1DDDC20700040E5B /* DashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardViewController.h; sourceTree = "<group>"; };
 		4546A90B1DDDC20700040E5B /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
 		454BD04A1DF14E8A005C21C4 /* current-password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "current-password.png"; sourceTree = "<group>"; };
+		454EA00F1E09101C006C8927 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 		4556C0151E03F25B0024D349 /* Ahmedabad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ahmedabad.png; sourceTree = "<group>"; };
 		4556C0161E03F25B0024D349 /* Bangalore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bangalore.png; sourceTree = "<group>"; };
 		4556C0171E03F25B0024D349 /* Chennai.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Chennai.png; sourceTree = "<group>"; };
@@ -302,8 +313,19 @@
 		FA76FD0F1DF92DCE00B78EEA /* SavedcarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedcarViewController.m; sourceTree = "<group>"; };
 		FA76FD121DF937AE00B78EEA /* SelectCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectCityViewController.h; sourceTree = "<group>"; };
 		FA76FD131DF937AE00B78EEA /* SelectCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectCityViewController.m; sourceTree = "<group>"; };
+		FA78C4191E0A557100E46333 /* bid-closed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bid-closed.png"; sourceTree = "<group>"; };
+		FA78C41A1E0A557100E46333 /* bid-ongoing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bid-ongoing.png"; sourceTree = "<group>"; };
+		FA78C41B1E0A557100E46333 /* Bid-postingkey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bid-postingkey.png"; sourceTree = "<group>"; };
+		FA78C41C1E0A557100E46333 /* bid-won.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bid-won.png"; sourceTree = "<group>"; };
+		FA78C41D1E0A557100E46333 /* queries-link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "queries-link.png"; sourceTree = "<group>"; };
+		FA78C41E1E0A557100E46333 /* queries-time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "queries-time.png"; sourceTree = "<group>"; };
+		FA78C4251E0A686600E46333 /* compare1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compare1.png; sourceTree = "<group>"; };
+		FA78C4271E0A686E00E46333 /* filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter.png; sourceTree = "<group>"; };
+		FA78C4291E0A687E00E46333 /* sort.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sort.png; sourceTree = "<group>"; };
 		FA7C1B361DFAC1B500377438 /* SelectcityCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectcityCollectionViewCell.h; sourceTree = "<group>"; };
 		FA7C1B371DFAC1B500377438 /* SelectcityCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectcityCollectionViewCell.m; sourceTree = "<group>"; };
+		FA847F881E0BB759002B3785 /* SiteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SiteViewController.h; sourceTree = "<group>"; };
+		FA847F891E0BB75A002B3785 /* SiteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SiteViewController.m; sourceTree = "<group>"; };
 		FAA3BDF51DE2C0E200A15F75 /* 0-search-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "0-search-field.png"; sourceTree = "<group>"; };
 		FAA3BDF81DE2C2C000A15F75 /* menuIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuIcon.png; sourceTree = "<group>"; };
 		FAA3BDFA1DE2C36B00A15F75 /* car-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "car-image.png"; sourceTree = "<group>"; };
@@ -370,7 +392,6 @@
 		FABE39531DEEE1890090075E /* SideDrawerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideDrawerTableViewCell.h; sourceTree = "<group>"; };
 		FABE39541DEEE1890090075E /* SideDrawerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideDrawerTableViewCell.m; sourceTree = "<group>"; };
 		FAC21DB71E02582300778FBE /* filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter.png; sourceTree = "<group>"; };
-		FAC21DB81E02582300778FBE /* sort.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sort.png; sourceTree = "<group>"; };
 		FAC21DBB1E025E7000778FBE /* won.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = won.png; sourceTree = "<group>"; };
 		FAC21DBD1E02655400778FBE /* BidsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BidsDetailViewController.h; sourceTree = "<group>"; };
 		FAC21DBE1E02655400778FBE /* BidsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BidsDetailViewController.m; sourceTree = "<group>"; };
@@ -550,11 +571,16 @@
 		4556BFFB1E03E8040024D349 /* Bid icons */ = {
 			isa = PBXGroup;
 			children = (
+				FA78C4191E0A557100E46333 /* bid-closed.png */,
+				FA78C41A1E0A557100E46333 /* bid-ongoing.png */,
+				FA78C41B1E0A557100E46333 /* Bid-postingkey.png */,
+				FA78C41C1E0A557100E46333 /* bid-won.png */,
+				FA78C41D1E0A557100E46333 /* queries-link.png */,
+				FA78C41E1E0A557100E46333 /* queries-time.png */,
 				45DEC6C91E026D2C00055306 /* replay.png */,
 				45AFB9BD1E0264AF00FA43DA /* list-view2.png */,
 				FAC21DBB1E025E7000778FBE /* won.png */,
 				FAC21DB71E02582300778FBE /* filter.png */,
-				FAC21DB81E02582300778FBE /* sort.png */,
 				459527141DFAC7D70050E52B /* close-1.png */,
 				454BD04A1DF14E8A005C21C4 /* current-password.png */,
 			);
@@ -564,6 +590,7 @@
 		4556BFFC1E03E8160024D349 /* City images */ = {
 			isa = PBXGroup;
 			children = (
+				454EA00F1E09101C006C8927 /* up.png */,
 				459527121DFAC03E0050E52B /* cityImage.png */,
 				4556C0151E03F25B0024D349 /* Ahmedabad.png */,
 				4556C0161E03F25B0024D349 /* Bangalore.png */,
@@ -662,6 +689,8 @@
 		45CD13261DDB3C9E0094BC71 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				FA847F881E0BB759002B3785 /* SiteViewController.h */,
+				FA847F891E0BB75A002B3785 /* SiteViewController.m */,
 				FA76FD151DF937B600B78EEA /* SelectCity */,
 				FA76FD111DF9377500B78EEA /* SavedCar */,
 				FAAB885F1DE55CD4007553F2 /* DetailView */,
@@ -723,6 +752,9 @@
 		45DC23611DD9BF7500BCE1BF /* DMS */ = {
 			isa = PBXGroup;
 			children = (
+				FA78C4251E0A686600E46333 /* compare1.png */,
+				FA78C4271E0A686E00E46333 /* filter.png */,
+				FA78C4291E0A687E00E46333 /* sort.png */,
 				459458781DEFF1160072B3CD /* Pch file */,
 				FAAB88A11DE5C739007553F2 /* Common class */,
 				FAAB889C1DE5C6C2007553F2 /* AFNetworking */,
@@ -825,6 +857,15 @@
 				FA7C1B371DFAC1B500377438 /* SelectcityCollectionViewCell.m */,
 			);
 			name = SelectCity;
+			sourceTree = "<group>";
+		};
+		FA78C42B1E0A86E500E46333 /* BidPosted TableCell */ = {
+			isa = PBXGroup;
+			children = (
+				FAC21DD01E02725900778FBE /* BidPostedTableViewCell.h */,
+				FAC21DD11E02725900778FBE /* BidPostedTableViewCell.m */,
+			);
+			name = "BidPosted TableCell";
 			sourceTree = "<group>";
 		};
 		FAA3BDF71DE2C0E700A15F75 /* Buy Page */ = {
@@ -1045,8 +1086,7 @@
 			children = (
 				FADE7CF41DFC056000528B36 /* bidsPostedViewController.h */,
 				FADE7CF51DFC056000528B36 /* bidsPostedViewController.m */,
-				FAC21DD01E02725900778FBE /* BidPostedTableViewCell.h */,
-				FAC21DD11E02725900778FBE /* BidPostedTableViewCell.m */,
+				FA78C42B1E0A86E500E46333 /* BidPosted TableCell */,
 			);
 			name = bidsPosted;
 			sourceTree = "<group>";
@@ -1181,19 +1221,23 @@
 				4556C0241E03F25B0024D349 /* Jaipur.png in Resources */,
 				FAAB88661DE56F96007553F2 /* beep.mp3 in Resources */,
 				45DEC6CA1E026D2C00055306 /* replay.png in Resources */,
+				FA78C42A1E0A687E00E46333 /* sort.png in Resources */,
 				FAA3BE151DE2D08300A15F75 /* search-blue.png in Resources */,
 				FAA3BE131DE2D08300A15F75 /* savecar-blue.png in Resources */,
 				FA472CF41DDC2368005CFB59 /* IQButtonBarArrowRight@3x.png in Resources */,
+				FA78C4221E0A557100E46333 /* bid-won.png in Resources */,
 				45CD13221DDB3B610094BC71 /* intro_banner.png in Resources */,
 				FA472CEF1DDC2368005CFB59 /* IQButtonBarArrowLeft.png in Resources */,
 				4556C0221E03F25B0024D349 /* Delhi.png in Resources */,
 				450215291DE45CC1000356EE /* like-red.png in Resources */,
+				FA78C4211E0A557100E46333 /* Bid-postingkey.png in Resources */,
 				FA472D051DDC3F31005CFB59 /* register.png in Resources */,
 				450215271DE45B10000356EE /* image1.png in Resources */,
 				FAA3BDF61DE2C0E200A15F75 /* 0-search-field.png in Resources */,
 				FA472D081DDC455A005CFB59 /* address.png in Resources */,
 				FAA3BDF91DE2C2C000A15F75 /* menuIcon.png in Resources */,
 				45BA1C201DDC2DF400FE74E5 /* login_bg_noicon.png in Resources */,
+				454EA0101E09101C006C8927 /* up.png in Resources */,
 				FADE7CEA1DFBFD2100528B36 /* communication.png in Resources */,
 				45BA1C311DDC38CD00FE74E5 /* location.png in Resources */,
 				FADE7CE91DFBFD2100528B36 /* Buy.png in Resources */,
@@ -1212,7 +1256,9 @@
 				4556C0251E03F25B0024D349 /* Kochi.png in Resources */,
 				452431791DF7ED0C003A056C /* deal.png in Resources */,
 				45BA1C301DDC38CD00FE74E5 /* email.png in Resources */,
+				FA78C4201E0A557100E46333 /* bid-ongoing.png in Resources */,
 				452431771DF7ECF1003A056C /* chola.png in Resources */,
+				FA78C4231E0A557100E46333 /* queries-link.png in Resources */,
 				45651D641DE55A760082262A /* camera.png in Resources */,
 				FAC21DBC1E025E7000778FBE /* won.png in Resources */,
 				FADE7CEF1DFBFD2100528B36 /* sell.png in Resources */,
@@ -1224,11 +1270,12 @@
 				4556C0201E03F25B0024D349 /* Bangalore.png in Resources */,
 				FAA3BE111DE2D08300A15F75 /* queries-blue.png in Resources */,
 				454BD04B1DF14E8A005C21C4 /* current-password.png in Resources */,
+				FA78C4281E0A686E00E46333 /* filter.png in Resources */,
 				FA472CF11DDC2368005CFB59 /* IQButtonBarArrowLeft@3x.png in Resources */,
 				FAA3BE0E1DE2D08300A15F75 /* bids-white.png in Resources */,
+				FA78C4241E0A557100E46333 /* queries-time.png in Resources */,
 				45BA1C2C1DDC38CD00FE74E5 /* back-arrow.png in Resources */,
 				452431711DF7E8BE003A056C /* compare.png in Resources */,
-				FAC21DBA1E02582300778FBE /* sort.png in Resources */,
 				45BA1C2D1DDC38CD00FE74E5 /* company.png in Resources */,
 				452431731DF7E8E9003A056C /* alert.png in Resources */,
 				45BA1C2F1DDC38CD00FE74E5 /* down-arrow.png in Resources */,
@@ -1242,7 +1289,9 @@
 				FADE7CF11DFBFD7500528B36 /* MenuContact.png in Resources */,
 				45CD13231DDB3B610094BC71 /* intro_btn.png in Resources */,
 				450215231DE459EC000356EE /* search-box.png in Resources */,
+				FA78C41F1E0A557100E46333 /* bid-closed.png in Resources */,
 				FADE7CEB1DFBFD2100528B36 /* home.png in Resources */,
+				FA78C4261E0A686600E46333 /* compare1.png in Resources */,
 				4556C0271E03F25B0024D349 /* Mumbai.png in Resources */,
 				4502152B1DE45CC9000356EE /* like-white.png in Resources */,
 				FAC21DB91E02582300778FBE /* filter.png in Resources */,
@@ -1301,6 +1350,7 @@
 				FAAB885E1DE55CB7007553F2 /* DetailViewController.m in Sources */,
 				FAAB888E1DE5C6AA007553F2 /* AFNetworkReachabilityManager.m in Sources */,
 				FAAB88921DE5C6AA007553F2 /* AFURLResponseSerialization.m in Sources */,
+				FA847F8A1E0BB75A002B3785 /* SiteViewController.m in Sources */,
 				FA472CC91DDC19F4005CFB59 /* RegisterViewController.m in Sources */,
 				FA76FD141DF937AE00B78EEA /* SelectCityViewController.m in Sources */,
 				FAC21DC91E0271DC00778FBE /* FundingDetailViewController.m in Sources */,

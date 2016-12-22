@@ -29,10 +29,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @implementation bidsPostedViewController
 
-- (void)viewDidLoad {
-    
+- (void)viewDidLoad
+{
     ObjShared = [SharedClass sharedInstance];
-
     
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -96,10 +95,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     return cell;
 }
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==0)
@@ -149,7 +150,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     static NSString * cellIdentifier = @"BidPostedTableViewCell";
     
     BidPostedTableViewCell *bidCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
-    
+    bidCell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return bidCell;
     
 }

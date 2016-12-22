@@ -148,6 +148,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     MyQueriesTableViewCell *queriesCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     
+    queriesCell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    
     return queriesCell;
     
 }

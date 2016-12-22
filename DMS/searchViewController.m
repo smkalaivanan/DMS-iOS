@@ -74,7 +74,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
-    [city setTitle:[NSString stringWithFormat:@"%@",[search_Dict objectForKey:@"city_name"]] forState:UIControlStateNormal];
+    
+    [city setTitle:ObjShared.Cityname forState:UIControlStateNormal];
 
 }
 
@@ -336,6 +337,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return YES;
 }
+
 #pragma mark -W.S Delegate Call
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
@@ -369,71 +371,36 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 - (void) failResponseFromServer
 {
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 - (IBAction)showWithCity:(id)sender
 {
-    self.pickerForCity = [[CZPickerView alloc] initWithHeaderTitle:@"City" cancelButtonTitle:@"Cancel" confirmButtonTitle:@"Confirm"];
-    //    pickerWithoutFooter.headerTitleFont = [UIFont systemFontOfSize: 40];
-    self.pickerForCity.delegate = self;
-    self.pickerForCity.dataSource = self;
-    self.pickerForCity.needFooterView = NO;
-    [self.pickerForCity show];
-}
-
-#pragma CZPickerView Delegates
-
-- (NSString *)czpickerView:(CZPickerView *)pickerView
-               titleForRow:(NSInteger)row
-{
-    return [[ObjShared.appDict valueForKey:@"model_city"]valueForKey:@"city_name"][row];
+    SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
+    [self presentViewController:cityVC animated:YES completion: nil];
 }
 
 
-- (NSInteger)numberOfRowsInPickerView:(CZPickerView *)pickerView
-{
-            return [[[ObjShared.appDict valueForKey:@"model_city"]valueForKey:@"city_name"] count];
-}
-- (void)czpickerView:(CZPickerView *)pickerView didConfirmWithItemAtRow:(NSInteger)row
-{
-        NSString * butName = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"model_city"]valueForKey:@"city_name"][row]];
-        [city setTitle:butName forState:UIControlStateNormal];
-}
-
-- (void)czpickerView:(CZPickerView *)pickerView didConfirmWithItemsAtRows:(NSArray *)rows
-{
-       NSString * butName = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"model_city"]valueForKey:@"city_name"] objectAtIndex:0]];
-        
-        [city setTitle:butName forState:UIControlStateNormal];
-}
-
-- (void)czpickerViewDidClickCancelButton:(CZPickerView *)pickerView
-{
-    [self.navigationController setNavigationBarHidden:YES];
-    //    NSLog(@"Canceled.");
-}
-
-- (void)czpickerViewWillDisplay:(CZPickerView *)pickerView
-{
-}
-
-- (void)czpickerViewDidDisplay:(CZPickerView *)pickerView
-{
-}
-
-- (void)czpickerViewWillDismiss:(CZPickerView *)pickerView
-{
-}
-
-- (void)czpickerViewDidDismiss:(CZPickerView *)pickerView
-{
-}
 
 -(IBAction)city:(id)sender
 {
     SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
     [self presentViewController:cityVC animated:YES completion: nil];
 }
+
+-(IBAction)filter:(id)sender
+{
+    
+}
+-(IBAction)compare:(id)sender
+{
+    
+}
+-(IBAction)sort:(id)sender
+{
+    
+}
+
+
 
 @end

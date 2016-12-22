@@ -136,7 +136,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 
-
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return ObjShared.collectionZ;
+}
 
 /*
 #pragma mark - Navigation

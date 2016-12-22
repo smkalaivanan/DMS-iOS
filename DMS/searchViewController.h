@@ -28,6 +28,10 @@
 -(IBAction)search:(id)sender;
 -(IBAction)back:(id)sender;
 -(IBAction)city:(id)sender;
+-(IBAction)filter:(id)sender;
+-(IBAction)compare:(id)sender;
+-(IBAction)sort:(id)sender;
+
 
 
 @end

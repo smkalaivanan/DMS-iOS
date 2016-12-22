@@ -222,8 +222,7 @@
 }
 - (void) failResponseFromServer
 {
-    
-    [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 @end

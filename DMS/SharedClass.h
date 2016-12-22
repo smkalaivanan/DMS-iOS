@@ -37,6 +37,8 @@
 @property (nonatomic, retain) NSDictionary * appDict;
 @property (nonatomic, retain) NSDictionary * LoginDict;
 @property (nonatomic, retain) NSString * Cityname;
+@property (nonatomic, retain) NSString * sityName;
+
 @property (nonatomic, retain) NSDictionary * searchPageDict;
 @property (nonatomic,retain) NSArray *footerArray;
 @property (nonatomic,retain) NSArray *footerText;
