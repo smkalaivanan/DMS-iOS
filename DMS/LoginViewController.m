@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "DashboardViewController.h"
+#import "LandingViewController.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -136,8 +137,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
 
-            DashboardViewController *dashVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DashboardViewController"];
-            [[self navigationController] pushViewController:dashVC animated:YES];
+            LandingViewController *landingVC =[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];
+            [[self navigationController] pushViewController:landingVC animated:YES];
         }
         else if ([[dictor objectForKey:@"Result"]isEqualToString:@"0"])
         {

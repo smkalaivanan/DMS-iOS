@@ -15,22 +15,21 @@
 #import "DashboardViewController.h"
 #import "BidDetailTableViewCell.h"
 
-
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-
 @interface BidsDetailViewController ()
-
+{
+    NSDictionary * bidDetailDict;
+}
 @end
 
 @implementation BidsDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     ObjShared = [SharedClass sharedInstance];
 
     // Do any additional setup after loading the view.
@@ -41,31 +40,38 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // Dispose of any resources that can be recreated.
 }
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     //Shared
-    
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
+    carName.text = [ObjShared.bidCaridDetail valueForKey:@"make"];
+    
+    [carImage setImageWithURL:[NSURL URLWithString:[ObjShared.bidCaridDetail valueForKey:@"imagelink"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+
+    delarName.text = [ObjShared.LoginDict valueForKey:@"dealer_name"];
+
+    [delarImage setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
+    delarImage.layer.cornerRadius = delarImage.frame.size.width /2;
+    delarImage.layer.masksToBounds = YES;
+    
+    carImage.layer.cornerRadius = carImage.frame.size.width /2;
+    carImage.layer.masksToBounds = YES;
+    
+    [self callMakeid];
 }
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[ObjShared.bidCaridDetail valueForKey:@"car_id"],@"car_id", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_bidding_viewmore" postData:para];
 }
-
--(IBAction)back:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 
 #pragma mark - Collection View delegate
 
@@ -143,7 +149,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[bidDetailDict valueForKey:@"dealer_bid_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,9 +159,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     BidDetailTableViewCell *bidCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     bidCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
+    bidCell.name.text = [[[bidDetailDict valueForKey:@"dealer_bid_list"] valueForKey:@"Dealername"] objectAtIndex:indexPath.row];
+    
+    bidCell.price.text = [[[bidDetailDict valueForKey:@"dealer_bid_list"] valueForKey:@"Amount"] objectAtIndex:indexPath.row];
+    
+    bidCell.time.text = [[[bidDetailDict valueForKey:@"dealer_bid_list"] valueForKey:@"Date"] objectAtIndex:indexPath.row];
     
     return bidCell;
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -165,11 +175,74 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)bidButton:(id)sender
 {
-    NSLog(@"bid button");
+    [self.view endEditing:YES];
+    
+    NSString * bidValueString = [NSString stringWithFormat:@"Your bid value is ₹ %@",bidText.text];
+    
+    if (bidText.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Bidding !!" withMessage:@"Your bid amount can't be empty"];
+    }
+    else
+    {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Bidding!!" message:bidValueString preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction
+                            actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                   }];
+    
+    [alertController addAction:cancelAction];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSMutableDictionary *param = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",bidText.text,@"biddingamount",[ObjShared.bidCaridDetail valueForKey:@"car_id"],@"car_id",[ObjShared.bidCaridDetail valueForKey:@"dealer_id"],@"dealerid", nil];
+                                   NSLog(@"bid param ----> %@",param);
+                                   bidText.text=@"";
+                                   [ObjShared callWebServiceWith_DomainName:@"api_addbidding_viewmore" postData:param];
+                               }];
+    
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 -(IBAction)backButton:(id)sender
 {
+    [self.view endEditing:YES];
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"in success");
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        bidDetailDict= dict;
+        [bidDetailtable reloadData];
+        delarPosition.text = [NSString stringWithFormat:@"%@",[bidDetailDict valueForKey:@"Position"]];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
 @end

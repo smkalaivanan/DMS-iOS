@@ -22,7 +22,6 @@
     int apiCall;
     IBOutlet UITableView *searchTable;
 }
--(IBAction)back:(id)sender;
 
 
 @end

@@ -16,8 +16,9 @@
     IBOutlet UIImageView *carImage;
     IBOutlet UIImageView *delarImage;
     IBOutlet UITextField * bidText;
+    
+    IBOutlet UITableView * bidDetailtable;
 }
 -(IBAction)bidButton:(id)sender;
--(IBAction)back:(id)sender;
-
+-(IBAction)backButton:(id)sender;
 @end

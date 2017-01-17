@@ -29,10 +29,33 @@
 
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
+    [self web];
 
     // Do any additional setup after loading the view.
     
 }
+- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
+ navigationType:(UIWebViewNavigationType)navigationType {
+    if ([request.URL  isEqual: @"http://www.google.com"])
+    {
+        //do close window magic here!!
+        [self stopLoading];
+        return NO;
+    }
+    return YES;
+}
+-(void)stopLoading{
+    [webView removeFromSuperview];
+}
+
+-(void)web
+{
+    NSURL *url=[NSURL URLWithString:@"http://www.google.com"];
+    NSURLRequest *request=[NSURLRequest requestWithURL:url];
+    [webView loadRequest:request];
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

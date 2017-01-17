@@ -29,17 +29,18 @@
     ObjShared = [SharedClass sharedInstance];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    MFSideMenuContainerViewController *container = (MFSideMenuContainerViewController *)self.window.rootViewController;
+   MFSideMenuContainerViewController *container = (MFSideMenuContainerViewController *)self.window.rootViewController;
     
     navigationController = [storyboard instantiateViewControllerWithIdentifier:@"navigationController"];
     
     UIViewController *leftSideMenuViewController = [storyboard instantiateViewControllerWithIdentifier:@"leftSideMenuViewController"];
     
-    //    UIViewController *rightSideMenuViewController = [storyboard instantiateViewControllerWithIdentifier:@"rightSideMenuViewController"];
+    UIViewController *rightSideMenuViewController = [storyboard instantiateViewControllerWithIdentifier:@"rightSideMenuViewController"];
     
     [container setLeftMenuViewController:leftSideMenuViewController];
-    //    [container setRightMenuViewController:rightSideMenuViewController];
+        [container setRightMenuViewController:rightSideMenuViewController];
     [container setCenterViewController:navigationController];
+  
     
     return YES;
 

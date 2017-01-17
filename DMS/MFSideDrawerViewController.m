@@ -11,6 +11,9 @@
 #import "SideDrawerTableViewCell.h"
 #import "ChangePasswordViewController.h"
 #import "AppDelegate.h"
+#import "InventoryViewController.h"
+#import "DashboardViewController.h"
+#import "profileViewController.h"
 
 @interface MFSideDrawerViewController ()
 {
@@ -33,7 +36,7 @@
 
     menu=[[NSArray alloc]initWithObjects:@"Home",@"Buy",@"Sell",@"Manage",@"Communication",@"Report",@"Contact",@"Logout", nil];
     
-    menuImg=[[NSArray alloc]initWithObjects:@"home.png",@"Buy.png",@"sell.png",@"Manage.png",@"communication.png",@"report.png",@"MenuContact.png",@"logout.png", nil];
+    menuImg=[[NSArray alloc]initWithObjects:@"home.png",@"sell.png",@"Buy.png",@"Manage.png",@"communication.png",@"report.png",@"MenuContact.png",@"logout.png", nil];
     
     // Do any additional setup after loading the view.
 }
@@ -63,6 +66,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma UITableView
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return menu.count;
@@ -87,13 +92,41 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"indexpath-->%ld",(long)indexPath.row);
-    
-    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+    if (indexPath.row == 1)
+    {
+        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+        
+        
+        DashboardViewController *dashVC=[self.storyboard instantiateViewControllerWithIdentifier:@"DashboardViewController"];
+        
+        [SharedClass NavigateTo:dashVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
+    else if (indexPath.row == 2)
+    {
+        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+        
+        
+        InventoryViewController *inventVC=[self.storyboard instantiateViewControllerWithIdentifier:@"InventoryViewController"];
+        
+        [SharedClass NavigateTo:inventVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
+    else if (indexPath.row == 3)
+    {
+        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+        
+        
+        profileViewController *profileVC=[self.storyboard instantiateViewControllerWithIdentifier:@"profileViewController"];
+        
+        [SharedClass NavigateTo:profileVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
 
-    
-    ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
-    
-    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:false];
+    else
+    {
+    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+//    ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
+//    
+//    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
     
 }
 

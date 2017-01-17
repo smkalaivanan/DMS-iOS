@@ -9,7 +9,7 @@
 #import "SharedClass.h"
 
 @implementation SharedClass
-@synthesize sharedDelegate,footerText,footerArray;
+@synthesize sharedDelegate,footerText,footerArray,inventoryFooterText;
 
 #pragma mark - Init Method
 

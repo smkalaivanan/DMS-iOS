@@ -24,7 +24,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface bidsPostedViewController ()
-
+{
+    NSDictionary * bidDict;
+}
 @end
 
 @implementation bidsPostedViewController
@@ -52,13 +54,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
     
 }
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_bidding_list" postData:para];
+    
+    NSLog(@"para -----> %@",para);
 }
 
 -(IBAction)side:(id)sender
@@ -142,7 +147,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[bidDict valueForKey:@"bidding_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -151,31 +156,81 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     BidPostedTableViewCell *bidCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     bidCell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-    return bidCell;
     
+    [bidCell.carImg setImageWithURL:[NSURL URLWithString:[[[bidDict valueForKey:@"bidding_list"] valueForKey:@"imagelink"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+        
+    [bidCell.dealerImg setImageWithURL:[NSURL URLWithString:[[[bidDict valueForKey:@"bidding_list"] valueForKey:@"site_image"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
+    bidCell.modelName.text = [[[bidDict valueForKey:@"bidding_list"] valueForKey:@"make"] objectAtIndex:indexPath.row];
+    bidCell.price.text = [[[bidDict valueForKey:@"bidding_list"] valueForKey:@"bidded_amount"] objectAtIndex:indexPath.row];
+    bidCell.closingTime.text = [[[bidDict valueForKey:@"bidding_list"] valueForKey:@"closing_time"] objectAtIndex:indexPath.row];
+    bidCell.posted.text = [[[bidDict valueForKey:@"bidding_list"] valueForKey:@"posted"] objectAtIndex:indexPath.row];
+    
+    if ([[[[bidDict valueForKey:@"bidding_list"] valueForKey:@"bid_image"] objectAtIndex:indexPath.row] isEqualToString:@"bid-won.png"])
+    {
+        bidCell.stausMessage.layer.cornerRadius = 5;
+        bidCell.stausMessage.layer.masksToBounds = YES;
+        bidCell.stausMessage.layer.backgroundColor = [UIColor greenColor].CGColor;
+        bidCell.stausMessage.text = @"Won";
+        bidCell.stausMessage.textColor = [UIColor whiteColor];
+    }
+    else if ([[[[bidDict valueForKey:@"bidding_list"] valueForKey:@"bid_image"] objectAtIndex:indexPath.row] isEqualToString:@"bid-ongoing.png"])
+    {
+        bidCell.stausMessage.layer.cornerRadius = 5;
+        bidCell.stausMessage.layer.masksToBounds = YES;
+        bidCell.stausMessage.layer.backgroundColor = [UIColor lightGrayColor].CGColor;
+        bidCell.stausMessage.text = @"Ongoing";
+        bidCell.stausMessage.textColor = [UIColor blackColor];
+    }
+    else
+    {
+        bidCell.stausMessage.layer.cornerRadius = 5;
+        bidCell.stausMessage.layer.masksToBounds = YES;
+        bidCell.stausMessage.layer.backgroundColor = [UIColor redColor].CGColor;
+        bidCell.stausMessage.text = @"Closed";
+        bidCell.stausMessage.textColor = [UIColor whiteColor];
+    }
+    
+    return bidCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
     
+    ObjShared.bidCaridDetail = [[bidDict valueForKey:@"bidding_list"]objectAtIndex:indexPath.row];
+    NSLog(@"bid detail ----> %@",ObjShared.bidCaridDetail);
+    
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
     [[self navigationController] pushViewController:bidVC animated:YES];
-    
-
-} 
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
-*/
+
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"in success");
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        bidDict= dict;
+        [bidTable reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[bidDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

@@ -9,13 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface BidPostedTableViewCell : UITableViewCell
+
 @property (nonatomic,retain) IBOutlet UIImageView *carImg;
-@property (nonatomic,retain) IBOutlet UIImageView *stausImg;
+@property (nonatomic,retain) IBOutlet UILabel *stausMessage;
 @property (nonatomic,retain) IBOutlet UIImageView *dealerImg;
-@property (nonatomic,retain) IBOutlet UILabel *name;
+@property (nonatomic,retain) IBOutlet UILabel *modelName;
 @property (nonatomic,retain) IBOutlet UILabel *price;
-@property (nonatomic,retain) IBOutlet UILabel *time;
+@property (nonatomic,retain) IBOutlet UILabel *closingTime;
 @property (nonatomic,retain) IBOutlet UILabel *posted;
-
-
 @end

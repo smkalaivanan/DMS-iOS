@@ -10,16 +10,21 @@
 
 @interface AddFundingViewController : UIViewController
 {
-    IBOutlet UITextField *DealerName;
+    IBOutlet UITextField *dealerName;
     IBOutlet UITextField *mobileNo;
     IBOutlet UITextField *amount;
-    IBOutlet UITextField *date;
     IBOutlet UITextField *city;
+    IBOutlet UITextField *emailId;
+    IBOutlet UITextField *dealershipName;
+    IBOutlet UITextField *area;
+
     IBOutlet UILabel *financeName;
     IBOutlet UILabel *request;
     IBOutlet UIImageView *financeImg;
     IBOutlet UIImageView *dealerImg;
+    IBOutlet UIButton * submitButton;
 }
+
 -(IBAction)back:(id)sender;
 -(IBAction)sumbit:(id)sender;
 

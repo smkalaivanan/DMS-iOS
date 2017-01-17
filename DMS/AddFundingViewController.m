@@ -21,7 +21,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface AddFundingViewController ()
-
+{
+    NSDictionary * addFundingDict;
+}
 @end
 
 @implementation AddFundingViewController
@@ -31,7 +33,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ObjShared = [SharedClass sharedInstance];
 
+    // Corner Radius for Enter button
+    submitButton.layer.cornerRadius = 10;
+    submitButton.layer.masksToBounds = NO;
+    submitButton.layer.shadowColor = [UIColor blackColor].CGColor;
     
+    // Shadow Effect for Enter button
+    submitButton.layer.shadowOpacity = 0.2;
+    submitButton.layer.shadowRadius = 2;
+    submitButton.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
     // Do any additional setup after loading the view.
 }
 
@@ -55,8 +65,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"addfundingpage",@"page_name",dealerName.text,@"dealername",mobileNo.text,@"dealermobileno",amount.text,@"requested_amount",city.text,@"dealercity",emailId.text,@"dealermailid",dealershipName.text,@"dealershipname",area.text,@"dealerarea", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_add_funding" postData:para];
+    NSLog(@"param ----> %@",para);
 }
 
 -(IBAction)back:(id)sender
@@ -67,6 +78,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(IBAction)sumbit:(id)sender
 {
     NSLog(@"Submit clicked");
+    [self callMakeid];
 }
 
 
@@ -84,6 +96,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.footerText objectAtIndex:indexPath.row];
+    
+    
     
     if (indexPath.row == 4)
     {
@@ -135,20 +149,33 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //    NSLog(@"selected");
 }
 
-
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return ObjShared.collectionZ;
 }
+#pragma mark -W.S Delegate Call
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        addFundingDict= dict;
+        [[self navigationController]popViewControllerAnimated:YES];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[addFundingDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
 }
-*/
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
 
 @end

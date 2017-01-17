@@ -12,6 +12,7 @@
 #import "bidsPostedViewController.h"
 #import "ApplyFundingViewController.h"
 #import "AppDelegate.h"
+#import "BidsDetailViewController.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -42,7 +43,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ObjShared = [SharedClass sharedInstance];
 
-    [self callMethod];
 //    [self likeArray];
 }
 
@@ -55,6 +55,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMethod];
+
 }
 
 -(void)likeArray
@@ -69,7 +71,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 -(void)callMethod
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"549",@"session_user_id", nil];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
     [ObjShared callWebServiceWith_DomainName:@"apiview_savedcars" postData:para];
 }
 
@@ -77,6 +79,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)showLeftMenuPressed:(id)sender
+{
+    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 }
 
 
@@ -168,12 +175,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     searchCell.CarKm.text=[NSString stringWithFormat:@"%@ |%@ |%@ |%@",[[newArray valueForKey:@"kilometer_run"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"registration_year"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"owner_type"] objectAtIndex:indexPath.row]];
     
     searchCell.carPrice.text=[NSString stringWithFormat:@"₹ %@",[[newArray valueForKey:@"price"]objectAtIndex:indexPath.row]];
-    
-    searchCell.address.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"car_address_1"]objectAtIndex:indexPath.row]];
-    
+        
     searchCell.postedDate.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"daysstmt"]objectAtIndex:indexPath.row]];
     
-    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"noimages"]objectAtIndex:indexPath.row]];
+    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"no_images"]objectAtIndex:indexPath.row]];
     
     
     [searchCell.carImage setImageWithURL:[NSURL URLWithString:[[newArray valueForKey:@"imagelinks"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
@@ -188,6 +193,35 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     searchCell.heart.tag = indexPath.row;
     [searchCell.heart addTarget:self
                          action:@selector(animateButton:) forControlEvents:UIControlEventTouchUpInside];
+    searchCell.viewBitButton.tag = indexPath.row;
+    searchCell.makeOfferButtom.tag = indexPath.row;
+    
+    searchCell.makeOfferButtom.layer.cornerRadius = 5;
+    searchCell.makeOfferButtom.layer.masksToBounds = YES;
+    searchCell.viewBitButton.layer.cornerRadius = 5;
+    searchCell.viewBitButton.layer.masksToBounds = YES;
+    
+    [searchCell.viewBitButton addTarget:self action:@selector(viewBidAction:) forControlEvents:UIControlEventTouchUpInside];
+    [searchCell.makeOfferButtom addTarget:self action:@selector(makeOfferAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"auction"]objectAtIndex:indexPath.row] isEqualToString:@"0"])
+    {
+        searchCell.viewBitButton.hidden = YES;
+        searchCell.makeOfferButtom.hidden = YES;
+    }
+    else if ([[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"auction"]objectAtIndex:indexPath.row] isEqualToString:@"1"])
+    {
+        searchCell.viewBitButton.hidden = NO;
+        searchCell.makeOfferButtom.hidden = NO;
+    }
+    else
+    {
+        searchCell.viewBitButton.hidden = NO;
+        searchCell.makeOfferButtom.hidden = YES;
+    }
+
+    
+    
     
     if ([[like objectAtIndex:indexPath.row] isEqualToString:@"1"])
     {
@@ -221,17 +255,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
 //    UIButton * button = (UIButton *)sender;
 //    button.selected = !button.selected;
-    NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"549",@"session_user_id",[[newArray valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
+    NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[newArray valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
     
     [ObjShared callWebServiceWith_DomainName:@"api_save_car" postData:likePara];
 }
-
--(IBAction)back:(id)sender
+-(void)viewBidAction:(UIButton *)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    NSLog(@"viewBidAction-----> %ld",(long)sender.tag);
+    ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
+    BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
+    [[self navigationController] pushViewController:bidVC animated:YES];
 }
-
-
+-(void)makeOfferAction:(UIButton *)sender
+{
+    NSLog(@"makeOfferAction-----> %ld",(long)sender.tag);
+    ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
+    BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
+    [[self navigationController] pushViewController:bidVC animated:YES];
+}
 //Status bar hidden
 -(BOOL)prefersStatusBarHidden
 {

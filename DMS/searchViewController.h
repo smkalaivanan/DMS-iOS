@@ -12,7 +12,6 @@
 #import "DashboardCollectionViewCell.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
-#import "CZPicker.h"
 
 @interface searchViewController : UIViewController<SharedDelegate>
 {

@@ -7,13 +7,14 @@
 //
 
 #import "SiteViewController.h"
+#import "SiteTableViewCell.h"
 
 @interface SiteViewController ()
 {
-    NSMutableArray *dummyArray,*searchArray;
+    NSMutableArray * dummyArray,* searchArray,* siteData;
     NSArray *sites;
     NSString *searchTextString;
-    UITableViewCell *cell;
+    SiteTableViewCell * celling;
 }
 @end
 
@@ -27,21 +28,26 @@
 
     [self.searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    NSLog(@"site--->%@",ObjShared.appDict);
+//    NSLog(@"site--->%@",ObjShared.appDict);
     
-    sites=[[ObjShared.appDict valueForKey:@"site_names"] valueForKey:@"sitename"];
-    NSLog(@"site--->%@",sites);
-
+    sites = [[ObjShared.appDict valueForKey:@"site_names"] valueForKey:@"sitename"];
+    
+    
+    siteData = [[NSMutableArray alloc] init];
+    for (int i=0; i<sites.count; i++)
+    {
+        [siteData addObject:@"0"];
+    }
     [self searchtext];
     [self updateSearchArray];
     
     
-    
-    
+
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -124,64 +130,79 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    static NSString * cellIdentifier = @"SiteTableViewCell";
+    
+    celling =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+
     
     // Configure the cell...
-    cell.textLabel.text = [[searchArray objectAtIndex:indexPath.row]objectForKey:@"site"];
+    celling.siteNameText.text = [[searchArray objectAtIndex:indexPath.row]objectForKey:@"site"];
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    celling.siteButtonView.tag = indexPath.row;
+    [celling.siteButtonView addTarget:self
+                   action:@selector(animateButton:) forControlEvents:UIControlEventTouchUpInside];
     
-//    NSString *str;
-//    
-//    if ([str isEqualToString:@"0"])
-//    {
-//        //            UIImageView *checkmark = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"untick.png"]];
-//        UIImageView *checkmark = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
-//        cell.accessoryView = checkmark;
-//    }
-//    else
-//    {
-//        //        UIImageView *checkmark = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tick.png"]];
-//        UIImageView *checkmark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-//        checkmark.image=[UIImage imageNamed:@"13.png"];
-//        
-//        cell.accessoryView = checkmark;
-//    }
+    celling.selectionStyle = UITableViewCellSelectionStyleNone;
 
-//            if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
-//            {
-//                cell.accessoryType = UITableViewCellAccessoryNone;
-//            }
-//            else
-//            {
-//                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//            }
-//
-    
-    return cell;
+    if ([[siteData objectAtIndex:indexPath.row] isEqualToString:@"0"])
+    {
+        celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox-empty.png"];
+    }
+    else
+    {
+        celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox.png"];
+    }
+
+    return celling;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    ObjShared.sityName=[NSString stringWithFormat:@"%@",[[searchArray objectAtIndex:indexPath.row]objectForKey:@"site"]];
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//
-    
-            if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
-            {
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            }
-            else
-            {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            }
-
 }
-
+-(void)animateButton:(UIButton *)sender
+{
+//    UIButton * button = (UIButton *)sender;
+//    button.selected = !button.selected;
+    
+    if ([[siteData objectAtIndex:sender.tag] isEqualToString:@"0"])
+    {
+        [siteData replaceObjectAtIndex:sender.tag withObject:[[searchArray objectAtIndex:sender.tag]objectForKey:@"site"]];
+        celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox.png"];
+        [siteList reloadData];
+    }
+    else
+    {
+        [siteData replaceObjectAtIndex:sender.tag withObject:@"0"];
+        celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox-empty.png"];
+        [siteList reloadData];
+    }
+}
 
 -(IBAction)back:(id)sender
 {
     NSLog(@"back");
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(IBAction)apply:(id)sender
+{
+    [siteData removeObject:@"0"];
+    NSLog(@"site data -----> %@",siteData);
+
+    if (siteData.count > 1)
+    {
+        ObjShared.siteName = [NSString stringWithFormat:@"%lu sites selected",(unsigned long)siteData.count];
+    }
+    else if (siteData.count == 0)
+    {
+        ObjShared.siteName =@"Select site";
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else
+    {
+        ObjShared.siteName = [NSString stringWithFormat:@"%@",[siteData objectAtIndex:0]];
+    }
+    ObjShared.siteNameArray = siteData;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -190,17 +211,5 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -14,6 +14,7 @@
 #import "DashboardCollectionViewCell.h"
 #import "DashboardViewController.h"
 #import "FundingDetailTableViewCell.h"
+
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -22,8 +23,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface FundingDetailViewController ()
 {
-    NSArray * name;
-    NSArray * dealer;
+    NSDictionary * revokeDict;
 }
 @end
 
@@ -34,10 +34,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ObjShared = [SharedClass sharedInstance];
     
-    name=[[NSArray alloc]initWithObjects:@"Dealer Name",@"Mobile",@"E-mail",@"Date of Applied",@"Amount",@"City",@"Loan for",@"Status", nil];
-    dealer=[[NSArray alloc]initWithObjects:@"ABC-0001",@"12341234",@"abc@gmail.com",@"11-11-2016",@"Rs 5,00,000",@"Chennai",@"Renault Duster",@"On going", nil];
-
-
+    statusLabel.text = [ObjShared.applyFundingPageDict objectForKey:@"Status"];
+    
+    NSLog(@"status label ----> %@",statusLabel.text);
+    // Corner Radius for Enter button
+    revokeButton.layer.cornerRadius = 10;
+    revokeButton.layer.masksToBounds = NO;
+    revokeButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    
+    // Shadow Effect for Enter button
+    revokeButton.layer.shadowOpacity = 0.2;
+    revokeButton.layer.shadowRadius = 2;
+    revokeButton.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
     // Do any additional setup after loading the view.
 }
 
@@ -51,26 +59,37 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewWillAppear:animated];
     
     //Shared
-    
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
-}
+    if ([statusLabel.text isEqualToString:@"pending"])
+    {
+        statusLabel.textColor = [UIColor redColor];
+    }
+    else
+    {
+        statusLabel.textColor = [UIColor greenColor];
+        redLabel.hidden = YES;
+    }
 
+}
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[ObjShared.applyFundingPageDict objectForKey:@"ticket_id"],@"ticketid", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_revoke_funding" postData:para];
+    NSLog(@"param -----> %@",para);
 }
-
 -(IBAction)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
+-(IBAction)revokeAction:(id)sender
+{
+    [self callMakeid];
+}
 
 #pragma mark - Collection View delegate
 
@@ -147,7 +166,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return name.count;
+    return [ObjShared.applyFundingPageDict allKeys].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -156,12 +175,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     FundingDetailTableViewCell *fundingCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     
-    fundingCell.detail.text=[NSString stringWithFormat:@"%@ :",[name objectAtIndex:indexPath.row]];
-    fundingCell.name.text=[NSString stringWithFormat:@"%@",[dealer objectAtIndex:indexPath.row]];
+    fundingCell.detail.text=[NSString stringWithFormat:@"%@ :",[[ObjShared.applyFundingPageDict allKeys] objectAtIndex:indexPath.row]];
+    fundingCell.name.text=[NSString stringWithFormat:@"%@",[[ObjShared.applyFundingPageDict allValues] objectAtIndex:indexPath.row]];
     
     fundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    
     return fundingCell;
     
 }
@@ -170,16 +188,30 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
 }
+#pragma mark -W.S Delegate Call
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        revokeDict= dict;
+        [[self navigationController]popViewControllerAnimated:YES];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[revokeDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
 }
-*/
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

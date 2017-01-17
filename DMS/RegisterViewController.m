@@ -7,6 +7,7 @@
 //
 
 #import "RegisterViewController.h"
+#import "LoginViewController.h"
 
 @interface RegisterViewController ()
 {
@@ -25,18 +26,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    cityArray = [[NSArray alloc] initWithObjects:@"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai",
-                 @"Chennai", nil];
-    
     
     // Corner Radius for Enter button
     signUp.layer.cornerRadius = 10;
@@ -58,9 +47,18 @@
     [signinPressed setAttributedTitle:butString
                       forState:UIControlStateNormal];
     
-    [self pickerItems];
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //Shared
+    ObjShared = nil;
+    ObjShared = [SharedClass sharedInstance];
+    ObjShared.sharedDelegate = nil;
+    ObjShared.sharedDelegate = (id)self;
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -75,102 +73,43 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-#pragma PickerView Delegates
-
--(void)pickerItems
-{
-    cityPicker = [[UIPickerView alloc]init];
-    cityPicker.dataSource = self;
-    cityPicker.delegate = self;
-    [cityPicker setShowsSelectionIndicator:YES];
-    
-    [city setInputView:cityPicker];
-    
-    // creating a tool bar for done button.
-    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolBar.barStyle = UIBarStyleDefault;
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                target:self
-                                                                                action:@selector(doneTouched:)];
-    
-    [toolBar setItems:[NSArray arrayWithObjects:doneButton, nil]];
-    city.inputAccessoryView = toolBar;
-    
-    city.delegate = self;
- 
-}
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thepickerView
-{
-    return 1;
-}
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-        return [cityArray count];
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-        return [cityArray objectAtIndex:row];
-}
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    city.text = [ cityArray objectAtIndex:row];
-
-}
-
--(void)doneTouched:(UIBarButtonItem *)sender
-{
-    // hide the picker view
-    [city resignFirstResponder];
-    // perform some action
-}
-
 -(IBAction)signupPressed:(id)sender
 {
+    [self.view endEditing:YES];
+
     if (dealerName.text.length==0)
     {
-        sub=@"Please enter the Dealer Name";
-        [self alert];
-    }
-    else if (firstName.text.length==0)
-    {
-        sub=@"Please enter the Dealer Name";
-        [self alert];
+        sub=@"Please enter the Dealer name";
     }
     else if (emailId.text.length==0)
     {
-        sub=@"Please enter the Dealer Name";
-        [self alert];
+        sub=@"Please enter the E-mail name";
     }
     else if (![self isValidEmail:emailId.text])
     {
         sub=[NSString stringWithFormat:@"Invaild Email-Id"];
         
-        [self alert];
     }
     else if (contactNo.text.length==0)
     {
-        sub=@"Please enter the Dealer Name";
-        [self alert];
+        sub=@"Please enter the contact number";
     }
     else if (contactNo.text.length<10)
     {
         sub=@"Enter Contact Number is less than 10 Character";
-        [self alert];
     }
     else if (city.text.length==0)
     {
-        sub=@"Please enter the Dealer Name";
-        [self alert];
+        sub=@"Please enter your city";
     }
     else
     {
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:dealerName.text,@"dealer_name",emailId.text,@"d_email",contactNo.text,@"d_mobile",city.text,@"d_city",@"registerpage",@"page_register", nil];
         
-//        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:userName.text,@"email",password.text,@"password", nil];
-//        [ObjShared callWebServiceWith_DomainName:@"user_login" postData:para];
-        
-        sub=@"Successfully Registered";
-        [self alert];
+        [ObjShared callWebServiceWith_DomainName:@"registration_store" postData:para];
+        NSLog(@"logging in....");
     }
+    [AppDelegate showAlert:@"Required !!" withMessage:sub];
 }
 
 -(IBAction)back:(id)sender
@@ -184,6 +123,7 @@
 }
 
 #pragma mark -IsValid Email
+
 -(BOOL)isValidEmail:(NSString *)email
 {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
@@ -213,11 +153,39 @@
     NSLog(@"Dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
-        [AppDelegate showAlert:@"valid User" withMessage:@"valid Username or Password"];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Success!!" message:@"Successfully Registered.Please check your email for password." preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                       style:UIAlertActionStyleCancel
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                       }];
+        
+        [alertController addAction:cancelAction];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       LoginViewController *loginVc=[self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+                                       [self.navigationController pushViewController:loginVc animated:YES];
+                                   }
+                                   ];
+        
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Registration" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {
-        
+        [AppDelegate showAlert:@"Registration" withMessage:[dict valueForKey:@"message"]];
     }
 }
 - (void) failResponseFromServer

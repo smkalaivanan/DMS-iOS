@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ApplyFundingViewController : UIViewController
+{
+   IBOutlet UITableView * fundTable;
+}
 -(IBAction)side:(id)sender;
 -(IBAction)add:(id)sender;
 

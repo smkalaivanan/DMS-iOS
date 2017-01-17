@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface FundingDetailViewController : UIViewController
+{
+    IBOutlet UIButton * revokeButton;
+    IBOutlet UITableView * detailFundingTable;
+    IBOutlet UILabel * statusLabel;
+    IBOutlet UIButton * redLabel;
+
+}
 -(IBAction)back:(id)sender;
 
 @end

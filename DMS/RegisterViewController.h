@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-@interface RegisterViewController : UIViewController<UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate,SharedDelegate>
+@interface RegisterViewController : UIViewController<UITextFieldDelegate,SharedDelegate>
 {
     IBOutlet UITextField *dealerName;
-    IBOutlet UITextField *firstName;
     IBOutlet UITextField *emailId;
     IBOutlet UITextField *contactNo;
     IBOutlet UITextField *city;

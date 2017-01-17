@@ -13,6 +13,7 @@
     IBOutlet UIButton *heart;
     IBOutlet UIScrollView *imageScroll;
     IBOutlet UICollectionView *collection;
+    IBOutlet UIWebView *webView;
 }
 -(IBAction)back:(id)sender;
 

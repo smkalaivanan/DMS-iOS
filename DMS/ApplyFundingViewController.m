@@ -24,7 +24,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface ApplyFundingViewController ()
-
+{
+    NSDictionary * fundDict;
+}
 @end
 
 @implementation ApplyFundingViewController
@@ -53,25 +55,26 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
-    
+    [self callMakeid];
 }
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_apply_funding" postData:para];
 }
+
 -(IBAction)side:(id)sender
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
     
 }
+
 -(IBAction)add:(id)sender
 {
     AddFundingViewController *addVC =[self.storyboard instantiateViewControllerWithIdentifier:@"AddFundingViewController"];
     [[self navigationController] pushViewController:addVC animated:YES];
 }
-
 
 #pragma mark - Collection View delegate
 
@@ -144,7 +147,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[fundDict valueForKey:@"apply_inventory_fund_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,7 +156,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ApplyFundingTableViewCell *fundingCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     fundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+        
+    fundingCell.name.text = [[[fundDict valueForKey:@"apply_inventory_fund_list"] valueForKey:@"Token"] objectAtIndex:indexPath.row];
+    fundingCell.price.text = [[[fundDict valueForKey:@"apply_inventory_fund_list"] valueForKey:@"Amount"] objectAtIndex:indexPath.row];
+    fundingCell.address.text = [[[fundDict valueForKey:@"apply_inventory_fund_list"] valueForKey:@"Contact"] objectAtIndex:indexPath.row];
+    fundingCell.date.text = [[[fundDict valueForKey:@"apply_inventory_fund_list"] valueForKey:@"Date"] objectAtIndex:indexPath.row];
     
     return fundingCell;
     
@@ -162,20 +169,40 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
+    ObjShared.applyFundingPageDict = [[fundDict valueForKey:@"apply_inventory_fund_list"] objectAtIndex:indexPath.row];
+    
+    NSLog(@"funding row----> %@",ObjShared.applyFundingPageDict);
+
+    
     FundingDetailViewController *fundVC =[self.storyboard instantiateViewControllerWithIdentifier:@"FundingDetailViewController"];
     [[self navigationController] pushViewController:fundVC animated:YES];
 
 }
 
+#pragma mark -W.S Delegate Call
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        fundDict= dict;
+        [fundTable reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[fundDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
 }
-*/
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

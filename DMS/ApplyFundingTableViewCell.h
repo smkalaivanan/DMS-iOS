@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ApplyFundingTableViewCell : UITableViewCell
-@property (nonatomic,retain) IBOutlet UIImageView *dealerImg;
+
 @property (nonatomic,retain) IBOutlet UILabel *name;
 @property (nonatomic,retain) IBOutlet UILabel *price;
 @property (nonatomic,retain) IBOutlet UILabel *address;

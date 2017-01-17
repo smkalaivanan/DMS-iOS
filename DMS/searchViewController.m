@@ -16,13 +16,15 @@
 #import "bidsPostedViewController.h"
 #import "MyQueriesViewController.h"
 #import "DashboardViewController.h"
+#import "DetailViewController.h"
+#import "BidsDetailViewController.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface searchViewController ()<TLTagsControlDelegate,CZPickerViewDataSource, CZPickerViewDelegate>
+@interface searchViewController ()<TLTagsControlDelegate>
 {
     SearchTableViewCell *searchCell;
     headerTableViewCell *header;
@@ -52,18 +54,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                    @"queries-blue.png",
                    @"bids-blue.png",
                    @"funding-blue.png", nil];
+    
     footerText = [[NSArray alloc] initWithObjects:@"Search",
                   @"Saved Cars",
                   @"My Queries",
                   @"Bids Posted",
                   @"Funding",nil];
     
-    tags = [NSMutableArray arrayWithArray:@[@"Budget: 4L - 5L",
-                                            @"Model: SUV",
-                                            @"City: Chennai",
-                                            @"Site: Quickr"]];
-    [self likeArray];
-}
+    tags = [search_Dict valueForKey:@"top_note"];
+    NSLog(@"search Dict ----> %@",search_Dict);
+    }
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -74,9 +74,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
-    
+    [self likeArray];
     [city setTitle:ObjShared.Cityname forState:UIControlStateNormal];
-
 }
 
 -(void)likeArray
@@ -99,7 +98,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return footerText.count;
+    return [footerText count];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -107,6 +106,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     static NSString *cellIdentifier = @"DashboardCollectionViewCell";
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    
     cell.footIcon.image = [UIImage imageNamed:[footerArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [footerText objectAtIndex:indexPath.row];
     
@@ -180,22 +180,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     searchCell.carName.text=[NSString stringWithFormat:@"%@-%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"make"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"model"] objectAtIndex:indexPath.row]];
     
-    searchCell.CarKm.text=[NSString stringWithFormat:@"%@ |%@ |%@ |%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"kilometer_run"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"registration_year"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"owner_type"] objectAtIndex:indexPath.row]];
+    searchCell.CarKm.text=[NSString stringWithFormat:@"%@ KM |%@ |%@ |%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"kilometer_run"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"registration_year"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"owner_type"] objectAtIndex:indexPath.row]];
     
-    searchCell.carPrice.text=[NSString stringWithFormat:@"₹ %@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"]objectAtIndex:indexPath.row]];
-    
-    searchCell.address.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_address_1"]objectAtIndex:indexPath.row]];
+    searchCell.carPrice.text=[NSString stringWithFormat:@"₹ %@ - %@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"]objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_locality"]objectAtIndex:indexPath.row]];
     
     searchCell.postedDate.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"]objectAtIndex:indexPath.row]];
 
-    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"noimages"]objectAtIndex:indexPath.row]];
+    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"no_images"]objectAtIndex:indexPath.row]];
     
-
     [searchCell.carImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"imagelinks"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
-    [searchCell.siteImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"site_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    [searchCell.siteImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"site_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
-    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+//    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
 
 //    NSLog(@"price-->%@,posted---->%@,photo--->%@",[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"],[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"],);
     
@@ -204,7 +201,34 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [searchCell.heart addTarget:self
                         action:@selector(animateButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    if ([[like objectAtIndex:indexPath.row] isEqualToString:@"1"])
+    searchCell.viewBitButton.tag = indexPath.row;
+    searchCell.makeOfferButtom.tag = indexPath.row;
+    
+    searchCell.makeOfferButtom.layer.cornerRadius = 5;
+    searchCell.makeOfferButtom.layer.masksToBounds = YES;
+    searchCell.viewBitButton.layer.cornerRadius = 5;
+    searchCell.viewBitButton.layer.masksToBounds = YES;
+    
+    [searchCell.viewBitButton addTarget:self action:@selector(viewBidAction:) forControlEvents:UIControlEventTouchUpInside];
+    [searchCell.makeOfferButtom addTarget:self action:@selector(makeOfferAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"auction"]objectAtIndex:indexPath.row] isEqualToString:@"0"])
+    {
+        searchCell.viewBitButton.hidden = YES;
+        searchCell.makeOfferButtom.hidden = YES;
+    }
+    else if ([[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"auction"]objectAtIndex:indexPath.row] isEqualToString:@"1"])
+    {
+        searchCell.viewBitButton.hidden = NO;
+        searchCell.makeOfferButtom.hidden = NO;
+    }
+    else
+    {
+        searchCell.viewBitButton.hidden = NO;
+        searchCell.makeOfferButtom.hidden = YES;
+    }
+        
+    if ([[NSString stringWithFormat:@"%@",[like objectAtIndex:indexPath.row]] isEqualToString:@"1"])
     {
         [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-red.png"] forState:UIControlStateNormal];
 //        NSLog(@"liky:%@",like);
@@ -223,6 +247,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
+    
+    DetailViewController *DetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+    [[self navigationController] pushViewController:DetailVC animated:NO];
+
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -244,19 +272,45 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     header.redListingTagControl.tagsTextColor = [UIColor blackColor];
     [header.redListingTagControl reloadTagSubviews];
     [header.redListingTagControl setTapDelegate:self];
+    header.redListingTagControl.showsHorizontalScrollIndicator = NO;
+    
     return header;
 }
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if(searchTable.contentOffset.y >= (searchTable.contentSize.height - searchTable.bounds.size.height))
+    {
+            NSLog(@"called %f",searchTable.contentOffset.y);
+        
+    }
+}
+-(void)viewBidAction:(UIButton *)sender
+{
+    NSLog(@"viewBidAction-----> %ld",(long)sender.tag);
+    ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
+    BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
+    [[self navigationController] pushViewController:bidVC animated:YES];
+    
+}
+-(void)makeOfferAction:(UIButton *)sender
+{
+    NSLog(@"makeOfferAction-----> %ld",(long)sender.tag);
+    ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
+    BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
+    [[self navigationController] pushViewController:bidVC animated:YES];
+}
 -(void)animateButton:(UIButton *)sender
 {
     UIButton * button = (UIButton *)sender;
 //        button.selected = !button.selected;
     
-    NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"549",@"session_user_id",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
+    NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
+    
+    NSLog(@"para--->%@",likePara);
     
     NSLog(@"sender--->%ld",(long)sender.tag);
     
-        if ([[like objectAtIndex:sender.tag] isEqualToString:@"0"])
+        if ([[NSString stringWithFormat:@"%@",[like objectAtIndex:sender.tag] ]isEqualToString:@"0"])
         {
             [like replaceObjectAtIndex:sender.tag withObject:@"1"];
             
@@ -327,7 +381,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [self.view endEditing:YES];
 
-   para=[[NSMutableDictionary alloc] initWithObjectsAndKeys:searchText.text,@"search_listing",city.titleLabel.text,@"city_name",@"detail_searchpage",@"page_name", nil];
+   para=[[NSMutableDictionary alloc] initWithObjectsAndKeys:searchText.text,@"search_listing",city.titleLabel.text,@"city_name",@"detail_searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
     NSLog(@"params--->%@",para);
     [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:para];
 }
@@ -345,18 +399,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"in success");
    
         NSLog(@"Dict--->%@",dict);
-        if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+        if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]]isEqualToString:@"1"])
         {
             search_Dict=[[NSDictionary alloc]init];
             search_Dict=dict;
 
             [searchTable reloadData];
         }
-        else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+        else if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]]isEqualToString:@"0"])
         {
             [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
         }
-        else if ([[dict objectForKey:@"Result"]isEqualToString:@"3"])
+        else if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"] ]isEqualToString:@"3"])
         {
             NSDictionary * likeDict = [[NSDictionary alloc]init];
             likeDict = dict;
@@ -365,9 +419,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         {
         
         }
-    
-
-    
 }
 - (void) failResponseFromServer
 {

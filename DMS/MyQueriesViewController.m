@@ -23,7 +23,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface MyQueriesViewController ()
-
+{
+    NSDictionary * queriesDict;
+}
 @end
 
 @implementation MyQueriesViewController
@@ -52,13 +54,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
     
 }
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"",@"make", nil];
-    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_queries_car" postData:para];
 }
 
 -(IBAction)side:(id)sender
@@ -139,7 +142,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[queriesDict valueForKey:@"queries_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,6 +153,23 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     queriesCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
+    [queriesCell.carImg setImageWithURL:[NSURL URLWithString:[[[queriesDict valueForKey:@"queries_list"] valueForKey:@"imagelink"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
+    [queriesCell.dealerImg setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict objectForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
+    queriesCell.dealerName.text = [[[queriesDict  valueForKey:@"queries_list"] valueForKey:@"dealer_name"]objectAtIndex:indexPath.row];
+    
+    queriesCell.carName.text = [[[queriesDict valueForKey:@"queries_list"] valueForKey:@"title"]objectAtIndex:indexPath.row];
+    
+    queriesCell.msg.text = [[[queriesDict valueForKey:@"queries_list"] valueForKey:@"message"]objectAtIndex:indexPath.row];
+    
+    queriesCell.time.text = [[[queriesDict valueForKey:@"queries_list"] valueForKey:@"Time"] objectAtIndex:indexPath.row];
+    
+    queriesCell.carImg.layer.cornerRadius = queriesCell.carImg.frame.size.width /2;
+    queriesCell.carImg.layer.masksToBounds = YES;
+    
+    queriesCell.dealerImg.layer.cornerRadius = queriesCell.dealerImg.frame.size.width /2;
+    queriesCell.dealerImg.layer.masksToBounds = YES;
     
     return queriesCell;
     
@@ -160,17 +180,29 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"selected row----> %ld",(long)indexPath.row);
 }
 
+#pragma mark -W.S Delegate Call
 
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        queriesDict= dict;
+        [queriesTable reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[queriesDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
 }
-*/
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
 
 @end
