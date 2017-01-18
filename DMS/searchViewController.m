@@ -18,6 +18,7 @@
 #import "DashboardViewController.h"
 #import "DetailViewController.h"
 #import "BidsDetailViewController.h"
+#import "FiltersViewController.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -192,7 +193,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     [searchCell.siteImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"site_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
-//    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
 
 //    NSLog(@"price-->%@,posted---->%@,photo--->%@",[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"],[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"],);
     
@@ -248,9 +249,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
     
-    DetailViewController *DetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
-    [[self navigationController] pushViewController:DetailVC animated:NO];
-
+//    DetailViewController *DetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+//    [[self navigationController] pushViewController:DetailVC animated:NO];
+//
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -441,6 +442,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)filter:(id)sender
 {
+    FiltersViewController *FilterVC=[self.storyboard instantiateViewControllerWithIdentifier:@"FiltersViewController"];
+    [self presentViewController:FilterVC animated:YES completion: nil];
     
 }
 -(IBAction)compare:(id)sender

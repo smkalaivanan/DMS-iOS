@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181E76771E2F6EFE00DDFE96 /* alert-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 181E76761E2F6EFE00DDFE96 /* alert-red.png */; };
 		450215231DE459EC000356EE /* search-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215221DE459EC000356EE /* search-box.png */; };
 		450215251DE45A4B000356EE /* search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215241DE45A4B000356EE /* search-icon.png */; };
 		450215271DE45B10000356EE /* image1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215261DE45B10000356EE /* image1.png */; };
@@ -150,6 +151,9 @@
 		FA4B86FE1E10FFCE00E49FA7 /* replay.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4B86FB1E10FFCE00E49FA7 /* replay.png */; };
 		FA4B87001E11404A00E49FA7 /* compare1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4B86FF1E11404A00E49FA7 /* compare1.png */; };
 		FA6C39941DF145BE00FC9F24 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6C39931DF145BE00FC9F24 /* ChangePasswordViewController.m */; };
+		FA6D349E1E2F616C008DEE0D /* FiltersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D34991E2F616C008DEE0D /* FiltersTableViewCell.m */; };
+		FA6D349F1E2F616C008DEE0D /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D349B1E2F616C008DEE0D /* FiltersViewController.m */; };
+		FA6D34A31E2F6187008DEE0D /* SelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6D34A21E2F6187008DEE0D /* SelectionViewController.m */; };
 		FA76FD101DF92DCE00B78EEA /* SavedcarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA76FD0F1DF92DCE00B78EEA /* SavedcarViewController.m */; };
 		FA76FD141DF937AE00B78EEA /* SelectCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA76FD131DF937AE00B78EEA /* SelectCityViewController.m */; };
 		FA78C41F1E0A557100E46333 /* bid-closed.png in Resources */ = {isa = PBXBuildFile; fileRef = FA78C4191E0A557100E46333 /* bid-closed.png */; };
@@ -255,6 +259,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181E76761E2F6EFE00DDFE96 /* alert-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red.png"; sourceTree = "<group>"; };
 		450215221DE459EC000356EE /* search-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-box.png"; sourceTree = "<group>"; };
 		450215241DE45A4B000356EE /* search-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-icon.png"; sourceTree = "<group>"; };
 		450215261DE45B10000356EE /* image1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image1.png; sourceTree = "<group>"; };
@@ -469,6 +474,12 @@
 		FA4B86FF1E11404A00E49FA7 /* compare1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compare1.png; sourceTree = "<group>"; };
 		FA6C39921DF145BE00FC9F24 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		FA6C39931DF145BE00FC9F24 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
+		FA6D34981E2F616C008DEE0D /* FiltersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersTableViewCell.h; sourceTree = "<group>"; };
+		FA6D34991E2F616C008DEE0D /* FiltersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltersTableViewCell.m; sourceTree = "<group>"; };
+		FA6D349A1E2F616C008DEE0D /* FiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersViewController.h; sourceTree = "<group>"; };
+		FA6D349B1E2F616C008DEE0D /* FiltersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltersViewController.m; sourceTree = "<group>"; };
+		FA6D34A11E2F6187008DEE0D /* SelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionViewController.h; sourceTree = "<group>"; };
+		FA6D34A21E2F6187008DEE0D /* SelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionViewController.m; sourceTree = "<group>"; };
 		FA76FD0E1DF92DCE00B78EEA /* SavedcarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedcarViewController.h; sourceTree = "<group>"; };
 		FA76FD0F1DF92DCE00B78EEA /* SavedcarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedcarViewController.m; sourceTree = "<group>"; };
 		FA76FD121DF937AE00B78EEA /* SelectCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectCityViewController.h; sourceTree = "<group>"; };
@@ -631,6 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				452431721DF7E8E9003A056C /* alert.png */,
+				181E76761E2F6EFE00DDFE96 /* alert-red.png */,
 				452431701DF7E8BE003A056C /* compare.png */,
 				FAAB88651DE56F96007553F2 /* beep.mp3 */,
 				45651D651DE562420082262A /* details.png */,
@@ -860,6 +872,12 @@
 		453688111E12FA8300144F5E /* Buy Page */ = {
 			isa = PBXGroup;
 			children = (
+				FA6D34981E2F616C008DEE0D /* FiltersTableViewCell.h */,
+				FA6D34991E2F616C008DEE0D /* FiltersTableViewCell.m */,
+				FA6D349A1E2F616C008DEE0D /* FiltersViewController.h */,
+				FA6D349B1E2F616C008DEE0D /* FiltersViewController.m */,
+				FA6D34A11E2F6187008DEE0D /* SelectionViewController.h */,
+				FA6D34A21E2F6187008DEE0D /* SelectionViewController.m */,
 				FAC21DCF1E02721700778FBE /* Bids */,
 				FAC21DCE1E02720500778FBE /* Queries */,
 				FAC21DCD1E0271F700778FBE /* Funding */,
@@ -1877,6 +1895,7 @@
 				FAA88F641E1D006500DC752C /* 1_inventory.png in Resources */,
 				FAA3BE141DE2D08300A15F75 /* savecar-white.png in Resources */,
 				FA472CF21DDC2368005CFB59 /* IQButtonBarArrowRight.png in Resources */,
+				181E76771E2F6EFE00DDFE96 /* alert-red.png in Resources */,
 				450215251DE45A4B000356EE /* search-icon.png in Resources */,
 				4536881A1E12FC6700144F5E /* redPlus.png in Resources */,
 				FAA3BDFB1DE2C36B00A15F75 /* car-image.png in Resources */,
@@ -1963,6 +1982,7 @@
 				FAEE1DF21DE456AA00BFAF8C /* headerTableViewCell.m in Sources */,
 				FAAB88971DE5C6AA007553F2 /* UIButton+AFNetworking.m in Sources */,
 				4515896E1E24DED7004D2526 /* SWUtilityButtonView.m in Sources */,
+				FA6D349E1E2F616C008DEE0D /* FiltersTableViewCell.m in Sources */,
 				FAA3BE5E1DE2F24E00A15F75 /* CZPickerView.m in Sources */,
 				FAAB888F1DE5C6AA007553F2 /* AFSecurityPolicy.m in Sources */,
 				4546A90C1DDDC20700040E5B /* DashboardViewController.m in Sources */,
@@ -1988,6 +2008,7 @@
 				FA7C1B381DFAC1B500377438 /* SelectcityCollectionViewCell.m in Sources */,
 				45DC23671DD9BF7500BCE1BF /* AppDelegate.m in Sources */,
 				FA472CF71DDC2368005CFB59 /* IQToolbar.m in Sources */,
+				FA6D349F1E2F616C008DEE0D /* FiltersViewController.m in Sources */,
 				45BA1C1C1DDC2AEA00FE74E5 /* main.m in Sources */,
 				FAC21DDE1E0272E300778FBE /* MyQueriesTableViewCell.m in Sources */,
 				4515896A1E24DED7004D2526 /* SWCellScrollView.m in Sources */,
@@ -2021,6 +2042,7 @@
 				FAAB88A01DE5C728007553F2 /* SharedClass.m in Sources */,
 				FAEE1DEB1DE454C000BFAF8C /* searchViewController.m in Sources */,
 				FAC21DCC1E0271F000778FBE /* MyQueriesViewController.m in Sources */,
+				FA6D34A31E2F6187008DEE0D /* SelectionViewController.m in Sources */,
 				FA472D001DDC2368005CFB59 /* IQKeyboardReturnKeyHandler.m in Sources */,
 				4536883D1E1311D400144F5E /* AddLoanViewController.m in Sources */,
 				4515894B1E24DE59004D2526 /* branchTableViewCell.m in Sources */,

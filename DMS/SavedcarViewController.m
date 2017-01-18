@@ -27,7 +27,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     AppDelegate * appDelegate;
     NSDictionary *search_Dict;
     NSMutableArray * newArray;
-    NSInteger * senderNumber;
+    NSString * senderNumber;
 }
 
 @end
@@ -42,8 +42,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     
     ObjShared = [SharedClass sharedInstance];
-
-//    [self likeArray];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -56,19 +54,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMethod];
-
 }
 
--(void)likeArray
-{
-    int c = 10;
-    
-    like = [[NSMutableArray alloc]initWithCapacity:c];
-    for (int i = 0; i<c; i++)
-    {
-        [like addObject:@"0"];
-    }
-}
 -(void)callMethod
 {
     NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
@@ -161,7 +148,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [newArray count];
+    return [[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -170,29 +157,33 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     searchCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     
-    searchCell.carName.text=[NSString stringWithFormat:@"%@-%@",[[newArray valueForKey:@"make"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"model"] objectAtIndex:indexPath.row]];
+    searchCell.carName.text=[NSString stringWithFormat:@"%@-%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"make"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"model"] objectAtIndex:indexPath.row]];
     
-    searchCell.CarKm.text=[NSString stringWithFormat:@"%@ |%@ |%@ |%@",[[newArray valueForKey:@"kilometer_run"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"registration_year"] objectAtIndex:indexPath.row],[[newArray valueForKey:@"owner_type"] objectAtIndex:indexPath.row]];
+    searchCell.CarKm.text=[NSString stringWithFormat:@"%@ KM |%@ |%@ |%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"kilometer_run"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"registration_year"] objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"owner_type"] objectAtIndex:indexPath.row]];
     
-    searchCell.carPrice.text=[NSString stringWithFormat:@"₹ %@",[[newArray valueForKey:@"price"]objectAtIndex:indexPath.row]];
-        
-    searchCell.postedDate.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"daysstmt"]objectAtIndex:indexPath.row]];
+    searchCell.carPrice.text=[NSString stringWithFormat:@"₹ %@ - %@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"]objectAtIndex:indexPath.row],[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_locality"]objectAtIndex:indexPath.row]];
     
-    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[newArray valueForKey:@"no_images"]objectAtIndex:indexPath.row]];
+    searchCell.postedDate.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"]objectAtIndex:indexPath.row]];
     
+    searchCell.PhotoNumber.text=[NSString stringWithFormat:@"%@",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"no_images"]objectAtIndex:indexPath.row]];
     
-    [searchCell.carImage setImageWithURL:[NSURL URLWithString:[[newArray valueForKey:@"imagelinks"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [searchCell.carImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"imagelinks"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
-    [searchCell.siteImage setImageWithURL:[NSURL URLWithString:[[newArray valueForKey:@"site_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    [searchCell.siteImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"site_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
-    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[newArray valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    [searchCell.bidImage setImageWithURL:[NSURL URLWithString:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"bid_image"]objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
     
     //    NSLog(@"price-->%@,posted---->%@,photo--->%@",[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"],[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"],);
     
     searchCell.reminder.tag=indexPath.row;
+    [searchCell.reminder addTarget:self
+                         action:@selector(alertButton:) forControlEvents:UIControlEventTouchUpInside];
+
     searchCell.heart.tag = indexPath.row;
     [searchCell.heart addTarget:self
                          action:@selector(animateButton:) forControlEvents:UIControlEventTouchUpInside];
+    [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"unlike.png"] forState:UIControlStateNormal];
+
     searchCell.viewBitButton.tag = indexPath.row;
     searchCell.makeOfferButtom.tag = indexPath.row;
     
@@ -219,21 +210,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         searchCell.viewBitButton.hidden = NO;
         searchCell.makeOfferButtom.hidden = YES;
     }
-
     
-    
-    
-    if ([[like objectAtIndex:indexPath.row] isEqualToString:@"1"])
+    if ([[NSString stringWithFormat:@"%@",[alert objectAtIndex:indexPath.row]] isEqualToString:@"1"])
     {
-        [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-white.png"] forState:UIControlStateNormal];
-        //        NSLog(@"liky:%@",like);
+        [searchCell.reminder setBackgroundImage:[UIImage imageNamed:@"alert-red.png"] forState:UIControlStateNormal];
     }
     else
     {
-        [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-red.png"] forState:UIControlStateNormal];
-        //        NSLog(@"liky:%@",like);
+        [searchCell.reminder setBackgroundImage:[UIImage imageNamed:@"alert.png"] forState:UIControlStateNormal];
     }
-    
+
     searchCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return searchCell;
     
@@ -249,7 +235,61 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return 320;
 }
+-(void)alertButton:(UIButton *)sender
+{
+    UIButton * button = (UIButton *)sender;
 
+    NSMutableDictionary* alertPara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] objectAtIndex:sender.tag],@"car_id",@"alertcarpage",@"page_name", nil];
+    
+    NSLog(@"para--->%@",alertPara);
+    
+    if ([[NSString stringWithFormat:@"%@",[alert objectAtIndex:sender.tag] ]isEqualToString:@"0"])
+    {
+        [alert replaceObjectAtIndex:sender.tag withObject:@"1"];
+        
+        SystemSoundID soundID;
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep" ofType:@"mp3"];
+        NSURL *soundUrl = [NSURL fileURLWithPath:soundPath];
+        AudioServicesCreateSystemSoundID ((CFURLRef) CFBridgingRetain(soundUrl) , &soundID);
+        AudioServicesPlaySystemSound(soundID);
+        
+        [UIView animateWithDuration:0.3/1.5 animations:^{
+            
+            button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
+            
+        } completion:^(BOOL finished)
+         {
+             [UIView animateWithDuration:0.3/2 animations:^{
+                 
+                 button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.7, 0.7);
+                 
+             } completion:^(BOOL finished){
+                 
+                 [UIView animateWithDuration:0.3/2 animations:^{
+                     button.transform = CGAffineTransformIdentity;
+                     
+                 }];
+                 
+                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
+                 NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
+                 [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+             }];
+         }];
+    }
+    else
+    {
+        [alert replaceObjectAtIndex:sender.tag withObject:@"0"];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
+        NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
+        [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    }
+
+    
+    [ObjShared callWebServiceWith_DomainName:@"api_alert_car" postData:alertPara];
+    NSLog(@"param --- >%@",alertPara);
+    senderNumber= [NSString stringWithFormat:@"%ld",(long)sender.tag];
+}
 
 -(void)animateButton:(UIButton *)sender
 {
@@ -258,6 +298,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[newArray valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
     
     [ObjShared callWebServiceWith_DomainName:@"api_save_car" postData:likePara];
+    senderNumber= [NSString stringWithFormat:@"%ld",(long)sender.tag];
 }
 -(void)viewBidAction:(UIButton *)sender
 {
@@ -291,13 +332,28 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         search_Dict= dict;
         newArray = [search_Dict valueForKey:@"car_listing"];
+        
+        alert = [[NSMutableArray alloc]initWithCapacity:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]]
+        ;
+        for (int i = 0; i<[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]; i++)
+        {
+            [alert addObject:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] objectAtIndex:i]];
+        }
+        
+        NSLog(@"alert array -- >%@",alert);
+
         [searchTable reloadData];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"3"])
     {
-        [newArray removeObjectAtIndex:searchCell.heart.tag];
+        [newArray removeObjectAtIndex:[senderNumber integerValue]];
         [searchTable reloadData];
     }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"4"])
+    {
+        [searchTable reloadData];
+    }
+
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
         [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];

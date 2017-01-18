@@ -52,6 +52,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @property (nonatomic,retain) NSArray *footerText, *inventoryFooterText,*manageFooterText;
 @property (nonatomic,retain) NSArray *siteNameArray;
 
+@property (nonatomic,retain) NSMutableArray *array;
+
+
 
 @property (nonatomic)int collectionZ;
 

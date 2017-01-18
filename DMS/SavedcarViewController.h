@@ -16,7 +16,7 @@
 @interface SavedcarViewController : UIViewController
 {
    
-    NSMutableArray *like;
+    NSMutableArray *alert;
     IBOutlet UIButton *city;
     IBOutlet UITextField *searchText;
     int apiCall;
