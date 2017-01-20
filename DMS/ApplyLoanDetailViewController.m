@@ -16,7 +16,9 @@
 #import "InventoryViewController.h"
 
 @interface ApplyLoanDetailViewController ()
-
+{
+    NSDictionary * revokeDict;
+}
 @end
 
 @implementation ApplyLoanDetailViewController
@@ -27,6 +29,21 @@
     // Do any additional setup after loading the view.
     
     ObjShared = [SharedClass sharedInstance];
+    
+    statusLabel.text = [ObjShared.sellApplyFundingDict objectForKey:@"Status"];
+    
+    NSLog(@"status label ----> %@",statusLabel.text);
+    // Corner Radius for Enter button
+    revokeButton.layer.cornerRadius = 10;
+    revokeButton.layer.masksToBounds = NO;
+    revokeButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    
+    // Shadow Effect for Enter button
+    revokeButton.layer.shadowOpacity = 0.2;
+    revokeButton.layer.shadowRadius = 2;
+    revokeButton.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
+    // Do any additional setup after loading the view.
+
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -37,24 +54,42 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
+    if ([statusLabel.text isEqualToString:@"pending"])
+    {
+        statusLabel.textColor = [UIColor redColor];
+    }
+    else
+    {
+        statusLabel.textColor = [UIColor greenColor];
+        redLabel.hidden = YES;
+    }
+    
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma UITableView-Sample
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+-(void)callMakeid
 {
-    // Return the number of sections.
-    return 1;
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[ObjShared.sellApplyFundingDict objectForKey:@"ticket_id"],@"ticketid", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_revoke_funding" postData:para];
+    NSLog(@"param -----> %@",para);
 }
+-(IBAction)revokeAction:(id)sender
+{
+    [self callMakeid];
+}
+-(IBAction)backButton:(id)sender
+{
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+#pragma UITableView-Sample
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 5;
+    return [ObjShared.sellApplyFundingDict allKeys].count;
 }
 
 
@@ -62,10 +97,12 @@
 {
     static NSString * cellIdentifier = @"ApplyLoanDetailTableViewCell";
     
-    ApplyLoanDetailTableViewCell * applyLoan =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+    ApplyLoanDetailTableViewCell * applyLoan =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
     applyLoan.selectionStyle = UITableViewCellSelectionStyleNone;
-    applyLoan.applyLoanUserKey.text = @"user key";
-    applyLoan.applyLoanUserDetail.text = @"user value";
+    
+    applyLoan.applyLoanUserKey.text = [NSString stringWithFormat:@"%@ :",[[ObjShared.sellApplyFundingDict allKeys] objectAtIndex:indexPath.row]];
+    applyLoan.applyLoanUserDetail.text = [NSString stringWithFormat:@"%@",[[ObjShared.sellApplyFundingDict allValues] objectAtIndex:indexPath.row]];
     
     return applyLoan;
 }
@@ -133,10 +170,30 @@
 {
     return ObjShared.collectionZ;
 }
--
-(IBAction)backButton:(id)sender
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
 {
-    [[self navigationController] popViewControllerAnimated:YES];
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        revokeDict= dict;
+        [[self navigationController]popViewControllerAnimated:YES];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[revokeDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
 }
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

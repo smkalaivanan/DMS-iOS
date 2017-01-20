@@ -18,7 +18,9 @@
 
 
 @interface SellApplyLoanViewController ()
-
+{
+    NSDictionary * sellApplyDict;
+}
 @end
 
 @implementation SellApplyLoanViewController
@@ -39,27 +41,30 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
 }
+
 -(IBAction)showLeftMenuPressed:(id)sender
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma UITableView-Sample
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+-(void)callMakeid
 {
-    // Return the number of sections.
-    return 1;
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewloanpage",@"page_name", nil];
+    [ObjShared callWebServiceWith_DomainName:@"viewapplyloan_list" postData:para];
 }
+#pragma UITableView-Sample
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 10;
+    return [[sellApplyDict valueForKey:@"loan_list"] count] ;
 }
 
 
@@ -70,11 +75,28 @@
     ApplyLoanTableViewCell * loan =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     loan.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    loan.customerName.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customername"]objectAtIndex:indexPath.row];
+    loan.customerEmail.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customermailid"]objectAtIndex:indexPath.row];
+    loan.customerNumber.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customermobileno"]objectAtIndex:indexPath.row];
+    
+    if ([[NSString stringWithFormat:@"%@",[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"status" ] objectAtIndex:indexPath.row]] isEqualToString:@"0"])
+    {
+        loan.customerStatus.text=@"Pending";
+        loan.customerStatus.textColor = [UIColor redColor];
+    }
+    else
+    {
+        loan.customerStatus.text=@"Approved";
+        loan.customerStatus.textColor = [UIColor greenColor];
+    }
+    [loan.customerImage setImageWithURL:[NSURL URLWithString:[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"bankimage" ] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
     return loan;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ObjShared.sellApplyFundingDict = [[sellApplyDict valueForKey:@"loan_list"] objectAtIndex:indexPath.row];
     ApplyLoanDetailViewController *applyDetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"ApplyLoanDetailViewController"];
     [[self navigationController] pushViewController:applyDetailVC animated:YES];
 }
@@ -147,5 +169,29 @@
 -(IBAction)revokeAddFundings:(id)sender
 {
     NSLog(@"revoke");
+}
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        sellApplyDict= dict;
+        [sellApplyTabel reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[sellApplyDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 @end

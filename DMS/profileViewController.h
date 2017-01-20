@@ -14,7 +14,7 @@
 #import "subscriptionViewController.h"
 
 
-@interface profileViewController : UIViewController
+@interface profileViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     IBOutlet UIImageView *profileImg;
     IBOutlet UITextField *profileName;
@@ -28,4 +28,6 @@
 -(IBAction)sidemMenu:(id)sender;
 -(IBAction)save:(id)sender;
 -(IBAction)edit:(id)sender;
+- (IBAction)pic:(id)sender;
+-(IBAction)changePassword:(id)sender;
 @end

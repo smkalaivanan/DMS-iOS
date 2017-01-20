@@ -13,10 +13,16 @@
 #import "subscriptionViewController.h"
 #import "profileViewController.h"
 #import "EditTableViewCell.h"
+#import "HMSegmentedControl.h"
 
 
 
 @interface myContactViewController : UIViewController<SWTableViewCellDelegate,SharedDelegate>
+
+{
+    IBOutlet UIView * segmentViewButton;
+
+}
 
 -(IBAction)sidemMenu:(id)sender;
 -(IBAction)add:(id)sender;

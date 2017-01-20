@@ -123,9 +123,6 @@
     else
     {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
-//    ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
-//    
-//    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     
 }
@@ -138,6 +135,14 @@
 -(IBAction)profile:(id)sender
 {
     NSLog(@"Clicked");
+    
+    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+    
+    
+    profileViewController *profileVC=[self.storyboard instantiateViewControllerWithIdentifier:@"profileViewController"];
+    
+    [SharedClass NavigateTo:profileVC inNavigationViewController:appDelegate.navigationController animated:false];
+    
 }
 
 -(BOOL)prefersStatusBarHidden

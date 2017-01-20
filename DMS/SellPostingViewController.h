@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface SellPostingViewController : UIViewController
-
+{
+    NSDictionary * postingDict;
+    IBOutlet UITableView * sellPostingtable;
+}
 @end

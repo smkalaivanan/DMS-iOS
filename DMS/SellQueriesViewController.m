@@ -36,6 +36,12 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
+}
+-(void)callMakeid
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_queries_received" postData:para];
 }
 -(IBAction)showLeftMenuPressed:(id)sender
 {
@@ -67,6 +73,13 @@
     QueriesTableViewCell * query =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     query.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    query.customerName.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+    query.carModel.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+    query.timeAgo.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+    query.customerMessage.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+
+    [query.customerImage setImageWithURL:[NSURL URLWithString:[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+
     return query;
 }
 
@@ -133,6 +146,30 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return ObjShared.collectionZ;
+}
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        sellQueriesDict= dict;
+        [sellQueriesTable reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[sellQueriesDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 @end

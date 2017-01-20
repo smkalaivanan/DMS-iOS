@@ -32,6 +32,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSMutableArray *tags;
     AppDelegate * appDelegate;
     NSDictionary *search_Dict;
+    UIButton * button;
+    UIView * pic;
+    NSArray * sort;
+    
 }
 @property CZPickerView *pickerForCity;
 @end
@@ -64,7 +68,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     tags = [search_Dict valueForKey:@"top_note"];
     NSLog(@"search Dict ----> %@",search_Dict);
-    }
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -86,6 +90,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     for (int i = 0; i<[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"saved_car"] count]; i++)
     {
         [like addObject:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"saved_car"] objectAtIndex:i]];
+    }
+    
+    alert = [[NSMutableArray alloc]initWithCapacity:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]];
+    
+    for (int i = 0; i<[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]; i++)
+    {
+        [alert addObject:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] objectAtIndex:i]];
     }
 }
 
@@ -198,6 +209,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 //    NSLog(@"price-->%@,posted---->%@,photo--->%@",[[search_Dict valueForKey:@"car_listing"] valueForKey:@"daysstmt"],[[search_Dict valueForKey:@"car_listing"] valueForKey:@"price"],);
     
     searchCell.reminder.tag=indexPath.row;
+    [searchCell.reminder addTarget:self
+                            action:@selector(alertButton:) forControlEvents:UIControlEventTouchUpInside];
+    
     searchCell.heart.tag = indexPath.row;
     [searchCell.heart addTarget:self
                         action:@selector(animateButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -238,6 +252,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-White.png"] forState:UIControlStateNormal];
 //        NSLog(@"liky:%@",like);
+    }
+    
+    if ([[NSString stringWithFormat:@"%@",[alert objectAtIndex:indexPath.row]] isEqualToString:@"1"])
+    {
+        [searchCell.reminder setBackgroundImage:[UIImage imageNamed:@"alert-red.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [searchCell.reminder setBackgroundImage:[UIImage imageNamed:@"alert.png"] forState:UIControlStateNormal];
     }
  
     searchCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -300,9 +323,41 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
     [[self navigationController] pushViewController:bidVC animated:YES];
 }
+-(void)clickAnimation
+{
+    SystemSoundID soundID;
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep" ofType:@"mp3"];
+    NSURL *soundUrl = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID ((CFURLRef) CFBridgingRetain(soundUrl) , &soundID);
+    AudioServicesPlaySystemSound(soundID);
+    
+    [UIView animateWithDuration:0.3/1.5 animations:^{
+        
+        button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
+        
+    } completion:^(BOOL finished)
+     {
+         [UIView animateWithDuration:0.3/2 animations:^{
+             
+             button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.7, 0.7);
+             
+         } completion:^(BOOL finished){
+             
+             [UIView animateWithDuration:0.3/2 animations:^{
+                 button.transform = CGAffineTransformIdentity;
+                 
+             }];
+             
+             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
+             NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
+             [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+         }];
+     }];
+   
+}
 -(void)animateButton:(UIButton *)sender
 {
-    UIButton * button = (UIButton *)sender;
+    button = (UIButton *)sender;
 //        button.selected = !button.selected;
     
     NSMutableDictionary* likePara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] objectAtIndex:sender.tag],@"carid", nil];
@@ -314,35 +369,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         if ([[NSString stringWithFormat:@"%@",[like objectAtIndex:sender.tag] ]isEqualToString:@"0"])
         {
             [like replaceObjectAtIndex:sender.tag withObject:@"1"];
-            
-            SystemSoundID soundID;
-            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"beep" ofType:@"mp3"];
-            NSURL *soundUrl = [NSURL fileURLWithPath:soundPath];
-            AudioServicesCreateSystemSoundID ((CFURLRef) CFBridgingRetain(soundUrl) , &soundID);
-            AudioServicesPlaySystemSound(soundID);
-            
-            [UIView animateWithDuration:0.3/1.5 animations:^{
-                
-                button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
-                
-            } completion:^(BOOL finished)
-            {
-                [UIView animateWithDuration:0.3/2 animations:^{
-                    
-                    button.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.7, 0.7);
-                    
-                } completion:^(BOOL finished){
-                    
-                    [UIView animateWithDuration:0.3/2 animations:^{
-                        button.transform = CGAffineTransformIdentity;
-                        
-                    }];
-                    
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
-                    NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
-                    [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-                }];
-            }];
+            [self clickAnimation];
         }
         else
         {
@@ -353,6 +380,32 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     [ObjShared callWebServiceWith_DomainName:@"api_save_car" postData:likePara];
+}
+-(void)alertButton:(UIButton *)sender
+{
+    button = (UIButton *)sender;
+    
+    NSMutableDictionary* alertPara =[[NSMutableDictionary alloc] initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"car_id"] objectAtIndex:sender.tag],@"car_id",@"alertcarpage",@"page_name", nil];
+    
+    NSLog(@"para--->%@",alertPara);
+    
+    if ([[NSString stringWithFormat:@"%@",[alert objectAtIndex:sender.tag] ]isEqualToString:@"0"])
+    {
+        [alert replaceObjectAtIndex:sender.tag withObject:@"1"];
+        [self clickAnimation];
+    }
+    else
+    {
+        [alert replaceObjectAtIndex:sender.tag withObject:@"0"];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
+        NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
+        [searchTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
+    
+    [ObjShared callWebServiceWith_DomainName:@"api_alert_car" postData:alertPara];
+    NSLog(@"param --- >%@",alertPara);
 }
 
 -(IBAction)back:(id)sender
@@ -443,16 +496,108 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(IBAction)filter:(id)sender
 {
     FiltersViewController *FilterVC=[self.storyboard instantiateViewControllerWithIdentifier:@"FiltersViewController"];
-    [self presentViewController:FilterVC animated:YES completion: nil];
+    [[self navigationController]pushViewController :FilterVC  animated:YES];
+
     
 }
 -(IBAction)compare:(id)sender
 {
     
 }
--(IBAction)sort:(id)sender
+-(IBAction)sort
 {
     
+    sort = @[@"Low price to High price",@"High price to Low price",@"Low Mileage to High Mileage",@"High Mileage to Low Mileage",@"Old cars to New  cars",@"New cars to Old cars"] ;
+    
+    pic = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-200, self.view.frame.size.width , 180)];
+    
+    pic.backgroundColor=[UIColor clearColor];
+    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, 50)];
+    
+    toolBar.layer.cornerRadius=5.0f;
+    toolBar.layer.masksToBounds = YES;
+    
+    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(pickerOk:)];
+    
+    UIBarButtonItem *btn1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(pickerCancel:)];
+    
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    
+    
+    [toolBar setItems:[NSArray arrayWithObjects:btn1,flexibleSpace,btn,nil]];
+    [pic addSubview:toolBar];
+    
+    
+    self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(10, 50, self.view.frame.size.width - 20, 145)];
+    self.pickerView.delegate=self;
+    self.pickerView.dataSource=self;
+    self.pickerView.showsSelectionIndicator=YES;
+    self.pickerView.layer.cornerRadius=10.0f;
+    self.pickerView.layer.masksToBounds = YES;
+
+    self.pickerView.backgroundColor=[UIColor whiteColor];
+    [pic addSubview:self.pickerView];
+    
+    [self.view addSubview:pic];
+    
+}
+
+-(IBAction)pickerOk:(id)sender
+{
+//    if ([sort_Name isEqualToString:@"A to Z"])
+//    {
+//        sortId=@"1";
+//    }
+//    else if ([sort_Name isEqualToString:@"Z to A"])
+//    {
+//        sortId=@"2";
+//        
+//    }
+//    else if ([sort_Name isEqualToString:@"Low price to High price"])
+//    {
+//        sortId=@"3";
+//    }
+//    else if ([sort_Name isEqualToString:@"High price to Low price"])
+//    {
+//        sortId=@"4";
+//        
+//    }
+//    else
+//    {
+//        sortId=@"0";
+//    }
+//    [self sendHTTPPost];
+    [pic removeFromSuperview];
+    //    [self.pickerView removeFromSuperview];
+    //    pic.hidden=YES;
+}
+-(IBAction)pickerCancel:(id)sender
+{
+    //    NSLog(@"inside picker cancel");
+   
+    [pic removeFromSuperview];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+//    sort_Name=[NSString stringWithFormat:@"%@",[picker objectAtIndex:row]];
+    //    NSLog(@"%@",[picker objectAtIndex:row]);
+}
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [sort count];
+}
+
+# pragma mark UIPickerViewDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [sort objectAtIndex:row];
 }
 
 

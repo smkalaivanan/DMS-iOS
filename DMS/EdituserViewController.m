@@ -8,7 +8,7 @@
 
 #import "EdituserViewController.h"
 
-@interface EdituserViewController ()
+@interface EdituserViewController ()<UIPickerViewDelegate,UIPickerViewDataSource>
 
 @end
 
@@ -16,6 +16,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIPickerView *picker = [[UIPickerView alloc] init];
+    picker.dataSource = self;
+    picker.delegate = self;
+    role.inputView = picker;
+    
 }
 
 - (void)didReceiveMemoryWarning {

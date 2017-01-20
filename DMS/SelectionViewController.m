@@ -107,8 +107,7 @@
     //    UIButton * button = (UIButton *)sender;
     //    button.selected = !button.selected;
    
-    if (single == 0)
-    {
+    
         NSLog(@"butoon tag--->%ld",(long)sender.tag);
         if ([[siteData objectAtIndex:sender.tag] isEqualToString:@"0"])
         {
@@ -124,26 +123,6 @@
         }
 
         
-        [self apply];
-    }
-    else
-    {
-        
-        NSLog(@"butoon tag--->%ld",(long)sender.tag);
-        if ([[siteData objectAtIndex:sender.tag] isEqualToString:@"0"])
-        {
-            [siteData replaceObjectAtIndex:sender.tag withObject:[choose objectAtIndex:sender.tag]];
-            celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox.png"];
-            [siteList reloadData];
-        }
-        else
-        {
-            [siteData replaceObjectAtIndex:sender.tag withObject:@"0"];
-            celling.checkBoxImage.image = [UIImage imageNamed:@"checkbox-empty.png"];
-            [siteList reloadData];
-        }
-
-    }
 }
 
 -(IBAction)back

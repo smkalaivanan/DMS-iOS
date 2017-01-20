@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SellApplyLoanViewController : UIViewController
-
+{
+    IBOutlet UITableView * sellApplyTabel;
+}
 -(IBAction)AddButton:(id)sender;
 -(IBAction)revokeAddFundings:(id)sender;
 

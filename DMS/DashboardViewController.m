@@ -28,7 +28,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @interface DashboardViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,CZPickerViewDataSource, CZPickerViewDelegate>
 {
     AppDelegate * appDelegate;
-    NSDictionary * dashDict;
     NSDictionary * modelDict;
     NSString * modelID;
     NSMutableDictionary *param;
@@ -228,12 +227,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            return [[dashDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"][row];
+            return [[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"][row];
 
         }
         else
         {
-            return [[dashDict valueForKey:@"model_make"]valueForKey:@"makename"][row];
+            return [[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"makename"][row];
         }
     }
     else
@@ -257,12 +256,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            return [[[dashDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"]count];
+            return [[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"]count];
 
         }
         else
         {
-            return [[[dashDict valueForKey:@"model_make"]valueForKey:@"makename"]count];
+            return [[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"makename"]count];
         }
     }
     else
@@ -287,16 +286,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            NSString * butBud = [NSString stringWithFormat:@"%@",[[dashDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"][row]];
+            NSString * butBud = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"][row]];
 
             [showBudget setTitle:butBud forState:UIControlStateNormal];
         }
         else
         {
-            NSString * butBud = [NSString stringWithFormat:@"%@",[[dashDict valueForKey:@"model_make"]valueForKey:@"makename"][row]];
+            NSString * butBud = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"makename"][row]];
             [showBudget setTitle:butBud forState:UIControlStateNormal];
             
-            modelID = [NSString stringWithFormat:@"%@",[[dashDict valueForKey:@"model_make"]valueForKey:@"make_id"][row]];
+            modelID = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"make_id"][row]];
             [self callMakeid];
         }
 
@@ -327,13 +326,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue  ==  0)
         {
-            NSString * butBuds = [NSString stringWithFormat:@"%@",[[[dashDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"] objectAtIndex:0]];
+            NSString * butBuds = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"] objectAtIndex:0]];
 
             [showBudget setTitle:butBuds forState:UIControlStateNormal];
         }
         else
         {
-            NSString * butBuds = [NSString stringWithFormat:@"%@",[[[dashDict valueForKey:@"model_make"]valueForKey:@"makename"] objectAtIndex:0]];
+            NSString * butBuds = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"makename"] objectAtIndex:0]];
             [showBudget setTitle:butBuds forState:UIControlStateNormal];
 
         }
@@ -503,8 +502,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
-        dashDict = dict;
-        ObjShared.appDict = dashDict;
+        ObjShared.appDict = dict;
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"7"])
     {
@@ -528,11 +526,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     
 }
-- (void) failResponseFromServer
+- (void)failResponseFromServer
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
-
+-(IBAction)reload:(id)sender
+{
+    [self.view setNeedsDisplay];
+}
 
 
 @end

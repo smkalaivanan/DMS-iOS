@@ -10,4 +10,12 @@
 
 @interface QueriesTableViewCell : UITableViewCell
 
+@property(nonatomic,retain) IBOutlet UILabel * customerName;
+@property(nonatomic,retain) IBOutlet UILabel * carModel;
+@property(nonatomic,retain) IBOutlet UILabel * customerMessage;
+@property(nonatomic,retain) IBOutlet UILabel * timeAgo;
+@property(nonatomic,retain) IBOutlet UIImageView * customerImage;
+
+
+
 @end

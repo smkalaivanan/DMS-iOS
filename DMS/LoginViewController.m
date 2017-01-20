@@ -20,6 +20,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *sub;
     AppDelegate * appDelegate;
     UIView * activity;
+    NSUserDefaults *defaluts;
+
 }
 
 @end
@@ -134,6 +136,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         {
             ObjShared.LoginDict=dictor;
             NSLog(@"login page--->%@",ObjShared.LoginDict);
+            
+            defaluts  = [NSUserDefaults standardUserDefaults];
+            
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_name"]] forKey:@"dealerName"];
+           
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"user_id"]] forKey:@"user_id"];
+
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_img"]] forKey:@"dealer_img"];
+
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_address"]] forKey:@"dealer_address"];
+
 
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
 

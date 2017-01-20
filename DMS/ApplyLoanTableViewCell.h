@@ -10,6 +10,13 @@
 
 @interface ApplyLoanTableViewCell : UITableViewCell
 
+@property(nonatomic,retain) IBOutlet UILabel * customerName;
+@property(nonatomic,retain) IBOutlet UILabel * customerNumber;
+@property(nonatomic,retain) IBOutlet UILabel * customerEmail;
+@property(nonatomic,retain) IBOutlet UILabel * customerStatus;
+@property(nonatomic,retain) IBOutlet UIImageView * customerImage;
+
+
 
 
 @end

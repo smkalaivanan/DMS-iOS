@@ -36,11 +36,19 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
 }
 -(IBAction)showLeftMenuPressed:(id)sender
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 }
+
+-(void)callMakeid
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewmypost",@"page_name", nil];
+    [ObjShared callWebServiceWith_DomainName:@"view_mypost_list" postData:para];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -56,7 +64,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 10;
+    return [[postingDict valueForKey:@"myposting_list"] count];
 }
 
 
@@ -66,6 +74,18 @@
     
     SellPostingTableViewCell * post =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     post.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    post.titleLabel.text = [[[postingDict valueForKey:@"myposting_list"] valueForKey:@"model"] objectAtIndex:indexPath.row];
+    post.priceLabel.text = [NSString stringWithFormat:@"₹ %@",[[[postingDict valueForKey:@"myposting_list"] valueForKey:@"price"] objectAtIndex:indexPath.row]];
+    post.kilometerLabel.text =[NSString stringWithFormat:@"%@ Km|%@|%@|%@",
+                               [[[postingDict valueForKey:@"myposting_list"] valueForKey:@"kms"] objectAtIndex:indexPath.row],
+                               [[[postingDict valueForKey:@"myposting_list"] valueForKey:@"fuel_type"] objectAtIndex:indexPath.row],
+                               [[[postingDict valueForKey:@"myposting_list"] valueForKey:@"year"] objectAtIndex:indexPath.row],
+                               [[[postingDict valueForKey:@"myposting_list"] valueForKey:@"owner"] objectAtIndex:indexPath.row]];
+    
+    post.dateLabel.text =[NSString stringWithFormat:@"%@",[[[postingDict valueForKey:@"myposting_list"] valueForKey:@"mongopushdate"] objectAtIndex:indexPath.row]];
+    
+    [post.postingImage setImageWithURL:[NSURL URLWithString:[[[postingDict valueForKey:@"myposting_list"] valueForKey:@"imageurl"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
     return post;
 }
@@ -135,4 +155,32 @@
 {
     return ObjShared.collectionZ;
 }
+#pragma mark -W.S Delegate Call
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    
+    NSLog(@"in success");
+    
+    NSLog(@"Dict--->%@",dict);
+    if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]]isEqualToString:@"1"])
+    {
+        postingDict=dict;
+        
+        [sellPostingtable reloadData];
+    }
+    else if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert !!" withMessage:[postingDict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+        
+    }
+}
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
+
 @end

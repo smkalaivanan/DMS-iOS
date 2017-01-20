@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		181E76771E2F6EFE00DDFE96 /* alert-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 181E76761E2F6EFE00DDFE96 /* alert-red.png */; };
+		18651CAE1E30E488007326C2 /* add-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 18651CAD1E30E488007326C2 /* add-icon.png */; };
 		450215231DE459EC000356EE /* search-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215221DE459EC000356EE /* search-box.png */; };
 		450215251DE45A4B000356EE /* search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215241DE45A4B000356EE /* search-icon.png */; };
 		450215271DE45B10000356EE /* image1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215261DE45B10000356EE /* image1.png */; };
@@ -260,6 +261,7 @@
 
 /* Begin PBXFileReference section */
 		181E76761E2F6EFE00DDFE96 /* alert-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red.png"; sourceTree = "<group>"; };
+		18651CAD1E30E488007326C2 /* add-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-icon.png"; sourceTree = "<group>"; };
 		450215221DE459EC000356EE /* search-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-box.png"; sourceTree = "<group>"; };
 		450215241DE45A4B000356EE /* search-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-icon.png"; sourceTree = "<group>"; };
 		450215261DE45B10000356EE /* image1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image1.png; sourceTree = "<group>"; };
@@ -822,6 +824,7 @@
 		453687EF1E12B8D000144F5E /* New Icon set */ = {
 			isa = PBXGroup;
 			children = (
+				18651CAD1E30E488007326C2 /* add-icon.png */,
 				45C50A181E265F8000B77506 /* notification hamburger.png */,
 				45C50A161E263A4C00B77506 /* chat-icon-message.png */,
 				45C50A141E26395A00B77506 /* message-icon-chat.png */,
@@ -1873,6 +1876,7 @@
 				FADE7CEF1DFBFD2100528B36 /* sell.png in Resources */,
 				45BA1C241DDC345400FE74E5 /* user.png in Resources */,
 				459527131DFAC03E0050E52B /* cityImage.png in Resources */,
+				18651CAE1E30E488007326C2 /* add-icon.png in Resources */,
 				FAA88F691E1D006500DC752C /* 3_Auction1.png in Resources */,
 				45BA1C221DDC344C00FE74E5 /* password.png in Resources */,
 				FADE7CED1DFBFD2100528B36 /* Manage.png in Resources */,

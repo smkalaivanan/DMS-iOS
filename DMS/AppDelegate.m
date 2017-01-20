@@ -21,15 +21,19 @@
     [alert show];
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     
     [application setStatusBarHidden:YES];
 
     
     ObjShared = [SharedClass sharedInstance];
     
+
+    
+    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-   MFSideMenuContainerViewController *container = (MFSideMenuContainerViewController *)self.window.rootViewController;
+    MFSideMenuContainerViewController *container = (MFSideMenuContainerViewController *)self.window.rootViewController;
     
     navigationController = [storyboard instantiateViewControllerWithIdentifier:@"navigationController"];
     
@@ -40,7 +44,6 @@
     [container setLeftMenuViewController:leftSideMenuViewController];
         [container setRightMenuViewController:rightSideMenuViewController];
     [container setCenterViewController:navigationController];
-  
     
     return YES;
 

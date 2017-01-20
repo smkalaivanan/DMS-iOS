@@ -7,10 +7,17 @@
 //
 
 #import "profileViewController.h"
-
+#import "ChangePasswordViewController.h"
+#import "AppDelegate.h"
 
 @interface profileViewController ()
+{
+    NSString *base64String;
+    NSUserDefaults *defaults;
+    
+    AppDelegate *appDelegate;
 
+}
 @end
 
 @implementation profileViewController
@@ -27,10 +34,10 @@
                    @"funding-blue.png",nil];
     
     ObjShared.manageFooterText = [[NSArray alloc] initWithObjects:@"Profile",
-                  @"Contacts",
-                  @"Subscription",
-                  @"Branches",
-                  @"Users",nil];
+                                  @"Branches",
+                                  @"Contact",
+                                  @"Users",
+                                  @"Subscription",nil];
     
 }
 
@@ -43,7 +50,14 @@
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
-    ObjShared.sharedDelegate = (id)self;    
+    ObjShared.sharedDelegate = (id)self;
+    
+    defaults  = [NSUserDefaults standardUserDefaults];
+
+    [profileImg setImageWithURL:[NSURL URLWithString:[defaults valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    profileName.text=[defaults valueForKey:@"dealerName"];
+    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,30 +107,27 @@
         [[self navigationController] pushViewController:profileVC animated:NO];
         
     }
-    else if (indexPath.row==3)
-    {
-        subscriptionViewController *subVC =[self.storyboard instantiateViewControllerWithIdentifier:@"subscriptionViewController"];
-        [[self navigationController] pushViewController:subVC animated:NO];
-        
-    }
-    else if (indexPath.row==4)
-    {
-        myContactViewController *contactVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myContactViewController"];
-        [[self navigationController] pushViewController:contactVC animated:NO];
-        
-    }
-    else if (indexPath.row==5)
+    else if (indexPath.row==1)
     {
         myBranchesViewController *branchVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myBranchesViewController"];
         [[self navigationController] pushViewController:branchVC animated:NO];
-        
     }
-    else if (indexPath.row==6)
+    else if (indexPath.row==2)
+    {
+        myContactViewController *contactVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myContactViewController"];
+        [[self navigationController] pushViewController:contactVC animated:NO];
+    }
+    else if (indexPath.row==3)
     {
         myUsersViewController *userVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myUsersViewController"];
         [[self navigationController] pushViewController:userVC animated:NO];
-        
     }
+    else if (indexPath.row==4)
+    {
+        subscriptionViewController *subVC =[self.storyboard instantiateViewControllerWithIdentifier:@"subscriptionViewController"];
+        [[self navigationController] pushViewController:subVC animated:NO];
+    }
+    
     NSLog(@"selected");
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -148,6 +159,58 @@
 -(IBAction)sidemMenu:(id)sender
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+}
+
+- (IBAction)pic:(id)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate=self;
+    picker.allowsEditing= NO;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    //    NSLog(@"info-->%@",info);
+    UIImage *chosenimage = info[UIImagePickerControllerOriginalImage];
+    profileImg.image = chosenimage;
+    
+    UIImage *image = chosenimage;
+    UIImage *tempImage = nil;
+    CGSize targetSize = CGSizeMake(200,200);
+    UIGraphicsBeginImageContext(targetSize);
+    
+    CGRect thumbnailRect = CGRectMake(0, 0, 0, 0);
+    thumbnailRect.origin = CGPointMake(0.0,0.0);
+    thumbnailRect.size.width  = targetSize.width;
+    thumbnailRect.size.height = targetSize.height;
+    
+    [image drawInRect:thumbnailRect];
+    
+    tempImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    chosenimage = tempImage;
+    NSData *dataImage = [[NSData alloc] init];
+    dataImage = UIImageJPEGRepresentation(chosenimage, 0);
+    //    NSLog(@"new size %lu", (unsigned long)[dataImage length]);
+    base64String = [dataImage base64EncodedStringWithOptions:0];
+    //    NSLog(@"%@", base64String);
+    
+    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
+    profileImg.clipsToBounds = YES;
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(IBAction)changePassword:(id)sender
+{
+    ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
+    
+    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:false];
+
 }
 
 @end

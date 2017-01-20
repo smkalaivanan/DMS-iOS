@@ -42,7 +42,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @property (nonatomic, retain) NSDictionary * appDict;
 @property (nonatomic, retain) NSDictionary * LoginDict;
 @property (nonatomic, retain) NSDictionary * searchPageDict;
-@property (nonatomic, retain) NSDictionary * applyFundingPageDict;
+@property (nonatomic, retain) NSDictionary * applyFundingPageDict,*sellApplyFundingDict;
 @property (nonatomic, retain) NSDictionary * bidCaridDetail;
 
 @property (nonatomic, retain) NSString * Cityname;

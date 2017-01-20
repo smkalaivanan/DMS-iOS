@@ -89,30 +89,27 @@
         [[self navigationController] pushViewController:profileVC animated:NO];
         
     }
-    else if (indexPath.row==3)
-    {
-        subscriptionViewController *subVC =[self.storyboard instantiateViewControllerWithIdentifier:@"subscriptionViewController"];
-        [[self navigationController] pushViewController:subVC animated:NO];
-        
-    }
-    else if (indexPath.row==4)
-    {
-        myContactViewController *contactVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myContactViewController"];
-        [[self navigationController] pushViewController:contactVC animated:NO];
-        
-    }
-    else if (indexPath.row==5)
+    else if (indexPath.row==1)
     {
         myBranchesViewController *branchVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myBranchesViewController"];
         [[self navigationController] pushViewController:branchVC animated:NO];
-        
     }
-    else if (indexPath.row==6)
+    else if (indexPath.row==2)
+    {
+        myContactViewController *contactVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myContactViewController"];
+        [[self navigationController] pushViewController:contactVC animated:NO];
+    }
+    else if (indexPath.row==3)
     {
         myUsersViewController *userVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myUsersViewController"];
         [[self navigationController] pushViewController:userVC animated:NO];
-        
     }
+    else if (indexPath.row==4)
+    {
+        subscriptionViewController *subVC =[self.storyboard instantiateViewControllerWithIdentifier:@"subscriptionViewController"];
+        [[self navigationController] pushViewController:subVC animated:NO];
+    }
+    
     NSLog(@"selected");
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section

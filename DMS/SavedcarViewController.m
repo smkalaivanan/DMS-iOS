@@ -333,8 +333,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         search_Dict= dict;
         newArray = [search_Dict valueForKey:@"car_listing"];
         
-        alert = [[NSMutableArray alloc]initWithCapacity:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]]
-        ;
+        alert = [[NSMutableArray alloc]initWithCapacity:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]];
+        
         for (int i = 0; i<[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] count]; i++)
         {
             [alert addObject:[[[search_Dict valueForKey:@"car_listing"] valueForKey:@"notify_car"] objectAtIndex:i]];

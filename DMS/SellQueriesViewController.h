@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface SellQueriesViewController : UIViewController
-
+{
+    IBOutlet UITableView * sellQueriesTable;
+    NSDictionary * sellQueriesDict;
+}
 @end
