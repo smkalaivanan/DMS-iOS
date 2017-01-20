@@ -16,7 +16,8 @@
 
 @implementation EdituserViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     roles=[[NSArray alloc]initWithObjects:@"Manager",@"Viewer",@"Editor",@"Owner", nil];
@@ -24,6 +25,7 @@
     UIPickerView *picker = [[UIPickerView alloc] init];
     picker.dataSource = self;
     picker.delegate = self;
+    picker.backgroundColor=[UIColor clearColor];
     role.inputView = picker;
     
 }
