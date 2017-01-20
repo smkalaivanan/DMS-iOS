@@ -73,12 +73,12 @@
     QueriesTableViewCell * query =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     query.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    query.customerName.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
-    query.carModel.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+    query.customerName.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"dealer_name"] objectAtIndex:indexPath.row];
+    query.carModel.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"make"] objectAtIndex:indexPath.row];
     query.timeAgo.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
-    query.customerMessage.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row];
+    query.customerMessage.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"message"] objectAtIndex:indexPath.row];
 
-    [query.customerImage setImageWithURL:[NSURL URLWithString:[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@""] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    [query.customerImage setImageWithURL:[NSURL URLWithString:[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"imagelink"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 
     return query;
 }

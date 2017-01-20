@@ -9,13 +9,17 @@
 #import "EdituserViewController.h"
 
 @interface EdituserViewController ()<UIPickerViewDelegate,UIPickerViewDataSource>
-
+{
+    NSArray *roles;
+}
 @end
 
 @implementation EdituserViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    roles=[[NSArray alloc]initWithObjects:@"Manager",@"Viewer",@"Editor",@"Owner", nil];
     
     UIPickerView *picker = [[UIPickerView alloc] init];
     picker.dataSource = self;
@@ -39,6 +43,24 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return roles.count;
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return  1;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return roles[row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    role.text = roles[row];
+    [role resignFirstResponder];
 }
 
 #pragma mark - Collection View delegate
