@@ -169,6 +169,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
+    
     ObjShared.applyFundingPageDict = [[fundDict valueForKey:@"apply_inventory_fund_list"] objectAtIndex:indexPath.row];
     
     NSLog(@"funding row----> %@",ObjShared.applyFundingPageDict);

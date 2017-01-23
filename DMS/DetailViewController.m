@@ -6,6 +6,8 @@
 //  Copyright © 2016 Falconnect Technologies Pvt Ltd. All rights reserved.
 //
 
+//http://52.220.105.165/works/Mobile/vani/angular/basicinfo.html
+
 #import "DetailViewController.h"
 #import "AppDelegate.h"
 @interface DetailViewController ()
@@ -36,7 +38,7 @@
 }
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
  navigationType:(UIWebViewNavigationType)navigationType {
-    if ([request.URL  isEqual: @"http://www.google.com"])
+    if ([request.URL  isEqual: @"www.google.co.in"])
     {
         //do close window magic here!!
         [self stopLoading];
@@ -50,7 +52,7 @@
 
 -(void)web
 {
-    NSURL *url=[NSURL URLWithString:@"http://www.google.com"];
+    NSURL *url=[NSURL URLWithString:@"www.google.co.in"];
     NSURLRequest *request=[NSURLRequest requestWithURL:url];
     [webView loadRequest:request];
 }

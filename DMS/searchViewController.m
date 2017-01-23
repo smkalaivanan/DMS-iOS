@@ -272,9 +272,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
     
-//    DetailViewController *DetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
-//    [[self navigationController] pushViewController:DetailVC animated:NO];
-//
+    DetailViewController *DetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+    [[self navigationController] pushViewController:DetailVC animated:NO];
+
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

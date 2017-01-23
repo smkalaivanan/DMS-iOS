@@ -17,6 +17,9 @@
 
     IBOutlet UIButton *signUp;
     IBOutlet UIButton *signinPressed;
+    
+    IBOutlet UIWebView *webView;
+
 }
 -(IBAction)signupPressed:(id)sender;
 -(IBAction)back:(id)sender;

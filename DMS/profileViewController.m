@@ -39,6 +39,9 @@
                                   @"Users",
                                   @"Subscription",nil];
     
+    appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated

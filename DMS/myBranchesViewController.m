@@ -168,10 +168,7 @@
         case 1:
         {
             // Delete button is pressed
-            
             NSLog(@"Delete");
-            
-            
             break;
         }
             

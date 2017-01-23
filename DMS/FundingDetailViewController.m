@@ -29,12 +29,50 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @implementation FundingDetailViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     ObjShared = [SharedClass sharedInstance];
     
-    statusLabel.text = [ObjShared.applyFundingPageDict objectForKey:@"Status"];
+    
+//    0 PENDING
+//    1 INPROGRESS
+//    2 COMPLETED
+//    3 DISMISS
+//    4 REVOKE
+    
+    if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"0"])
+    {
+        statusLabel.text = @"PENDING";
+        
+        statusLabel.textColor = [UIColor redColor];
+
+    }
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"1"])
+    {
+        statusLabel.text = @"INPROGRESS";
+        
+        
+    }
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"2"])
+    {
+        statusLabel.text = @"COMPLETED";
+        
+        statusLabel.textColor = [UIColor greenColor];
+
+    }
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"3"])
+    {
+        statusLabel.text = @"DISMISS";
+    }
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"4"])
+    {
+        statusLabel.text = @"REVOKE";
+    }
+    
+    
+    
     
     NSLog(@"status label ----> %@",statusLabel.text);
     // Corner Radius for Enter button
@@ -49,7 +87,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -64,20 +103,20 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
-    if ([statusLabel.text isEqualToString:@"pending"])
-    {
-        statusLabel.textColor = [UIColor redColor];
-    }
-    else
-    {
-        statusLabel.textColor = [UIColor greenColor];
-        redLabel.hidden = YES;
-    }
+//    if ([statusLabel.text isEqualToString:@"pending"])
+//    {
+//        statusLabel.textColor = [UIColor redColor];
+//    }
+//    else
+//    {
+//        statusLabel.textColor = [UIColor greenColor];
+//        redLabel.hidden = YES;
+//    }
 
 }
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[ObjShared.applyFundingPageDict objectForKey:@"ticket_id"],@"ticketid", nil];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",[ObjShared.applyFundingPageDict objectForKey:@"Token"],@"ticketid", nil];
     [ObjShared callWebServiceWith_DomainName:@"api_revoke_funding" postData:para];
     NSLog(@"param -----> %@",para);
 }

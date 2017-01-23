@@ -47,7 +47,37 @@
     [signinPressed setAttributedTitle:butString
                       forState:UIControlStateNormal];
     
+    [self web];
+    
 }
+
+
+
+- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
+ navigationType:(UIWebViewNavigationType)navigationType {
+    if ([request.URL  isEqual: @"http://52.220.105.165/works/Mobile/Cardealer/register-new.html"])
+    {
+        //do close window magic here!!
+        [self stopLoading];
+        return NO;
+    }
+    return YES;
+}
+-(void)stopLoading{
+    [webView removeFromSuperview];
+}
+
+-(void)web
+{
+    NSURL *url=[NSURL URLWithString:@"http://52.220.105.165/works/Mobile/Cardealer/register-new.html"];
+    NSURLRequest *request=[NSURLRequest requestWithURL:url];
+    [webView loadRequest:request];
+}
+
+
+
+
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
