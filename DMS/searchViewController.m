@@ -35,9 +35,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIButton * button;
     UIView * pic;
     NSArray * sort;
+    NSString *sortId;
+    NSString *sortName;
+
     
 }
-@property CZPickerView *pickerForCity;
 @end
 
 @implementation searchViewController
@@ -435,9 +437,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [self.view endEditing:YES];
 
-   para=[[NSMutableDictionary alloc] initWithObjectsAndKeys:searchText.text,@"search_listing",city.titleLabel.text,@"city_name",@"detail_searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+    [self callingapi];
+}
+
+-(void)callingapi
+{
+    para=[[NSMutableDictionary alloc] initWithObjectsAndKeys:searchText.text,@"search_listing",city.titleLabel.text,@"city_name",@"detail_searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",sortId,@"sorting_category",nil];
     NSLog(@"params--->%@",para);
     [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:para];
+
 }
 
 //Status bar hidden
@@ -534,8 +542,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.pickerView.showsSelectionIndicator=YES;
     self.pickerView.layer.cornerRadius=10.0f;
     self.pickerView.layer.masksToBounds = YES;
-
     self.pickerView.backgroundColor=[UIColor whiteColor];
+
     [pic addSubview:self.pickerView];
     
     [self.view addSubview:pic];
@@ -544,29 +552,42 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)pickerOk:(id)sender
 {
-//    if ([sort_Name isEqualToString:@"A to Z"])
-//    {
-//        sortId=@"1";
-//    }
-//    else if ([sort_Name isEqualToString:@"Z to A"])
-//    {
-//        sortId=@"2";
-//        
-//    }
-//    else if ([sort_Name isEqualToString:@"Low price to High price"])
-//    {
-//        sortId=@"3";
-//    }
-//    else if ([sort_Name isEqualToString:@"High price to Low price"])
-//    {
-//        sortId=@"4";
-//        
-//    }
-//    else
-//    {
-//        sortId=@"0";
-//    }
-//    [self sendHTTPPost];
+    if ([sortName isEqualToString:@"Select price"])
+    {
+        sortId=@"0";
+    }
+    else if ([sortName isEqualToString:@"High price to Low price"])
+    {
+        sortId=@"1";
+    }
+    else if ([sortName isEqualToString:@"Low price to High price"])
+    {
+        sortId=@"2";
+    }
+    else if ([sortName isEqualToString:@"High Mileage to Low Mileage"])
+    {
+        sortId=@"3";
+    }
+    else if ([sortName isEqualToString:@"Low Mileage to High Mileage"])
+    {
+        sortId=@"4";
+    }
+    else if ([sortName isEqualToString:@"New cars to Old cars"])
+    {
+        sortId=@"5";
+    }
+    else if ([sortName isEqualToString:@"Old cars to New  cars"])
+    {
+        sortId=@"6";
+    }
+    else
+    {
+        sortId=@"0";
+    }
+    
+    [self callingapi];
+
+    
     [pic removeFromSuperview];
     //    [self.pickerView removeFromSuperview];
     //    pic.hidden=YES;
@@ -580,8 +601,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-//    sort_Name=[NSString stringWithFormat:@"%@",[picker objectAtIndex:row]];
-    //    NSLog(@"%@",[picker objectAtIndex:row]);
+    sortName=[NSString stringWithFormat:@"%@",[sort objectAtIndex:row]];
 }
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
@@ -592,11 +612,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return [sort count];
 }
-
 # pragma mark UIPickerViewDelegate
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
+    
     return [sort objectAtIndex:row];
 }
 

@@ -86,9 +86,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ObjShared.Cityname=@"Select City";
     ObjShared.siteName=@"Select sites";
-    
-    
-    
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -461,7 +459,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)search:(id)sender
 {
-    if ([showWithoutFooter.titleLabel.text isEqualToString:@"Select City" ] && [showWithMultipleSelection.titleLabel.text isEqualToString:@"Select site"])
+    if ([ObjShared.Cityname isEqualToString:@"Select City" ] || [ ObjShared.siteName isEqualToString:@"Select site"])
     {
         [AppDelegate showAlert:@"Error" withMessage:@"Please select your city and sites"];
     }

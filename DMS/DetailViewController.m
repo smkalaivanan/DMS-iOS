@@ -38,7 +38,7 @@
 }
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
  navigationType:(UIWebViewNavigationType)navigationType {
-    if ([request.URL  isEqual: @"www.google.co.in"])
+    if ([request.URL  isEqual: @"http://52.220.105.165/works/Mobile/vani/angular/basicinfo.html"])
     {
         //do close window magic here!!
         [self stopLoading];
@@ -52,7 +52,7 @@
 
 -(void)web
 {
-    NSURL *url=[NSURL URLWithString:@"www.google.co.in"];
+    NSURL *url=[NSURL URLWithString:@"http://52.220.105.165/works/Mobile/vani/angular/basicinfo.html"];
     NSURLRequest *request=[NSURLRequest requestWithURL:url];
     [webView loadRequest:request];
 }
