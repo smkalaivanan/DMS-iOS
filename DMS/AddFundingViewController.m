@@ -72,7 +72,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)back:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(IBAction)sumbit:(id)sender
@@ -162,7 +162,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
         addFundingDict= dict;
-        [[self navigationController]popViewControllerAnimated:YES];
+        [[self navigationController]popViewControllerAnimated:NO];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

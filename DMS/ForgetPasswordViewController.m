@@ -96,12 +96,12 @@
 
 -(IBAction)back:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(IBAction)existingAccount:(id)sender
 {
-    [[self navigationController] popViewControllerAnimated:YES];
+    [[self navigationController] popViewControllerAnimated:NO];
 }
 
 #pragma alertview Controller
@@ -111,7 +111,7 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:sub preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alertController addAction:ok];
-    [self presentViewController:alertController animated:YES completion:nil];
+    [self presentViewController:alertController animated:NO completion:nil];
 }
 
 
@@ -138,7 +138,7 @@
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
         [AppDelegate showAlert:@"Success" withMessage:[dict objectForKey:@"message"]];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:NO];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

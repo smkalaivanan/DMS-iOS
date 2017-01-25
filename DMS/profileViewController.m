@@ -40,8 +40,6 @@
                                   @"Subscription",nil];
     
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -59,8 +57,6 @@
 
     [profileImg setImageWithURL:[NSURL URLWithString:[defaults valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
     profileName.text=[defaults valueForKey:@"dealerName"];
-    
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -212,7 +208,7 @@
 {
     ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
     
-    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:false];
+    [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:YES];
 
 }
 

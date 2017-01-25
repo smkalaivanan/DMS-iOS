@@ -25,6 +25,7 @@
 }
 -(IBAction)segment:(UISegmentedControl *)sender;
 -(IBAction)search:(id)sender;
+
 //@property CZPickerView *showWithoutFooter;
 
 @end

@@ -11,6 +11,7 @@
 #import "IQKeyboardManager.h"
 #import "IQKeyboardReturnKeyHandler.h"
 #import "IQUIView+IQKeyboardToolbar.h"
+#import "NoInternetViewController.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
@@ -20,6 +21,8 @@
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
 
 @property (strong, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) UINavigationController *rechabilityNavigationController;
+
 
 
 - (void)saveContext;

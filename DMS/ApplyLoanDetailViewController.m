@@ -18,6 +18,7 @@
 @interface ApplyLoanDetailViewController ()
 {
     NSDictionary * revokeDict;
+    NSMutableDictionary * tableData;
 }
 @end
 
@@ -30,7 +31,7 @@
     
     ObjShared = [SharedClass sharedInstance];
     
-    statusLabel.text = [ObjShared.sellApplyFundingDict objectForKey:@"Status"];
+    statusLabel.text = [ObjShared.sellApplyFundingDict objectForKey:@"status"];
     
     NSLog(@"status label ----> %@",statusLabel.text);
     // Corner Radius for Enter button
@@ -55,16 +56,26 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
-    if ([statusLabel.text isEqualToString:@"pending"])
-    {
-        statusLabel.textColor = [UIColor redColor];
-    }
-    else
+    tableData = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.sellApplyFundingDict valueForKey:@"tokenid"],@"Token Id",[ObjShared.sellApplyFundingDict valueForKey:@"customername"],@"Customer",[ObjShared.sellApplyFundingDict valueForKey:@"customermobileno"],@"Mobile",[ObjShared.sellApplyFundingDict valueForKey:@"customermailid"],@"Email",[ObjShared.sellApplyFundingDict valueForKey:@"amount"],@"Amount",[ObjShared.sellApplyFundingDict valueForKey:@"date"],@"Date", nil];
+    
+    if ([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"COMPLETED"])
     {
         statusLabel.textColor = [UIColor greenColor];
         redLabel.hidden = YES;
     }
-    
+    else if ([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"REVOKE"] || [[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"DISMISS"])
+    {
+        statusLabel.textColor = [UIColor redColor];
+        redLabel.hidden = YES;
+    }
+    else if([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"INPROGRESS"])
+    {
+        statusLabel.textColor = [UIColor grayColor];
+    }
+    else
+    {
+        statusLabel.textColor = [UIColor redColor];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -82,14 +93,14 @@
 }
 -(IBAction)backButton:(id)sender
 {
-    [[self navigationController] popViewControllerAnimated:YES];
+    [[self navigationController] popViewControllerAnimated:NO];
 }
 #pragma UITableView-Sample
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [ObjShared.sellApplyFundingDict allKeys].count;
+    return [tableData allKeys].count;
 }
 
 
@@ -101,8 +112,8 @@
     
     applyLoan.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    applyLoan.applyLoanUserKey.text = [NSString stringWithFormat:@"%@ :",[[ObjShared.sellApplyFundingDict allKeys] objectAtIndex:indexPath.row]];
-    applyLoan.applyLoanUserDetail.text = [NSString stringWithFormat:@"%@",[[ObjShared.sellApplyFundingDict allValues] objectAtIndex:indexPath.row]];
+    applyLoan.applyLoanUserKey.text = [NSString stringWithFormat:@"%@ :",[[tableData allKeys] objectAtIndex:indexPath.row]];
+    applyLoan.applyLoanUserDetail.text = [NSString stringWithFormat:@"%@",[[tableData allValues] objectAtIndex:indexPath.row]];
     
     return applyLoan;
 }
@@ -179,7 +190,7 @@
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
         revokeDict= dict;
-        [[self navigationController]popViewControllerAnimated:YES];
+        [[self navigationController]popViewControllerAnimated:NO];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

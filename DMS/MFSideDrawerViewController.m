@@ -14,6 +14,7 @@
 #import "InventoryViewController.h"
 #import "DashboardViewController.h"
 #import "profileViewController.h"
+#import "LandingViewController.h"
 
 @interface MFSideDrawerViewController ()
 {
@@ -32,8 +33,10 @@
     
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    [self.menuContainerViewController setPanMode:MFSideMenuPanModeNone];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UpdateProfile) name:@"UpdateProfile"  object:nil];
-
+    
     menu=[[NSArray alloc]initWithObjects:@"Home",@"Buy",@"Sell",@"Manage",@"Communication",@"Report",@"Contact",@"Logout", nil];
     
     menuImg=[[NSArray alloc]initWithObjects:@"home.png",@"sell.png",@"Buy.png",@"Manage.png",@"communication.png",@"report.png",@"MenuContact.png",@"logout.png", nil];
@@ -49,6 +52,7 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
 }
 
 #pragma mark -Update Profile
@@ -58,6 +62,11 @@
 
     nameLab.text=[NSString stringWithFormat:@"%@",[ObjShared.LoginDict objectForKey:@"dealer_name"]];
     addressLab.text=[NSString stringWithFormat:@"%@",[ObjShared.LoginDict objectForKey:@"dealer_address"]];
+    
+    [profileImg setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2 ;
+    profileImg.layer.masksToBounds = YES;
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,7 +101,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"indexpath-->%ld",(long)indexPath.row);
-    if (indexPath.row == 1)
+    if (indexPath.row == 0)
+    {
+        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+        
+        
+        LandingViewController *landingVC=[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];
+        
+        [SharedClass NavigateTo:landingVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
+    else if (indexPath.row == 1)
     {
         [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         

@@ -30,6 +30,8 @@
     <key>NSPhotoLibraryUsageDescription</key>
     <string>$(PRODUCT_NAME) uses photos</string>
     
+    <key>NSContactsUsageDescription</key>
+    <string>Can we use to your contacts?</string>
     
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>

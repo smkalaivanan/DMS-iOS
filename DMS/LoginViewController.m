@@ -21,7 +21,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     AppDelegate * appDelegate;
     UIView * activity;
     NSUserDefaults *defaluts;
-
 }
 
 @end

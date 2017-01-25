@@ -92,7 +92,7 @@
 
 -(IBAction)back:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark -W.S Delegate Call

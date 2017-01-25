@@ -88,7 +88,7 @@
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
         [AppDelegate showAlert:@"Success" withMessage:[dict objectForKey:@"message"]];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:NO];
     }
     else if([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

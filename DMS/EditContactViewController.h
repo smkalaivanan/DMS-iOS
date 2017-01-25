@@ -13,9 +13,10 @@
 #import "myBranchesViewController.h"
 #import "subscriptionViewController.h"
 #import "profileViewController.h"
+#import "WCSContactPicker.h"
 
 
-@interface EditContactViewController : UIViewController
+@interface EditContactViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
     IBOutlet UIImageView *profileImg;
     IBOutlet UITextField *contactType;
@@ -27,6 +28,7 @@
 }
 -(IBAction)save:(id)sender;
 -(IBAction)back:(id)sender;
-
+- (IBAction)pic:(id)sender;
+- (IBAction)ContactPicker:(id)sender;
 
 @end

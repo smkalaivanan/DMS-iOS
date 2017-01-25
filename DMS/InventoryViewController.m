@@ -28,12 +28,11 @@
     
     ObjShared = [SharedClass sharedInstance];
     
-    ObjShared.inventoryFooterText = [[NSArray alloc] initWithObjects:@"Inventory",
-                            @"My Posting",
-                            @"Auction",
-                            @"Queries",
-                            @"Apply Loan",
-                            nil];
+    ObjShared.inventoryFooterText =[[NSArray alloc] initWithObjects:@"Inventory",
+                                                                    @"My Posting",
+                                                                    @"Auction",
+                                                                    @"Queries",
+                                                                    @"Apply Loan",nil];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -94,7 +93,7 @@
     // Return the number of sections.
     return 1;
 }
-
+					
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.

@@ -209,13 +209,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     [alertController addAction:okAction];
     
-    [self presentViewController:alertController animated:YES completion:nil];
+    [self presentViewController:alertController animated:NO completion:nil];
     }
 }
 -(IBAction)backButton:(id)sender
 {
     [self.view endEditing:YES];
-    [[self navigationController] popViewControllerAnimated:YES];
+    [[self navigationController] popViewControllerAnimated:NO];
 }
 
 #pragma mark -W.S Delegate Call

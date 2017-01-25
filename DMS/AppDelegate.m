@@ -14,7 +14,7 @@
 @end
 
 @implementation AppDelegate
-@synthesize navigationController;
+@synthesize navigationController,rechabilityNavigationController;
 + (void) showAlert:(NSString *)title withMessage:(NSString *) msg
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: title message: msg  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -29,9 +29,27 @@
     
     ObjShared = [SharedClass sharedInstance];
     
+    //AFNetworking Reachablity
+    
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status)
+    {
+        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
+        {
+            ObjShared.InternetAvailable = YES;
+            
+        }
+        else
+        {
+            UIStoryboard *storyboard1 = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+            rechabilityNavigationController = [storyboard1 instantiateViewControllerWithIdentifier:@"navigationController"];
+            NoInternetViewController * rechabilityVC =[storyboard1 instantiateViewControllerWithIdentifier:@"NoInternetViewController"];
+            [[self navigationController] presentViewController:rechabilityVC animated:YES completion:nil];
+            
+            ObjShared.InternetAvailable = NO;
+        }
+    }];
 
-    
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     MFSideMenuContainerViewController *container = (MFSideMenuContainerViewController *)self.window.rootViewController;
     

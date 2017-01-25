@@ -315,7 +315,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"viewBidAction-----> %ld",(long)sender.tag);
     ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
-    [[self navigationController] pushViewController:bidVC animated:YES];
+    [[self navigationController] pushViewController:bidVC animated:NO];
     
 }
 -(void)makeOfferAction:(UIButton *)sender
@@ -323,7 +323,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"makeOfferAction-----> %ld",(long)sender.tag);
     ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
-    [[self navigationController] pushViewController:bidVC animated:YES];
+    [[self navigationController] pushViewController:bidVC animated:NO];
 }
 -(void)clickAnimation
 {
@@ -412,7 +412,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)back:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark - TLTagsControlDelegate
@@ -490,7 +490,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (IBAction)showWithCity:(id)sender
 {
     SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
-    [self presentViewController:cityVC animated:YES completion: nil];
+    [self presentViewController:cityVC animated:NO completion: nil];
 }
 
 
@@ -498,7 +498,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(IBAction)city:(id)sender
 {
     SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
-    [self presentViewController:cityVC animated:YES completion: nil];
+    [self presentViewController:cityVC animated:NO completion: nil];
 }
 
 -(IBAction)filter:(id)sender

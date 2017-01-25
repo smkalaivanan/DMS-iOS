@@ -128,7 +128,7 @@
 -
 (IBAction)backButton:(id)sender
 {
-    [[self navigationController] popViewControllerAnimated:YES];
+    [[self navigationController] popViewControllerAnimated:NO];
 }
 
 -(IBAction)submitButton:(id)sender
@@ -158,7 +158,7 @@
         
         [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self presentViewController:alertController animated:NO completion:nil];
 
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])

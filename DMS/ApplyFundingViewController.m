@@ -73,7 +73,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(IBAction)add:(id)sender
 {
     AddFundingViewController *addVC =[self.storyboard instantiateViewControllerWithIdentifier:@"AddFundingViewController"];
-    [[self navigationController] pushViewController:addVC animated:YES];
+    [[self navigationController] pushViewController:addVC animated:NO];
 }
 
 #pragma mark - Collection View delegate
@@ -176,7 +176,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
     
     FundingDetailViewController *fundVC =[self.storyboard instantiateViewControllerWithIdentifier:@"FundingDetailViewController"];
-    [[self navigationController] pushViewController:fundVC animated:YES];
+    [[self navigationController] pushViewController:fundVC animated:NO];
 
 }
 

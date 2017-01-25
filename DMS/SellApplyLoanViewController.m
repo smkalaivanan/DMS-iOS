@@ -78,17 +78,21 @@
     loan.customerName.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customername"]objectAtIndex:indexPath.row];
     loan.customerEmail.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customermailid"]objectAtIndex:indexPath.row];
     loan.customerNumber.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"customermobileno"]objectAtIndex:indexPath.row];
+    loan.customerStatus.text=[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"status" ] objectAtIndex:indexPath.row];
     
-    if ([[NSString stringWithFormat:@"%@",[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"status" ] objectAtIndex:indexPath.row]] isEqualToString:@"0"])
+    if ([[NSString stringWithFormat:@"%@",[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"status" ] objectAtIndex:indexPath.row]] isEqualToString:@"COMPLETED"])
     {
-        loan.customerStatus.text=@"Pending";
-        loan.customerStatus.textColor = [UIColor redColor];
+        loan.customerStatus.textColor = [UIColor greenColor];
+    }
+    else if ([[NSString stringWithFormat:@"%@",[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"status" ] objectAtIndex:indexPath.row]] isEqualToString:@"INPROGRESS"])
+    {
+        loan.customerStatus.textColor = [UIColor grayColor];
     }
     else
     {
-        loan.customerStatus.text=@"Approved";
-        loan.customerStatus.textColor = [UIColor greenColor];
+        loan.customerStatus.textColor = [UIColor redColor];
     }
+    
     [loan.customerImage setImageWithURL:[NSURL URLWithString:[[[sellApplyDict valueForKey:@"loan_list"] valueForKey:@"bankimage" ] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
     return loan;
@@ -97,8 +101,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ObjShared.sellApplyFundingDict = [[sellApplyDict valueForKey:@"loan_list"] objectAtIndex:indexPath.row];
+    NSLog(@"obj share ---> %@",ObjShared.sellApplyFundingDict);
     ApplyLoanDetailViewController *applyDetailVC =[self.storyboard instantiateViewControllerWithIdentifier:@"ApplyLoanDetailViewController"];
-    [[self navigationController] pushViewController:applyDetailVC animated:YES];
+    [[self navigationController] pushViewController:applyDetailVC animated:NO];
 }
 #pragma mark - Collection View delegate
 
@@ -163,7 +168,7 @@
 -(IBAction)AddButton:(id)sender
 {
     AddLoanViewController *addLoanVC =[self.storyboard instantiateViewControllerWithIdentifier:@"AddLoanViewController"];
-    [[self navigationController] pushViewController:addLoanVC animated:YES];
+    [[self navigationController] pushViewController:addLoanVC animated:NO];
     
 }
 -(IBAction)revokeAddFundings:(id)sender

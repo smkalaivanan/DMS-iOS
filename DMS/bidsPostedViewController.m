@@ -202,7 +202,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"bid detail ----> %@",ObjShared.bidCaridDetail);
     
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
-    [[self navigationController] pushViewController:bidVC animated:YES];
+    [[self navigationController] pushViewController:bidVC animated:NO];
 }
 
 #pragma mark -W.S Delegate Call

@@ -104,7 +104,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     //push to register page
     RegisterViewController *registerVc =[self.storyboard instantiateViewControllerWithIdentifier:@"RegisterViewController"];
-    [[self navigationController] pushViewController:registerVc animated:YES];
+    [[self navigationController] pushViewController:registerVc animated:NO];
     
 }
 
@@ -114,7 +114,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     //push to login page
     LoginViewController *loginVc=[self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    [self.navigationController pushViewController:loginVc animated:YES];
+    [self.navigationController pushViewController:loginVc animated:NO];
 }
 
 #pragma Custom Keyboard

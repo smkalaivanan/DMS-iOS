@@ -31,6 +31,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSDictionary * modelDict;
     NSString * modelID;
     NSMutableDictionary *param;
+    NSUserDefaults *defaluts;
 }
 @property CZPickerView *pickerWithImage;
 @property CZPickerView *pickerWithValue;
@@ -84,9 +85,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                   @"SUV",
                   @"Wagon", nil];
     
-    ObjShared.Cityname=@"Select City";
-    ObjShared.siteName=@"Select sites";
-
+//    if ([[defaluts valueForKey:@"city name"] length] == 0)
+//    {
+        ObjShared.Cityname=@"Select City";
+        ObjShared.siteName=@"Select sites";
+//    }
+//    else
+//    {
+//        ObjShared.Cityname=[defaluts valueForKey:@"city name"];
+//        ObjShared.siteName=[defaluts valueForKey:@"site name"];
+//    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -129,14 +137,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(void)callMakeid
 {
-        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:modelID,@"make", nil];
-        [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:modelID,@"make", nil];
+    [ObjShared callWebServiceWith_DomainName:@"apibuyid" postData:para];
 }
 
 -(void)callMethod
 {
     NSMutableDictionary *para = [[NSMutableDictionary alloc]init];
-    
     [ObjShared callWebServiceWith_DomainName:@"apibuy" getData:para];
 }
 
@@ -267,8 +274,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         if (segValue == 0)
         {
             return vehicleType.count;
-//            return [[[dashDict valueForKey:@"model_make"]valueForKey:@"makename"]count];
-
         }
         else
         {
@@ -303,8 +308,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         if (segValue == 0)
         {
             NSString * butVeh = [NSString stringWithFormat:@"%@",vehicleType[row]];
-//            NSString * butVeh = [NSString stringWithFormat:@"%@",[[modelDict valueForKey:@"model_makeid"]valueForKey:@"model_name"][row]];
-
             [showVehicle setTitle:butVeh forState:UIControlStateNormal];
         }
         else
@@ -339,8 +342,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue  ==  0)
         {
-        NSString * butVehOne = [NSString stringWithFormat:@"%@",[vehicleType objectAtIndex:0]];
-        [showVehicle setTitle:butVehOne forState:UIControlStateNormal];
+            NSString * butVehOne = [NSString stringWithFormat:@"%@",[vehicleType objectAtIndex:0]];
+            [showVehicle setTitle:butVehOne forState:UIControlStateNormal];
         }
         else
         {
@@ -374,7 +377,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (IBAction)showWithMultipleSelection:(id)sender
 {
-    
     SiteViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SiteViewController"];
     [self presentViewController:cityVC animated:YES completion: nil];
 
@@ -459,6 +461,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)search:(id)sender
 {
+    
     if ([ObjShared.Cityname isEqualToString:@"Select City" ] || [ ObjShared.siteName isEqualToString:@"Select site"])
     {
         [AppDelegate showAlert:@"Error" withMessage:@"Please select your city and sites"];
@@ -485,6 +488,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
         [self searchcarlisting];
     }
+//    defaluts  = [NSUserDefaults standardUserDefaults];
+//    
+//    [defaluts setObject:ObjShared.Cityname forKey:@"city name"];
+//    [defaluts setObject:ObjShared.siteName forKey:@"site name"];
+//    NSLog(@"default ----> %@",[defaluts objectForKey:@"site name"]);
 }
 
 -(void)searchcarlisting
@@ -510,7 +518,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         ObjShared.searchPageDict=dict;
         searchViewController *searchVC =[self.storyboard instantiateViewControllerWithIdentifier:@"searchViewController"];
-        [[self navigationController] pushViewController:searchVC animated:YES];
+        [[self navigationController] pushViewController:searchVC animated:NO];
 
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
@@ -522,7 +530,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         
     }
-    
 }
 - (void)failResponseFromServer
 {
@@ -530,8 +537,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 -(IBAction)reload:(id)sender
 {
-    [self.view setNeedsDisplay];
+    
 }
-
 
 @end

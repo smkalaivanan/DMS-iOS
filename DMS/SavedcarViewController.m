@@ -305,14 +305,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"viewBidAction-----> %ld",(long)sender.tag);
     ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
-    [[self navigationController] pushViewController:bidVC animated:YES];
+    [[self navigationController] pushViewController:bidVC animated:NO];
 }
 -(void)makeOfferAction:(UIButton *)sender
 {
     NSLog(@"makeOfferAction-----> %ld",(long)sender.tag);
     ObjShared.bidCaridDetail = [[search_Dict valueForKey:@"car_listing"]objectAtIndex:sender.tag];
     BidsDetailViewController *bidVC =[self.storyboard instantiateViewControllerWithIdentifier:@"BidsDetailViewController"];
-    [[self navigationController] pushViewController:bidVC animated:YES];
+    [[self navigationController] pushViewController:bidVC animated:NO];
 }
 //Status bar hidden
 -(BOOL)prefersStatusBarHidden
