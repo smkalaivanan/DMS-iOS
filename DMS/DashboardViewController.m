@@ -27,11 +27,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface DashboardViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,CZPickerViewDataSource, CZPickerViewDelegate>
 {
-    AppDelegate * appDelegate;
-    NSDictionary * modelDict;
-    NSString * modelID;
+    AppDelegate *appDelegate;
+    NSDictionary *modelDict;
+    NSString *modelID, *newTrim;
     NSMutableDictionary *param;
-    NSUserDefaults *defaluts;
+    NSUserDefaults *searchSave;
 }
 @property CZPickerView *pickerWithImage;
 @property CZPickerView *pickerWithValue;
@@ -45,9 +45,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
+    searchSave  = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    
     ObjShared = [SharedClass sharedInstance];
     
     segValue = segment.selectedSegmentIndex;
@@ -85,16 +84,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                   @"SUV",
                   @"Wagon", nil];
     
-//    if ([[defaluts valueForKey:@"city name"] length] == 0)
-//    {
+    if ([searchSave valueForKey:@"city_name"] != 0)
+    {
+        ObjShared.Cityname=[searchSave valueForKey:@"city_name"];
+        newTrim=[searchSave valueForKey:@"site_name"];
+        ObjShared.siteName= [NSString stringWithFormat:@"%lu sites selected",(unsigned long)[[searchSave valueForKey:@"site_name_array"] count]];
+        ObjShared.siteNameArray =[searchSave valueForKey:@"site_city_array"];
+        
+        NSLog(@"main ---> %@",ObjShared.Cityname);
+        NSLog(@"main ---> %@",newTrim);
+        NSLog(@"main ---> %@",ObjShared.siteNameArray);
+        
+    }
+    else
+    {
         ObjShared.Cityname=@"Select City";
         ObjShared.siteName=@"Select sites";
-//    }
-//    else
-//    {
-//        ObjShared.Cityname=[defaluts valueForKey:@"city name"];
-//        ObjShared.siteName=[defaluts valueForKey:@"site name"];
-//    }
+        NSLog(@"search default ----> %@",[searchSave valueForKey:@"city_name"]);
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -125,8 +132,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     NSLog(@"city--->%@",ObjShared.Cityname);
     NSLog(@"hello world");
-
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -461,44 +466,35 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(IBAction)search:(id)sender
 {
-    
     if ([ObjShared.Cityname isEqualToString:@"Select City" ] || [ ObjShared.siteName isEqualToString:@"Select site"])
     {
         [AppDelegate showAlert:@"Error" withMessage:@"Please select your city and sites"];
     }
     else
     {
-        NSString * arrayString = [NSString stringWithFormat:@"%@",ObjShared.siteNameArray];
-        NSString * newTrim = [[[[[arrayString
+        if ([[searchSave valueForKey:@"site_name_array"] count] <= 0 || NULL)
+        {
+            NSString * arrayString = [NSString stringWithFormat:@"%@",ObjShared.siteNameArray];
+            newTrim = [[[[[arrayString
             stringByReplacingOccurrencesOfString:@"\n" withString:@""]stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""]
                 stringByReplacingOccurrencesOfString:@" " withString:@""]
-        stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                       stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            [searchSave setObject:newTrim forKey:@"site_name"];
+        }
+
+        if (segment.selectedSegmentIndex == 0)
+        {
+            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",@"searchpage",@"page_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"car_budget",showVehicle.titleLabel.text,@"vehicle_type",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+        }
+        else
+        {
+            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"vehicle_make",showVehicle.titleLabel.text,@"vehicle_model",@"searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+        }
         
-        NSLog(@"trimmer ---- > %@",newTrim);
-
-    if (segment.selectedSegmentIndex == 0)
-    {
-        param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",@"searchpage",@"page_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"car_budget",showVehicle.titleLabel.text,@"vehicle_type",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+        [searchSave setObject:[param valueForKey:@"city_name"] forKey:@"city_name"];
+        [searchSave setObject:ObjShared.siteNameArray forKey:@"site_name_array"];
+        [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:param];
     }
-    else
-    {
-        param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"vehicle_make",showVehicle.titleLabel.text,@"vehicle_model",@"searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
-    }
-    NSLog(@"searchVC---->%@",param);
-
-        [self searchcarlisting];
-    }
-//    defaluts  = [NSUserDefaults standardUserDefaults];
-//    
-//    [defaluts setObject:ObjShared.Cityname forKey:@"city name"];
-//    [defaluts setObject:ObjShared.siteName forKey:@"site name"];
-//    NSLog(@"default ----> %@",[defaluts objectForKey:@"site name"]);
-}
-
--(void)searchcarlisting
-{
-    NSLog(@"para--->%@",param);
-    [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:param];
 }
 
 #pragma mark -W.S Delegate Call
@@ -519,7 +515,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         ObjShared.searchPageDict=dict;
         searchViewController *searchVC =[self.storyboard instantiateViewControllerWithIdentifier:@"searchViewController"];
         [[self navigationController] pushViewController:searchVC animated:NO];
-
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

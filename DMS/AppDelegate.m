@@ -37,7 +37,6 @@
         if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
         {
             ObjShared.InternetAvailable = YES;
-            
         }
         else
         {

@@ -52,10 +52,7 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
-    
 }
-
-
 -(IBAction)submit:(id)sender
 {
     
