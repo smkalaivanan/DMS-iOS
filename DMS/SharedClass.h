@@ -48,7 +48,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @property (nonatomic, retain) NSString * Cityname;
 @property (nonatomic, retain) NSString * siteName;
 
-@property (nonatomic,retain) NSArray *footerArray;
+@property (nonatomic,retain) NSArray *footerArray, *inventoryFooterArray, *manageFooterArray;
 @property (nonatomic,retain) NSArray *footerText, *inventoryFooterText,*manageFooterText;
 @property (nonatomic,retain) NSArray *siteNameArray;
 

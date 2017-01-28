@@ -146,6 +146,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_address"]] forKey:@"dealer_address"];
 
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_email"]] forKey:@"dealer_email"];
+
+            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_mobile"]] forKey:@"dealer_mobile"];
+
 
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
 

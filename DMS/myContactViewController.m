@@ -101,11 +101,12 @@
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
+    cell.footIcon.image = [UIImage imageNamed:[ObjShared.manageFooterArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.manageFooterText objectAtIndex:indexPath.row];
     
-    if (indexPath.row == 0)
+    if (indexPath.row == 2)
     {
+        cell.footIcon.image=[UIImage imageNamed:@"contact-white.png"];
         cell.foorLabel.textColor = [UIColor whiteColor];
     }
     else
@@ -175,11 +176,13 @@
     
     
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"delete.png"]];
+     [UIColor colorWithRed:0.008f green:0.208f blue:0.569f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"edit-50x50.png"]];
+    
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"delete.png"]];
+     [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"edit-50x50.png"]];
+   
     
     editCell.rightUtilityButtons = rightUtilityButton;
     editCell.delegate = self;

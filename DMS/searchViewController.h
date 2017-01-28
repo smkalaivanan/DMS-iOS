@@ -12,6 +12,7 @@
 #import "DashboardCollectionViewCell.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import "AHKActionSheet.h"
 
 @interface searchViewController : UIViewController<SharedDelegate>
 {
@@ -31,7 +32,7 @@
 -(IBAction)city:(id)sender;
 -(IBAction)filter:(id)sender;
 -(IBAction)compare:(id)sender;
--(IBAction)sort;
+-(IBAction)sort:(id)sender;
 
 
 

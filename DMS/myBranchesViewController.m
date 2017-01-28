@@ -10,7 +10,10 @@
 #import "AddBranchesViewController.h"
 
 @interface myBranchesViewController ()
-
+{
+    NSDictionary *branchDict;
+    IBOutlet UITableView *branchTable;
+}
 @end
 
 @implementation myBranchesViewController
@@ -24,6 +27,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 -(IBAction)sidemMenu:(id)sender
 {
@@ -46,7 +51,19 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
+    [self callMethod];
+
 }
+
+-(void)callMethod
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewbranchlist",@"page_name", nil];
+    
+    NSLog(@"para--->%@",para);
+    [ObjShared callWebServiceWith_DomainName:@"api_branch_list" postData:para];
+}
+
 
 #pragma mark - Collection View delegate
 
@@ -61,11 +78,12 @@
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
+    cell.footIcon.image = [UIImage imageNamed:[ObjShared.manageFooterArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.manageFooterText objectAtIndex:indexPath.row];
     
-    if (indexPath.row == 0)
+    if (indexPath.row == 1)
     {
+        cell.footIcon.image=[UIImage imageNamed:@"branches-white.png"];
         cell.foorLabel.textColor = [UIColor whiteColor];
     }
     else
@@ -121,7 +139,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[[branchDict valueForKey:@"branch_list"]valueForKey:@"dealer_name"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -131,16 +149,30 @@
     branchTableViewCell *branchCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     branchCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    branchCell.dealerName.text=[NSString stringWithFormat:@"%@",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"dealer_name"] objectAtIndex:indexPath.row]];
+    branchCell.address.text=[NSString stringWithFormat:@"%@",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"branch_address"]objectAtIndex:indexPath.row]];
+    branchCell.mobile.text=[NSString stringWithFormat:@"%@",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"dealer_contact_no"]objectAtIndex:indexPath.row]];
+    branchCell.email.text=[NSString stringWithFormat:@"%@",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"dealer_mail"]objectAtIndex:indexPath.row]];
+    
+    branchCell.status.text=[NSString stringWithFormat:@"%@",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"dealer_status"]objectAtIndex:indexPath.row]];
+
+
+    
     
     NSMutableArray *rightUtilityButton = [NSMutableArray new];
     
     
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"delete.png"]];
+     [UIColor colorWithRed:0.008f green:0.208f blue:0.569f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"repost-50x50.png"]];
+    
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"delete.png"]];
+     [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"edit-50x50.png"]];
+    [rightUtilityButton sw_addUtilityButtonWithColor:
+     [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"delete-50x50.png"]];
+
     
     branchCell.rightUtilityButtons = rightUtilityButton;
     branchCell.delegate = self;
@@ -176,5 +208,33 @@
             break;
     }
 }
+
+
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        branchDict = dict;
+    
+        [branchTable reloadData];
+        
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+        
+    }
+}
+- (void)failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

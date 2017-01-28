@@ -27,11 +27,11 @@
     
     save.hidden=YES;
     
-    ObjShared.footerArray = [[NSArray alloc] initWithObjects:@"search-white.png",
-                   @"savecar-blue.png",
-                   @"queries-blue.png",
-                   @"bids-blue.png",
-                   @"funding-blue.png",nil];
+    ObjShared.manageFooterArray = [[NSArray alloc] initWithObjects:@"profile-blue.png",
+                   @"branches-blue.png",
+                   @"contact-blue.png",
+                   @"user-blue.png",
+                   @"sub-blue.png",nil];
     
     ObjShared.manageFooterText = [[NSArray alloc] initWithObjects:@"Profile",
                                   @"Branches",
@@ -56,7 +56,14 @@
     defaults  = [NSUserDefaults standardUserDefaults];
 
     [profileImg setImageWithURL:[NSURL URLWithString:[defaults valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    
     profileName.text=[defaults valueForKey:@"dealerName"];
+    
+    email.text=[defaults valueForKey:@"dealer_email"];
+    
+    phone.text=[defaults valueForKey:@"dealer_mobile"];
+    
+    NSLog(@"default---->%@",defaults);
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,11 +85,12 @@
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
+    cell.footIcon.image = [UIImage imageNamed:[ObjShared.manageFooterArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.manageFooterText objectAtIndex:indexPath.row];
     
     if (indexPath.row == 0)
     {
+        cell.footIcon.image=[UIImage imageNamed:@"profile-white.png"];
         cell.foorLabel.textColor = [UIColor whiteColor];
     }
     else
@@ -140,7 +148,6 @@
     save.hidden=YES;
     imgPicker.hidden=YES;
     profileName.userInteractionEnabled=NO;
-    email.userInteractionEnabled=NO;
     passoword.userInteractionEnabled=NO;
     phone.userInteractionEnabled=NO;
 }
@@ -148,9 +155,8 @@
 {
     save.hidden=NO;
     edit.hidden=YES;
-    imgPicker.hidden=YES;
+    imgPicker.hidden=NO;
     profileName.userInteractionEnabled=YES;
-    email.userInteractionEnabled=YES;
     passoword.userInteractionEnabled=YES;
     phone.userInteractionEnabled=YES;
 }
@@ -196,7 +202,7 @@
     dataImage = UIImageJPEGRepresentation(chosenimage, 0);
     //    NSLog(@"new size %lu", (unsigned long)[dataImage length]);
     base64String = [dataImage base64EncodedStringWithOptions:0];
-    //    NSLog(@"%@", base64String);
+        NSLog(@"%@", base64String);
     
     profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
     profileImg.clipsToBounds = YES;

@@ -68,9 +68,7 @@
     }
     else
     {
-        
         [navigationController pushViewController:destinationVC animated:animated];
-        
     }
     
 }

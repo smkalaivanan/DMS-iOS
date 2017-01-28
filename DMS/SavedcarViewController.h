@@ -22,6 +22,6 @@
     int apiCall;
     IBOutlet UITableView *searchTable;
 }
-
+@property(nonatomic,retain) IBOutlet UITableView * searchTable;
 
 @end

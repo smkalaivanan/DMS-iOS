@@ -13,6 +13,8 @@
 @interface FiltersViewController ()
 {
     NSArray *valueArray;
+    
+    NSDictionary *filterDict;
 }
 @end
 
@@ -23,22 +25,47 @@
     [super viewDidLoad];
     
     
+    ObjShared = [SharedClass sharedInstance];
+    
+
+
     keyArray = [[NSArray alloc] initWithObjects:
-                @"Budget",
-                @"Sites",
-                @"City",
+                @"Car Sites",
+                @"Listing Type",
                 @"Car Make",
                 @"Car Model",
-                @"Body Type",
                 @"Car Year",
                 @"Transmission",
                 @"Fuel Type",
-                @"Listing Type",
+                @"Budget",
+                @"Body Type",
                 nil];
-
+    
+    
+    [self callMethod];
     
     // Do any additional setup after loading the view.
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //Shared
+    ObjShared = [SharedClass sharedInstance];
+    
+    ObjShared = nil;
+    ObjShared = [SharedClass sharedInstance];
+    ObjShared.sharedDelegate = nil;
+    ObjShared.sharedDelegate = (id)self;
+}
+
+-(void)callMethod
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]init];
+    [ObjShared callWebServiceWith_DomainName:@"api_buy_filter" getData:para];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -82,84 +109,52 @@
     
     if (indexPath.row == 0)
     {
-
-        valueArray=[[ObjShared.appDict valueForKey:@"car_budget"] valueForKey:@"budget_varient_name"];
+        valueArray=[filterDict valueForKey:@"Car_site"];
     }
     else if (indexPath.row == 1)
     {
 
-        valueArray=[[ObjShared.appDict valueForKey:@"site_names"] valueForKey:@"sitename"];
+        valueArray=[filterDict valueForKey:@"Listing_type"];
         
     }
     else if (indexPath.row == 2)
     {
-
-        
-        valueArray=[[ObjShared.appDict valueForKey:@"model_city"] valueForKey:@"city_name"];
-        
+        valueArray=[filterDict valueForKey:@"Make"];
     }
     else if (indexPath.row == 3)
     {
-
-        valueArray=[[ObjShared.appDict valueForKey:@"model_make"] valueForKey:@"makename"];
-        
+        valueArray=[filterDict valueForKey:@"Listing_type"];
     }
     else if (indexPath.row == 4)
     {
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"Z10",
-                      @"A8",
-                      @"Duster",
-                      @"Xuv800",
-                      @"TUV",
-                      @"Wagon R", nil];
+        valueArray=[filterDict valueForKey:@"year"];
+
     }
     else if (indexPath.row == 5)
     {
 
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"Sedan",
-                      @"Coupe",
-                      @"Hatchback",
-                      @"Minivan",
-                      @"SUV",
-                      @"Wagon", nil];
+        valueArray=[filterDict valueForKey:@"Transmission_type"];
+
     }
     else if (indexPath.row == 6)
     {
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"2010",
-                      @"2011",
-                      @"2012",
-                      @"2013",
-                      @"2014",
-                      @"2015",
-                      @"2016",
-                      @"2017",
-                      @"2018",
-                      @"2019",nil];
+        valueArray=[filterDict valueForKey:@"Fuel_type"];
         
     }
     else if (indexPath.row == 7)
     {
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"Manual",
-                      @"Automatic",nil];
+        valueArray=[filterDict valueForKey:@"Car_budget"];
+
         
     }
     else if (indexPath.row == 8)
     {
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"LPG",
-                      @"Petrol",
-                      @"Disel",nil];
+        valueArray=[filterDict valueForKey:@"Body_type"];
         
     }
-    else if (indexPath.row == 9)
+    else
     {
-        valueArray = [[NSArray alloc] initWithObjects:
-                      @"Auction",
-                      @"Listing",nil];
+        valueArray = @[@""];
         
     }
     
@@ -176,6 +171,31 @@
     NSLog(@"back");
     [[self navigationController]popViewControllerAnimated:YES];
 }
+
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        filterDict = dict;
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+        
+    }
+}
+- (void)failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
+
 
 
 @end

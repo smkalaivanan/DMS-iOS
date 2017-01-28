@@ -27,7 +27,11 @@
     [self HMSegmentTagController];
     
     ObjShared = [SharedClass sharedInstance];
-    
+    ObjShared.inventoryFooterArray = [[NSArray alloc] initWithObjects:@"inventory-blue.png",
+                                      @"myposting-blue.png",
+                                      @"bids-blue.png",
+                                      @"queries-blue.png",
+                                      @"loan-blue.png", nil];
     ObjShared.inventoryFooterText =[[NSArray alloc] initWithObjects:@"Inventory",
                                                                     @"My Posting",
                                                                     @"Auction",
@@ -126,11 +130,12 @@
     static NSString *cellIdentifier = @"DashboardCollectionViewCell";
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
+    cell.footIcon.image = [UIImage imageNamed:[ObjShared.inventoryFooterArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.inventoryFooterText objectAtIndex:indexPath.row];
     
     if (indexPath.row == 0)
     {
+        cell.footIcon.image=[UIImage imageNamed:@"inventory-white.png"];
         cell.foorLabel.textColor = [UIColor whiteColor];
     }
     else

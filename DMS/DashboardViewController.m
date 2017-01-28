@@ -27,6 +27,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface DashboardViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,CZPickerViewDataSource, CZPickerViewDelegate>
 {
+    NSString *budgetValue;
     AppDelegate *appDelegate;
     NSDictionary *modelDict;
     NSString *modelID, *newTrim;
@@ -64,18 +65,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                             @"Funding",
                             nil];
     
-    sites = @[@"Quickr",
-              @"Carwale",
-              @"Cardekho",
-              @"OLX"];
-    
-    budget=[[NSArray alloc]initWithObjects:
-            @"Below 1 Lakh",
-            @"1 Lakh - 2 Lakh",
-            @"2 Lakh - 3 Lakh",
-            @"3 Lakh - 4 Lakh",
-            @"5 Lakh - Above",nil];
-    
     vehicleType =[[NSArray alloc] initWithObjects:
                   @"Sedan",
                   @"Coupe",
@@ -84,24 +73,29 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                   @"SUV",
                   @"Wagon", nil];
     
-    if ([searchSave valueForKey:@"city_name"] != 0)
-    {
-        ObjShared.Cityname=[searchSave valueForKey:@"city_name"];
-        newTrim=[searchSave valueForKey:@"site_name"];
-        ObjShared.siteName= [NSString stringWithFormat:@"%lu sites selected",(unsigned long)[[searchSave valueForKey:@"site_name_array"] count]];
-        ObjShared.siteNameArray =[searchSave valueForKey:@"site_city_array"];
-        
-        NSLog(@"main ---> %@",ObjShared.Cityname);
-        NSLog(@"main ---> %@",newTrim);
-        NSLog(@"main ---> %@",ObjShared.siteNameArray);
-        
-    }
-    else
-    {
+//    NSLog(@"outer ---> %@",ObjShared.Cityname);
+//    NSLog(@"outer ---> %@",newTrim);
+//    NSLog(@"outer ---> %@",ObjShared.siteNameArray);
+
+    
+//    if ([searchSave valueForKey:@"city_name"] != 0)
+//    {
+//        ObjShared.Cityname=[searchSave valueForKey:@"city_name"];
+//        newTrim=[searchSave valueForKey:@"site_name"];
+//        ObjShared.siteName= [NSString stringWithFormat:@"%lu sites selected",(unsigned long)[[searchSave valueForKey:@"site_name_array"] count]];
+//        ObjShared.siteNameArray =[searchSave valueForKey:@"site_city_array"];
+//        
+//        NSLog(@"main ---> %@",ObjShared.Cityname);
+//        NSLog(@"main ---> %@",newTrim);
+//        NSLog(@"main ---> %@",ObjShared.siteNameArray);
+//        
+//    }
+//    else
+//    {
         ObjShared.Cityname=@"Select City";
         ObjShared.siteName=@"Select sites";
         NSLog(@"search default ----> %@",[searchSave valueForKey:@"city_name"]);
-    }
+//    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -249,7 +243,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            return vehicleType[row];
+            return [[ObjShared.appDict valueForKey:@"Vehicle_type"]valueForKey:@"category_description"][row];
 //            return [[modelDict valueForKey:@"model_makeid"]valueForKey:@"model_name"][row];
 
         }
@@ -278,7 +272,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            return vehicleType.count;
+            return [[[ObjShared.appDict valueForKey:@"Vehicle_type"]valueForKey:@"category_description"]count];
         }
         else
         {
@@ -296,6 +290,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         {
             NSString * butBud = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"][row]];
 
+            budgetValue=[NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_value"][row]];
+            
+            NSLog(@"%@",budgetValue);
+            
             [showBudget setTitle:butBud forState:UIControlStateNormal];
         }
         else
@@ -312,7 +310,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue == 0)
         {
-            NSString * butVeh = [NSString stringWithFormat:@"%@",vehicleType[row]];
+            NSString * butVeh = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"Vehicle_type"]valueForKey:@"category_description"][row]];
             [showVehicle setTitle:butVeh forState:UIControlStateNormal];
         }
         else
@@ -334,6 +332,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         {
             NSString * butBuds = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"] objectAtIndex:0]];
 
+            
             [showBudget setTitle:butBuds forState:UIControlStateNormal];
         }
         else
@@ -347,7 +346,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     {
         if (segValue  ==  0)
         {
-            NSString * butVehOne = [NSString stringWithFormat:@"%@",[vehicleType objectAtIndex:0]];
+            NSString * butVehOne = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"Vehicle_type"]valueForKey:@"category_description"] objectAtIndex:0]];
             [showVehicle setTitle:butVehOne forState:UIControlStateNormal];
         }
         else
@@ -472,27 +471,27 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else
     {
-        if ([[searchSave valueForKey:@"site_name_array"] count] <= 0 || NULL)
-        {
+//        if ([[searchSave valueForKey:@"site_name_array"] count] <= 0 || NULL)
+//        {
             NSString * arrayString = [NSString stringWithFormat:@"%@",ObjShared.siteNameArray];
             newTrim = [[[[[arrayString
             stringByReplacingOccurrencesOfString:@"\n" withString:@""]stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""]
                 stringByReplacingOccurrencesOfString:@" " withString:@""]
                        stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            [searchSave setObject:newTrim forKey:@"site_name"];
-        }
+//            [searchSave setObject:newTrim forKey:@"site_name"];
+//        }
 
         if (segment.selectedSegmentIndex == 0)
         {
-            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",@"searchpage",@"page_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"car_budget",showVehicle.titleLabel.text,@"vehicle_type",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",showWithoutFooter.titleLabel.text,@"city_name",@"searchpage",@"page_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",budgetValue,@"car_budget",showVehicle.titleLabel.text,@"vehicle_type",nil];
         }
         else
         {
-            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",showBudget.titleLabel.text,@"vehicle_make",showVehicle.titleLabel.text,@"vehicle_model",@"searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
+            param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",budgetValue,@"vehicle_make",showVehicle.titleLabel.text,@"vehicle_model",@"searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
         }
-        
-        [searchSave setObject:[param valueForKey:@"city_name"] forKey:@"city_name"];
-        [searchSave setObject:ObjShared.siteNameArray forKey:@"site_name_array"];
+        NSLog(@"param value -----> %@",param);
+//        [searchSave setObject:[param valueForKey:@"city_name"] forKey:@"city_name"];
+//        [searchSave setObject:ObjShared.siteNameArray forKey:@"site_name_array"];
         [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:param];
     }
 }
@@ -518,9 +517,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
     }
-    
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {
         

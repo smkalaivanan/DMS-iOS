@@ -84,11 +84,12 @@
     static NSString *cellIdentifier = @"DashboardCollectionViewCell";
     
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
+    cell.footIcon.image = [UIImage imageNamed:[ObjShared.inventoryFooterArray objectAtIndex:indexPath.row]];
     cell.foorLabel.text = [ObjShared.inventoryFooterText objectAtIndex:indexPath.row];
     
     if (indexPath.row == 2)
     {
+        cell.footIcon.image=[UIImage imageNamed:@"bids-white.png"];
         cell.foorLabel.textColor = [UIColor whiteColor];
     }
     else

@@ -61,11 +61,20 @@
 //    activity.alpha = 0.1;
 //    [self.view addSubview:activity];
 //    activity.hidden = NO;
-   
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:oldPass.text,@"oldpassword",changePass.text,@"newpassword",confirmPass.text,@"confirm_password",[ObjShared.LoginDict valueForKey:@"user_id"],@"id", nil];
     
-    [ObjShared callWebServiceWith_DomainName:@"change_password" postData:para];
-
+    if ([changePass.text isEqualToString:confirmPass.text])
+    {
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:oldPass.text,@"oldpassword",changePass.text,@"newpassword",confirmPass.text,@"confirm_password",[ObjShared.LoginDict valueForKey:@"user_id"],@"id", nil];
+        
+        [ObjShared callWebServiceWith_DomainName:@"change_password" postData:para];
+        
+    }
+    else
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Check the Confirm Password"];
+    }
+   
+   
 }
 -(IBAction)back:(id)sender
 {

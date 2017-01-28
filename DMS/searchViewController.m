@@ -33,8 +33,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     AppDelegate * appDelegate;
     NSDictionary *search_Dict;
     UIButton * button;
-    UIView * pic;
-    NSArray * sort;
     NSString *sortId;
     NSString *sortName;
 
@@ -457,7 +455,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #pragma mark -W.S Delegate Call
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
-    
     NSLog(@"in success");
    
         NSLog(@"Dict--->%@",dict);
@@ -512,114 +509,85 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     
 }
--(IBAction)sort
+-(IBAction)sort:(id)sender
 {
+    AHKActionSheet *actionSheet = [[AHKActionSheet alloc] initWithTitle:nil];
     
-    sort = @[@"Low price to High price",@"High price to Low price",@"Low Mileage to High Mileage",@"High Mileage to Low Mileage",@"Old cars to New  cars",@"New cars to Old cars"] ;
+    actionSheet.blurTintColor = [UIColor colorWithWhite:0.0f alpha:0.75f];
+    actionSheet.blurRadius = 8.0f;
+    actionSheet.buttonHeight = 50.0f;
+    actionSheet.cancelButtonHeight = 50.0f;
+    actionSheet.animationDuration = 0.5f;
+    actionSheet.cancelButtonShadowColor = [UIColor colorWithWhite:0.0f alpha:0.1f];
+    actionSheet.separatorColor = [UIColor colorWithWhite:1.0f alpha:0.3f];
+    actionSheet.selectedBackgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    UIFont *defaultFont = [UIFont systemFontOfSize:17.0];
+    actionSheet.buttonTextAttributes = @{ NSFontAttributeName : defaultFont,
+                                          NSForegroundColorAttributeName : [UIColor whiteColor] };
+    actionSheet.disabledButtonTextAttributes = @{ NSFontAttributeName : defaultFont,
+                                                  NSForegroundColorAttributeName : [UIColor grayColor] };
+    actionSheet.destructiveButtonTextAttributes = @{ NSFontAttributeName : defaultFont,
+                                                     NSForegroundColorAttributeName : [UIColor redColor] };
+    actionSheet.cancelButtonTextAttributes = @{ NSFontAttributeName : defaultFont,
+                                                NSForegroundColorAttributeName : [UIColor redColor
+                                                                                  ] };
     
-    pic = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-200, self.view.frame.size.width , 180)];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Price", nil)
+                              image:[UIImage imageNamed:@"Icon2"]
+                               type:AHKActionSheetButtonTypeDisabled
+                            handler:nil];
     
-    pic.backgroundColor=[UIColor clearColor];
-    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, 50)];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Price -- High → Low", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"1";
+                                [self callingapi];                            }];
     
-    toolBar.layer.cornerRadius=5.0f;
-    toolBar.layer.masksToBounds = YES;
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Price -- Low → High", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"2";
+                                [self callingapi];                            }];
     
-    UIBarButtonItem *btn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(pickerOk:)];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Milage", nil)
+                              image:[UIImage imageNamed:@"Icon2"]
+                               type:AHKActionSheetButtonTypeDisabled
+                            handler:nil];
     
-    UIBarButtonItem *btn1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(pickerCancel:)];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Milage -- High → Low", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"3";
+                                [self callingapi];                            }];
     
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Milage -- Low → High", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"4";
+                                [self callingapi];                            }];
     
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Year", nil)
+                              image:[UIImage imageNamed:@"Icon2"]
+                               type:AHKActionSheetButtonTypeDisabled
+                            handler:nil];
     
-    [toolBar setItems:[NSArray arrayWithObjects:btn1,flexibleSpace,btn,nil]];
-    [pic addSubview:toolBar];
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Year -- High → Low", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"5";
+                                [self callingapi];                            }];
     
-    
-    self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(10, 50, self.view.frame.size.width - 20, 145)];
-    self.pickerView.delegate=self;
-    self.pickerView.dataSource=self;
-    self.pickerView.showsSelectionIndicator=YES;
-    self.pickerView.layer.cornerRadius=10.0f;
-    self.pickerView.layer.masksToBounds = YES;
-    self.pickerView.backgroundColor=[UIColor whiteColor];
-
-    [pic addSubview:self.pickerView];
-    
-    [self.view addSubview:pic];
-    
+    [actionSheet addButtonWithTitle:NSLocalizedString(@"Year -- Low → High", nil)
+                              image:nil
+                               type:AHKActionSheetButtonTypeDefault
+                            handler:^(AHKActionSheet *as) {
+                                sortId=@"6";
+                                [self callingapi];                            }];
+    [actionSheet show];
 }
-
--(IBAction)pickerOk:(id)sender
-{
-    if ([sortName isEqualToString:@"Select price"])
-    {
-        sortId=@"0";
-    }
-    else if ([sortName isEqualToString:@"High price to Low price"])
-    {
-        sortId=@"1";
-    }
-    else if ([sortName isEqualToString:@"Low price to High price"])
-    {
-        sortId=@"2";
-    }
-    else if ([sortName isEqualToString:@"High Mileage to Low Mileage"])
-    {
-        sortId=@"3";
-    }
-    else if ([sortName isEqualToString:@"Low Mileage to High Mileage"])
-    {
-        sortId=@"4";
-    }
-    else if ([sortName isEqualToString:@"New cars to Old cars"])
-    {
-        sortId=@"5";
-    }
-    else if ([sortName isEqualToString:@"Old cars to New  cars"])
-    {
-        sortId=@"6";
-    }
-    else
-    {
-        sortId=@"0";
-    }
-    
-    [self callingapi];
-
-    
-    [pic removeFromSuperview];
-    //    [self.pickerView removeFromSuperview];
-    //    pic.hidden=YES;
-}
--(IBAction)pickerCancel:(id)sender
-{
-    //    NSLog(@"inside picker cancel");
-   
-    [pic removeFromSuperview];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    sortName=[NSString stringWithFormat:@"%@",[sort objectAtIndex:row]];
-}
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [sort count];
-}
-# pragma mark UIPickerViewDelegate
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    
-    return [sort objectAtIndex:row];
-}
-
-
-
 @end

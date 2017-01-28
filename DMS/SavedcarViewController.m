@@ -13,6 +13,7 @@
 #import "ApplyFundingViewController.h"
 #import "AppDelegate.h"
 #import "BidsDetailViewController.h"
+#import "DGElasticPullToRefresh.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -33,6 +34,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @end
 
 @implementation SavedcarViewController
+@synthesize searchTable;
 
 - (void)viewDidLoad
 {
@@ -54,6 +56,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMethod];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [searchTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMethod];
+            [weakSelf.searchTable dg_stopLoading];
+        });
+    }
+                                         loadingView:loadingView];
+    
+    [searchTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [searchTable dg_setPullToRefreshBackgroundColor:searchTable.backgroundColor];
+
 }
 
 -(void)callMethod
@@ -66,6 +86,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void)dealloc
+{
+    [self.searchTable dg_removePullToRefresh];
 }
 
 -(IBAction)showLeftMenuPressed:(id)sender

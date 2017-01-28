@@ -68,7 +68,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         if(result.height == 568)
         {
             NSLog(@"iphone 5");
-            ObjShared.collectionZ = -10;
+            ObjShared.collectionZ = -12;
         }
         if (result.height == 667)
         {
