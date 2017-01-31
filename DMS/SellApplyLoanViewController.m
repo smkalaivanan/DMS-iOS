@@ -24,6 +24,7 @@
 @end
 
 @implementation SellApplyLoanViewController
+@synthesize sellApplyTabel;
 
 - (void)viewDidLoad
 {
@@ -42,6 +43,24 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMakeid];
+
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [sellApplyTabel dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+            [weakSelf.sellApplyTabel dg_stopLoading];
+        });
+    }
+                                               loadingView:loadingView];
+    
+    [sellApplyTabel dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [sellApplyTabel dg_setPullToRefreshBackgroundColor:sellApplyTabel.backgroundColor];
+
 }
 
 -(IBAction)showLeftMenuPressed:(id)sender
@@ -189,7 +208,7 @@
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[sellApplyDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

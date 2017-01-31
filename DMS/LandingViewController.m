@@ -9,7 +9,6 @@
 #import "LandingViewController.h"
 
 @interface LandingViewController ()
-
 @end
 
 @implementation LandingViewController
@@ -28,5 +27,6 @@
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 }
+
 
 @end

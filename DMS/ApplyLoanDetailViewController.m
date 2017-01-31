@@ -195,7 +195,7 @@
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[revokeDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

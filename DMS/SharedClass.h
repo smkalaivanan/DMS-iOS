@@ -16,6 +16,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 #import "SWTableViewCell.h"
+#import "DGElasticPullToRefresh.h"
 
 @protocol  SharedDelegate <NSObject>
 
@@ -47,12 +48,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @property (nonatomic, retain) NSString * Cityname;
 @property (nonatomic, retain) NSString * siteName;
+@property (nonatomic, retain) NSString * stateId;
+
 
 @property (nonatomic,retain) NSArray *footerArray, *inventoryFooterArray, *manageFooterArray;
 @property (nonatomic,retain) NSArray *footerText, *inventoryFooterText,*manageFooterText;
 @property (nonatomic,retain) NSArray *siteNameArray;
 
 @property (nonatomic,retain) NSMutableArray *array;
+@property (nonatomic,retain) NSMutableArray *branchArray;
+
+
+@property (nonatomic) int editBranch;
 
 
 

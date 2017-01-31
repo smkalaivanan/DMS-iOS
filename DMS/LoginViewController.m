@@ -150,7 +150,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_mobile"]] forKey:@"dealer_mobile"];
 
-
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
 
             LandingViewController *landingVC =[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];
@@ -158,7 +157,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         }
         else if ([[dictor objectForKey:@"Result"]isEqualToString:@"0"])
         {
-             [AppDelegate showAlert:@"Invalid User" withMessage:[NSString stringWithFormat:@"%@",[dictor objectForKey:@"message"]]];
+             [AppDelegate showAlert:@"Invalid User" withMessage:[dictor objectForKey:@"message"]];
         }
         else if (![[NSString stringWithFormat:@"%@",[dictor objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dictor != nil)
         {

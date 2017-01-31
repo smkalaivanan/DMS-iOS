@@ -88,24 +88,20 @@
         NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:emailId.text,@"mailid", nil];
         
         [ObjShared callWebServiceWith_DomainName:@"forgot_password" postData:para];
-
     }
 }
 
-
-
 -(IBAction)back:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)existingAccount:(id)sender
 {
-    [[self navigationController] popViewControllerAnimated:NO];
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 #pragma alertview Controller
-
 -(void)alert
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:sub preferredStyle:UIAlertControllerStyleAlert];
@@ -114,7 +110,6 @@
     [self presentViewController:alertController animated:NO completion:nil];
 }
 
-
 #pragma mark -IsValid Email
 -(BOOL)isValidEmail:(NSString *)email
 {
@@ -122,14 +117,11 @@
     NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailPredicate evaluateWithObject:email];
 }
-
 //Status bar hidden
 -(BOOL)prefersStatusBarHidden
 {
     return YES;
 }
-
-
 #pragma mark -W.S Delegate Call
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
@@ -137,29 +129,38 @@
     NSLog(@"Dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
-        [AppDelegate showAlert:@"Success" withMessage:[dict objectForKey:@"message"]];
-        [self.navigationController popViewControllerAnimated:NO];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Success!!" message:[dict objectForKey:@"message"] preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                       style:UIAlertActionStyleCancel
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                       }];
+        
+        [alertController addAction:cancelAction];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       [self.navigationController popViewControllerAnimated:NO];
+                                   }];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        
         [AppDelegate showAlert:@"Failure" withMessage:[dict objectForKey:@"message"]];
-        
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {
         
     }
-    
-//    activity.hidden = YES;
 }
-
 - (void) failResponseFromServer
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
-
-
-
-
 @end

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SellAuctionViewController : UIViewController
-
+@property(nonatomic,retain) IBOutlet UITableView * autionTable;
 @end

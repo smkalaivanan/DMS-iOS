@@ -15,6 +15,7 @@
 #import "DashboardViewController.h"
 #import "profileViewController.h"
 #import "LandingViewController.h"
+#import "CompareViewController.h"
 
 @interface MFSideDrawerViewController ()
 {
@@ -105,39 +106,37 @@
     {
         [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
-        
         LandingViewController *landingVC=[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];
-        
         [SharedClass NavigateTo:landingVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 1)
     {
         [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
-        
         DashboardViewController *dashVC=[self.storyboard instantiateViewControllerWithIdentifier:@"DashboardViewController"];
-        
         [SharedClass NavigateTo:dashVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 2)
     {
         [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
-        
         InventoryViewController *inventVC=[self.storyboard instantiateViewControllerWithIdentifier:@"InventoryViewController"];
-        
         [SharedClass NavigateTo:inventVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 3)
     {
         [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
-        
         profileViewController *profileVC=[self.storyboard instantiateViewControllerWithIdentifier:@"profileViewController"];
-        
         [SharedClass NavigateTo:profileVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
+    else if (indexPath.row == 4)
+    {
+        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 
+        CompareViewController *compareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"CompareViewController"];
+        [SharedClass NavigateTo:compareVC inNavigationViewController:appDelegate.navigationController animated:false];
+    }
     else
     {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];

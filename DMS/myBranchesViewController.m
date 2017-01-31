@@ -18,12 +18,14 @@
 
 @implementation myBranchesViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -52,6 +54,8 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
+    ObjShared.editBranch=0;
+
     [self callMethod];
 
 }
@@ -164,11 +168,8 @@
     
     [rightUtilityButton sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:0.008f green:0.208f blue:0.569f alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"repost-50x50.png"]];
-    
-    [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
                                                 icon:[UIImage imageNamed:@"edit-50x50.png"]];
+    
     [rightUtilityButton sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
                                                 icon:[UIImage imageNamed:@"delete-50x50.png"]];
@@ -195,11 +196,35 @@
         {
             // Delete button is pressed
             NSLog(@"Edit");
+            
+            ObjShared.editBranch=1;
+            
+            ObjShared.branchArray=[[branchDict valueForKey:@"branch_list"] objectAtIndex:index];
+            
+            
+            NSLog(@"branch--->%@",ObjShared.branchArray);
+            
+            AddBranchesViewController *branchVC =[self.storyboard instantiateViewControllerWithIdentifier:@"AddBranchesViewController"];
+            [[self navigationController] pushViewController:branchVC animated:NO];
+
             break;
         }
         case 1:
         {
             // Delete button is pressed
+            
+//        session_user_id:1402
+//            id:2
+//        page_name:deletebranch
+            
+            NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"deletebranch",@"page_name",[[[branchDict valueForKey:@"branch_list"] valueForKey:@"branch_id"]objectAtIndex:index],@"id", nil];
+            
+            NSLog(@"para--->%@",para);
+            
+            [ObjShared callWebServiceWith_DomainName:@"api_delete_branch" postData:para];
+            
+            
+            
             NSLog(@"Delete");
             break;
         }
@@ -221,6 +246,10 @@
     
         [branchTable reloadData];
         
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"3"])
+    {
+        [self callMethod];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

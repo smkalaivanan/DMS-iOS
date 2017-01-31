@@ -18,6 +18,7 @@
 @end
 
 @implementation SellAuctionViewController
+@synthesize autionTable;
 
 - (void)viewDidLoad
 {
@@ -35,6 +36,23 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [autionTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.autionTable dg_stopLoading];
+        });
+    }
+                                               loadingView:loadingView];
+    
+    [autionTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [autionTable dg_setPullToRefreshBackgroundColor:autionTable.backgroundColor];
+
 }
 -(IBAction)showLeftMenuPressed:(id)sender
 {

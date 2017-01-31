@@ -30,6 +30,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @end
 
 @implementation ApplyFundingViewController
+@synthesize fundTable;
 
 - (void)viewDidLoad
 {
@@ -56,6 +57,23 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMakeid];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [fundTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+           [weakSelf.fundTable dg_stopLoading];
+        });
+    }
+                                          loadingView:loadingView];
+    
+    [fundTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [fundTable dg_setPullToRefreshBackgroundColor:fundTable.backgroundColor];
 }
 
 -(void)callMakeid
@@ -193,7 +211,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[fundDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

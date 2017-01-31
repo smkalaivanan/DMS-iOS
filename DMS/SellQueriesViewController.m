@@ -19,6 +19,7 @@
 @end
 
 @implementation SellQueriesViewController
+@synthesize sellQueriesTable;
 
 - (void)viewDidLoad
 {
@@ -37,6 +38,24 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMakeid];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [sellQueriesTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+            [weakSelf.sellQueriesTable dg_stopLoading];
+        });
+    }
+                                          loadingView:loadingView];
+    
+    [sellQueriesTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [sellQueriesTable dg_setPullToRefreshBackgroundColor:sellQueriesTable.backgroundColor];
+
 }
 -(void)callMakeid
 {
@@ -79,6 +98,8 @@
     query.customerMessage.text=[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"message"] objectAtIndex:indexPath.row];
 
     [query.customerImage setImageWithURL:[NSURL URLWithString:[[[sellQueriesDict valueForKey:@"mysellqueries"] valueForKey:@"imagelink"] objectAtIndex:indexPath.row]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    query.customerImage.layer.cornerRadius = query.customerImage.frame.size.width/2;
+    query.customerImage.layer.masksToBounds = YES;
 
     return query;
 }
@@ -161,7 +182,7 @@
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[sellQueriesDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

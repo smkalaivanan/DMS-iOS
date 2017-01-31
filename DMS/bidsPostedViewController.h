@@ -15,5 +15,6 @@
     IBOutlet UITableView *bidTable;
 }
 -(IBAction)side:(id)sender;
+@property(nonatomic,retain) IBOutlet UITableView *bidTable;
 
 @end

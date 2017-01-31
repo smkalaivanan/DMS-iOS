@@ -13,7 +13,6 @@
 #import "ApplyFundingViewController.h"
 #import "AppDelegate.h"
 #import "BidsDetailViewController.h"
-#import "DGElasticPullToRefresh.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \

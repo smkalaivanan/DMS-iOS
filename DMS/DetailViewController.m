@@ -108,7 +108,7 @@
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+        [AppDelegate showAlert:@"Invalid User" withMessage:[dict valueForKey:@"message"]];
     }
     
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)

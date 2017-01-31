@@ -14,6 +14,6 @@
 }
 -(IBAction)side:(id)sender;
 -(IBAction)add:(id)sender;
-
+@property (nonatomic,retain) IBOutlet UITableView * fundTable;
 
 @end

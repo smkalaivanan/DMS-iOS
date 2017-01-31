@@ -15,6 +15,10 @@
     NSArray *city;
     NSString *searchTextString;
     NSArray *popular;
+    NSArray *stateId;
+    NSArray *state;
+
+
 }
 @end
 
@@ -27,10 +31,16 @@
     ObjShared = [SharedClass sharedInstance];
     
     popular=[[NSArray alloc]initWithObjects:@"Chennai",@"Mumbai",@"Pune",@"Bangalore",@"Kochi",@"Delhi",@"Jaipur",@"Hyderabad",@"Kolkata",@"Ahmedabad", nil];
+    //need to change state id
+    stateId=[[NSArray alloc]initWithObjects:@"31",@"21",@"21",@"18",@"18",@"10",@"29",@"2",@"35",@"12", nil];
+
+    
     
     [self.searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     city=[[ObjShared.appDict valueForKey:@"model_city"] valueForKey:@"city_name"];
+
+    state=[[ObjShared.appDict valueForKey:@"model_city"] valueForKey:@"state_id"];
 
     [self searchtext];
     [self updateSearchArray];
@@ -53,7 +63,7 @@
     dummyArray = [[NSMutableArray alloc] init];
     for (int i=0; i<city.count; i++)
     {
-        [dummyArray addObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:[city objectAtIndex:i], @"city", nil]];
+        [dummyArray addObject:[[NSMutableDictionary alloc] initWithObjectsAndKeys:[city objectAtIndex:i], @"city",[state objectAtIndex:i], @"state_id", nil]];
     }
     [cityList reloadData];
     [self updateSearchArray];
@@ -131,7 +141,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     ObjShared.Cityname=[NSString stringWithFormat:@"%@",[[searchArray objectAtIndex:indexPath.row]objectForKey:@"city"]];
+    ObjShared.stateId=[NSString stringWithFormat:@"%@",[[searchArray objectAtIndex:indexPath.row]objectForKey:@"state_id"]];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }
@@ -153,6 +166,7 @@
 //    cell.footIcon.image = [UIImage imageNamed:[ObjShared.footerArray objectAtIndex:indexPath.row]];
 //    cell.foorLabel.text = [ObjShared.footerText objectAtIndex:indexPath.row];
     return cell;
+    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -163,7 +177,11 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ObjShared.Cityname=[NSString stringWithFormat:@"%@",[popular objectAtIndex:indexPath.row]];
+    
+    ObjShared.stateId=[NSString stringWithFormat:@"%@",[stateId objectAtIndex:indexPath.row]];
+                                                            
     [self dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section

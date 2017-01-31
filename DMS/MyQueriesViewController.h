@@ -13,5 +13,5 @@
     IBOutlet UITableView * queriesTable;
 }
 -(IBAction)side:(id)sender;
-
+@property(nonatomic,retain) IBOutlet UITableView *queriesTable;
 @end

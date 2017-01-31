@@ -61,6 +61,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
+    [dealerImg setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    dealerImg.layer.cornerRadius = dealerImg.frame.size.width /2;
+    dealerImg.layer.masksToBounds = YES;
 }
 
 -(void)callMakeid
@@ -78,7 +81,53 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 -(IBAction)sumbit:(id)sender
 {
     NSLog(@"Submit clicked");
-    [self callMakeid];
+    if (mobileNo.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Mobile number can't be empty"];
+    }
+    else if (mobileNo.text.length < 10)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid mobile number"];
+    }
+    else if (mobileNo.text.length > 10)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid mobile number"];
+    }
+    else if (emailId.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Email id can't be empty"];
+    }
+    else if (![self isValidEmail:emailId.text])
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid email"];
+    }
+    else
+    {
+        [self callMakeid];
+    }
+}
+
+#pragma mark -IsValid Email
+
+-(BOOL)isValidEmail:(NSString *)email
+{
+//    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+//    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+//    return [emailPredicate evaluateWithObject:email];
+    
+    BOOL stricterFilter = NO;
+    NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+    NSString *laxString = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:email];
+}
+
+#pragma mark -textfield delegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 
@@ -157,7 +206,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
-    
     NSLog(@"Dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
@@ -166,7 +214,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[addFundingDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

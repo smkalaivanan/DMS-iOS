@@ -25,7 +25,7 @@
     IBOutlet UITableView *searchTable;
 }
 @property(nonatomic,retain)UIPickerView *pickerView;
-
+@property(nonatomic,retain) IBOutlet UITableView * searchTable;
 @property(nonatomic,retain)NSMutableDictionary *para;
 -(IBAction)search:(id)sender;
 -(IBAction)back:(id)sender;

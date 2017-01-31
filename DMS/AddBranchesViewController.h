@@ -21,10 +21,13 @@
     IBOutlet UITextField *phone;
     IBOutlet UITextField *email;
     IBOutlet UITextField *address;
-    IBOutlet UITextField *pincode;    
+    IBOutlet UITextField *pincode;
+    IBOutlet UIButton *city;
 }
 
 -(IBAction)save:(id)sender;
 -(IBAction)back:(id)sender;
+-(IBAction)city:(id)sender;
+
 
 @end

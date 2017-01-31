@@ -30,6 +30,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @end
 
 @implementation bidsPostedViewController
+@synthesize bidTable;
 
 - (void)viewDidLoad
 {
@@ -55,6 +56,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMakeid];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [bidTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+            [weakSelf.bidTable dg_stopLoading];
+        });
+    }
+                                           loadingView:loadingView];
+    
+    [bidTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [bidTable dg_setPullToRefreshBackgroundColor:bidTable.backgroundColor];
+
     
 }
 

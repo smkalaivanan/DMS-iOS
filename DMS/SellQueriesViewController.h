@@ -10,7 +10,8 @@
 
 @interface SellQueriesViewController : UIViewController
 {
-    IBOutlet UITableView * sellQueriesTable;
     NSDictionary * sellQueriesDict;
 }
+@property(nonatomic,retain)IBOutlet UITableView * sellQueriesTable;
+
 @end

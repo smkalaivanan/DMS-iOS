@@ -15,10 +15,10 @@
 #import "SellApplyLoanViewController.h"
 
 @interface InventoryViewController ()
-
 @end
 
 @implementation InventoryViewController
+@synthesize inventoryTable;
 
 - (void)viewDidLoad
 {
@@ -32,6 +32,7 @@
                                       @"bids-blue.png",
                                       @"queries-blue.png",
                                       @"loan-blue.png", nil];
+    
     ObjShared.inventoryFooterText =[[NSArray alloc] initWithObjects:@"Inventory",
                                                                     @"My Posting",
                                                                     @"Auction",
@@ -47,6 +48,23 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [inventoryTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.inventoryTable dg_stopLoading];
+        });
+    }
+                                           loadingView:loadingView];
+    
+    [inventoryTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [inventoryTable dg_setPullToRefreshBackgroundColor:inventoryTable.backgroundColor];
+
 }
 -(IBAction)showLeftMenuPressed:(id)sender
 {
@@ -68,7 +86,6 @@
     segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
     segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
 
-    
     [segmentViewButton addSubview:segmentedControl];
 
 }
@@ -118,6 +135,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
+
 #pragma mark - Collection View delegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section

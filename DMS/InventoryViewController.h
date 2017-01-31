@@ -14,4 +14,5 @@
     IBOutlet UIView * segmentViewButton;
     IBOutlet UIView * headerView;
 }
+@property(nonatomic,retain) IBOutlet UITableView * inventoryTable;
 @end

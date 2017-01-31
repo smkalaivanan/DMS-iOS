@@ -29,6 +29,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @end
 
 @implementation MyQueriesViewController
+@synthesize queriesTable;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -55,6 +56,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     [self callMakeid];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [queriesTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+            [weakSelf.queriesTable dg_stopLoading];
+        });
+    }
+                                        loadingView:loadingView];
+    
+    [queriesTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [queriesTable dg_setPullToRefreshBackgroundColor:queriesTable.backgroundColor];
+
 }
 
 -(void)callMakeid
@@ -192,7 +211,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
-        [AppDelegate showAlert:@"Alert !!" withMessage:[queriesDict valueForKey:@"message"]];
+        [AppDelegate showAlert:@"Alert !!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
     {

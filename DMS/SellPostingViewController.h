@@ -11,6 +11,6 @@
 @interface SellPostingViewController : UIViewController
 {
     NSDictionary * postingDict;
-    IBOutlet UITableView * sellPostingtable;
 }
+@property(nonatomic,retain) IBOutlet UITableView * sellPostingtable;
 @end

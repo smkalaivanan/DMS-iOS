@@ -7,6 +7,7 @@
 //
 
 #import "AddBranchesViewController.h"
+#import "SelectCityViewController.h"
 
 @interface AddBranchesViewController ()
 
@@ -24,6 +25,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -34,7 +36,30 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    
+
+    
+    if (ObjShared.editBranch == 1)
+    {
+        dealerName.text=[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"dealer_name"]];
+        email.text=[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"dealer_mail"]];
+        phone.text=[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"dealer_contact_no"]];
+        
+        [city setTitle:[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"dealer_city"]]forState:UIControlStateNormal];
+        
+        pincode.text=[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"dealer_pincode"]];
+        address.text=[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"branch_address"]];
+
+    }
+    
+    [city setTitle:ObjShared.Cityname forState:UIControlStateNormal];
+
+    
+    
+    
 }
+
+
 
 #pragma mark - Collection View delegate
 
@@ -108,12 +133,116 @@
 
 -(IBAction)save:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:NO];
+    if (dealerName.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Dealer Name"];
+
+    }
+    else if (address.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Address"];
+        
+    }
+    else if ([city.titleLabel.text isEqualToString:@"City"] )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the City"];
+        
+    }
+    else if (pincode.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Pincode"];
+        
+    }
+    else if (email.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Email-Id"];
+        
+    }
+    else if (phone.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Phone Number"];
+        
+    }
+    else if(ObjShared.editBranch ==0)
+    {
+        
+//    session_user_id:143583
+//    dealer_name:test
+//    mobilenumber:9790037458
+//    branch_address:Adyar,Chennai
+//    dealer_state:tamil nadu
+//    dealer_city:chennai
+//    dealer_pincode:600042
+//    dealer_mail:test@gmail.com
+//    page_name:addbranch
+        
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"addbranch",@"page_name",dealerName.text,@"dealer_name",phone.text,@"mobilenumber",address.text,@"branch_address",ObjShared.stateId,@"dealer_state",city.titleLabel.text,@"dealer_city",pincode.text,@"dealer_pincode",email.text,@"dealer_mail", nil];
+        
+        NSLog(@"para--->%@",para);
+        [ObjShared callWebServiceWith_DomainName:@"api_add_branch" postData:para];
+
+
+        
+    }
+    else if (ObjShared.editBranch ==1)
+    {
+        
+//    session_user_id:1402
+//    dealer_name:test
+//    branchid:3
+//    mobilenumber:9790037458
+//    branch_address:Adyar,Chennai
+//    dealer_state:31
+//    dealer_city:Chennai
+//    dealer_pincode:600042
+//    dealer_mail:test@gmail.com
+//    page_name:editbranch
+        
+        
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"editbranch",@"page_name",dealerName.text,@"dealer_name",phone.text,@"mobilenumber",address.text,@"branch_address",ObjShared.stateId,@"dealer_state",city.titleLabel.text,@"dealer_city",pincode.text,@"dealer_pincode",email.text,@"dealer_mail",[NSString stringWithFormat:@"%@",[ObjShared.branchArray valueForKey:@"branch_id"]],@"branchid", nil];
+        NSLog(@"para--->%@",para);
+        [ObjShared callWebServiceWith_DomainName:@"api_edit_branch" postData:para];
+
+    }
+    
+}
+
+-(IBAction)city:(id)sender
+{
+
+    SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
+    [self presentViewController:cityVC animated:NO completion: nil];
+
 }
 -(IBAction)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:NO];
 
 }
+
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"dict--->%@",dict);
+    if ([[dict valueForKey:@"Result"]isEqualToString:@"1"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+
+    }
+    else if ([[dict valueForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict valueForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+        
+    }
+}
+- (void)failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 @end

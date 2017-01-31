@@ -57,7 +57,6 @@
     segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
     segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
     
-    
     [segmentViewButton addSubview:segmentedControl];
     
 }
@@ -189,7 +188,10 @@
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
 }
-
+-(void)headerBuyButton:(UIButton *)sender
+{
+    NSLog(@"action performed");
+}
 -(IBAction)add:(id)sender
 {
     EdituserViewController *userVC =[self.storyboard instantiateViewControllerWithIdentifier:@"EdituserViewController"];
@@ -216,5 +218,4 @@
             break;
     }
 }
-
 @end

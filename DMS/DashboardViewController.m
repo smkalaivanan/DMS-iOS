@@ -155,6 +155,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [self.menuContainerViewController toggleRightSideMenuCompletion:nil];
 }
+
 #pragma mark - Collection View delegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -182,10 +183,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     return cell;
 }
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==0)
@@ -215,7 +218,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [[self navigationController] pushViewController:fundingVC animated:NO];
         
     }
-//    NSLog(@"selected");
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
@@ -304,7 +306,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             modelID = [NSString stringWithFormat:@"%@",[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"make_id"][row]];
             [self callMakeid];
         }
-
     }
     else
     {
@@ -318,7 +319,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             NSString * butVeh = [NSString stringWithFormat:@"%@",[[modelDict valueForKey:@"model_makeid"]valueForKey:@"model_name"][row]];
             [showVehicle setTitle:butVeh forState:UIControlStateNormal];
         }
-
     }
    
     [self.navigationController setNavigationBarHidden:YES];
@@ -331,15 +331,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         if (segValue  ==  0)
         {
             NSString * butBuds = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"car_budget"]valueForKey:@"budget_varient_name"] objectAtIndex:0]];
-
-            
             [showBudget setTitle:butBuds forState:UIControlStateNormal];
         }
         else
         {
             NSString * butBuds = [NSString stringWithFormat:@"%@",[[[ObjShared.appDict valueForKey:@"model_make"]valueForKey:@"makename"] objectAtIndex:0]];
             [showBudget setTitle:butBuds forState:UIControlStateNormal];
-
         }
     }
     else
@@ -436,8 +433,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     segValue=sender.selectedSegmentIndex ;
     
-//    NSLog(@"sender tag--->%ld",(long)segValue);
-    
     if (segValue  ==  0)
     {
         NSString * butNameone = [NSString stringWithFormat:@"Select the Budget"];
@@ -457,12 +452,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
 }
 
-//Status bar hidden
--(BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
 -(IBAction)search:(id)sender
 {
     if ([ObjShared.Cityname isEqualToString:@"Select City" ] || [ ObjShared.siteName isEqualToString:@"Select site"])
@@ -471,15 +460,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else
     {
-//        if ([[searchSave valueForKey:@"site_name_array"] count] <= 0 || NULL)
-//        {
             NSString * arrayString = [NSString stringWithFormat:@"%@",ObjShared.siteNameArray];
             newTrim = [[[[[arrayString
             stringByReplacingOccurrencesOfString:@"\n" withString:@""]stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""]
                 stringByReplacingOccurrencesOfString:@" " withString:@""]
                        stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-//            [searchSave setObject:newTrim forKey:@"site_name"];
-//        }
 
         if (segment.selectedSegmentIndex == 0)
         {
@@ -490,8 +475,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             param=[[NSMutableDictionary alloc]initWithObjectsAndKeys:showWithoutFooter.titleLabel.text,@"city_name",[NSString stringWithFormat:@"%ld",(long)segment.selectedSegmentIndex],@"radioInline",newTrim,@"car_sites",budgetValue,@"vehicle_make",showVehicle.titleLabel.text,@"vehicle_model",@"searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",nil];
         }
         NSLog(@"param value -----> %@",param);
-//        [searchSave setObject:[param valueForKey:@"city_name"] forKey:@"city_name"];
-//        [searchSave setObject:ObjShared.siteNameArray forKey:@"site_name_array"];
         [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:param];
     }
 }
@@ -530,7 +513,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 -(IBAction)reload:(id)sender
 {
-    
+    [self viewDidLoad];
+    [self.view setNeedsDisplay];
+    [showWithoutFooter setTitle:ObjShared.Cityname forState:UIControlStateNormal];
+    [showWithMultipleSelection setTitle:ObjShared.siteName forState:UIControlStateNormal];
+    [showBudget setTitle:@"Select the Brand" forState:UIControlStateNormal];
+    [showVehicle setTitle:@"Select the Model" forState:UIControlStateNormal];
+    [self callMethod];
 }
+//Status bar hidden
+-(BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 
 @end

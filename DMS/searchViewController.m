@@ -25,7 +25,7 @@ colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface searchViewController ()<TLTagsControlDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
+@interface searchViewController ()<TLTagsControlDelegate>
 {
     SearchTableViewCell *searchCell;
     headerTableViewCell *header;
@@ -35,13 +35,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIButton * button;
     NSString *sortId;
     NSString *sortName;
-
+    IBOutlet UIView * topView;
     
 }
 @end
 
 @implementation searchViewController
-@synthesize para;
+@synthesize para,searchTable;
 
 - (void)viewDidLoad
 
@@ -81,6 +81,23 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     ObjShared.sharedDelegate = (id)self;
     [self likeArray];
     [city setTitle:ObjShared.Cityname forState:UIControlStateNormal];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [searchTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [searchTable reloadData];
+            [weakSelf.searchTable dg_stopLoading];
+        });
+    }
+                                          loadingView:loadingView];
+    
+    [searchTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [searchTable dg_setPullToRefreshBackgroundColor:searchTable.backgroundColor];
 }
 
 -(void)likeArray
@@ -443,7 +460,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     para=[[NSMutableDictionary alloc] initWithObjectsAndKeys:searchText.text,@"search_listing",city.titleLabel.text,@"city_name",@"detail_searchpage",@"page_name",[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",sortId,@"sorting_category",nil];
     NSLog(@"params--->%@",para);
     [ObjShared callWebServiceWith_DomainName:@"apisearchcarlisting" postData:para];
-
 }
 
 //Status bar hidden
@@ -467,7 +483,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         }
         else if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]]isEqualToString:@"0"])
         {
-            [AppDelegate showAlert:@"Invalid User" withMessage:@"Invalid Username or Password"];
+            [AppDelegate showAlert:@"Invalid User" withMessage:[dict valueForKey:@"message"]];
         }
         else if ([[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"] ]isEqualToString:@"3"])
         {
@@ -502,8 +518,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     FiltersViewController *FilterVC=[self.storyboard instantiateViewControllerWithIdentifier:@"FiltersViewController"];
     [[self navigationController]pushViewController :FilterVC  animated:YES];
-
+}
+-(IBAction)searchIcon:(id)sender
+{
+    CATransition *animation = [CATransition animation];
+    animation.type = kCATransitionReveal;
+    animation.duration = 0.4;
+    [topView.layer addAnimation:animation forKey:nil];
     
+    topView.hidden = YES;
+}
+-(IBAction)searchCancel:(id)sender
+{
+    CATransition *animation = [CATransition animation];
+    animation.type = kCATransitionMoveIn;
+    animation.duration = 0.4;
+    [topView.layer addAnimation:animation forKey:nil];
+    searchText.text = @"";
+    topView.hidden = NO;
 }
 -(IBAction)compare:(id)sender
 {
@@ -533,7 +565,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                                                                   ] };
     
     [actionSheet addButtonWithTitle:NSLocalizedString(@"Price", nil)
-                              image:[UIImage imageNamed:@"Icon2"]
+                              image:nil
                                type:AHKActionSheetButtonTypeDisabled
                             handler:nil];
     
@@ -552,7 +584,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                 [self callingapi];                            }];
     
     [actionSheet addButtonWithTitle:NSLocalizedString(@"Milage", nil)
-                              image:[UIImage imageNamed:@"Icon2"]
+                              image:nil
                                type:AHKActionSheetButtonTypeDisabled
                             handler:nil];
     
@@ -571,7 +603,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                 [self callingapi];                            }];
     
     [actionSheet addButtonWithTitle:NSLocalizedString(@"Year", nil)
-                              image:[UIImage imageNamed:@"Icon2"]
+                              image:nil
                                type:AHKActionSheetButtonTypeDisabled
                             handler:nil];
     

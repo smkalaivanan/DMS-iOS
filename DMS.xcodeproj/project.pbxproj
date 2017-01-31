@@ -8,7 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		181E76771E2F6EFE00DDFE96 /* alert-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 181E76761E2F6EFE00DDFE96 /* alert-red.png */; };
+		1832BE731E3C968E0011547E /* plainicon.com-43958-114d-256px.png in Resources */ = {isa = PBXBuildFile; fileRef = 1832BE721E3C968E0011547E /* plainicon.com-43958-114d-256px.png */; };
+		18377CDC1E406B5800CB526B /* sidebar.png in Resources */ = {isa = PBXBuildFile; fileRef = 18377CDB1E406B5800CB526B /* sidebar.png */; };
 		18651CAE1E30E488007326C2 /* add-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 18651CAD1E30E488007326C2 /* add-icon.png */; };
+		18776B1A1E3F44EB00BAE40D /* CompareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18776B191E3F44EB00BAE40D /* CompareViewController.m */; };
+		18776B1E1E3F45FA00BAE40D /* CompareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18776B1D1E3F45FA00BAE40D /* CompareTableViewCell.m */; };
+		18776B271E3F6EA000BAE40D /* phone-book.png in Resources */ = {isa = PBXBuildFile; fileRef = 18776B261E3F6EA000BAE40D /* phone-book.png */; };
 		188F32E81E3B68E500BB2B9D /* AHKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 188F32E11E3B68E500BB2B9D /* AHKActionSheet.m */; };
 		188F32E91E3B68E500BB2B9D /* AHKActionSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188F32E31E3B68E500BB2B9D /* AHKActionSheetViewController.m */; };
 		188F32EA1E3B68E500BB2B9D /* UIImage+AHKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 188F32E51E3B68E500BB2B9D /* UIImage+AHKAdditions.m */; };
@@ -294,7 +299,14 @@
 
 /* Begin PBXFileReference section */
 		181E76761E2F6EFE00DDFE96 /* alert-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red.png"; sourceTree = "<group>"; };
+		1832BE721E3C968E0011547E /* plainicon.com-43958-114d-256px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plainicon.com-43958-114d-256px.png"; sourceTree = "<group>"; };
+		18377CDB1E406B5800CB526B /* sidebar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar.png; sourceTree = "<group>"; };
 		18651CAD1E30E488007326C2 /* add-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-icon.png"; sourceTree = "<group>"; };
+		18776B181E3F44EB00BAE40D /* CompareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompareViewController.h; sourceTree = "<group>"; };
+		18776B191E3F44EB00BAE40D /* CompareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompareViewController.m; sourceTree = "<group>"; };
+		18776B1C1E3F45FA00BAE40D /* CompareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompareTableViewCell.h; sourceTree = "<group>"; };
+		18776B1D1E3F45FA00BAE40D /* CompareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompareTableViewCell.m; sourceTree = "<group>"; };
+		18776B261E3F6EA000BAE40D /* phone-book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone-book.png"; sourceTree = "<group>"; };
 		188F32E01E3B68E500BB2B9D /* AHKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHKActionSheet.h; sourceTree = "<group>"; };
 		188F32E11E3B68E500BB2B9D /* AHKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHKActionSheet.m; sourceTree = "<group>"; };
 		188F32E21E3B68E500BB2B9D /* AHKActionSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHKActionSheetViewController.h; sourceTree = "<group>"; };
@@ -723,6 +735,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18776B1B1E3F45DB00BAE40D /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				18776B1C1E3F45FA00BAE40D /* CompareTableViewCell.h */,
+				18776B1D1E3F45FA00BAE40D /* CompareTableViewCell.m */,
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
+		18776B1F1E3F5A0100BAE40D /* Compare Car */ = {
+			isa = PBXGroup;
+			children = (
+				18776B181E3F44EB00BAE40D /* CompareViewController.h */,
+				18776B191E3F44EB00BAE40D /* CompareViewController.m */,
+				18776B1B1E3F45DB00BAE40D /* New Group */,
+			);
+			name = "Compare Car";
+			sourceTree = "<group>";
+		};
 		188F32EC1E3B68EA00BB2B9D /* AHKActionSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -1022,6 +1053,7 @@
 				FAAB885F1DE55CD4007553F2 /* DetailView */,
 				FAEE1DEC1DE454D700BFAF8C /* SearchView */,
 				4546A90D1DDDC21000040E5B /* Dashboard */,
+				18776B1F1E3F5A0100BAE40D /* Compare Car */,
 			);
 			name = "Buy Page";
 			sourceTree = "<group>";
@@ -1448,6 +1480,9 @@
 				FAA119DE1E334A6F004065C8 /* backdrop.png */,
 				FAA893701E3885740007AAB5 /* contactPicker.png */,
 				18A746C81E388D4C00DB2337 /* no-internet-connection.png */,
+				1832BE721E3C968E0011547E /* plainicon.com-43958-114d-256px.png */,
+				18776B261E3F6EA000BAE40D /* phone-book.png */,
+				18377CDB1E406B5800CB526B /* sidebar.png */,
 				188F33101E3B82AE00BB2B9D /* DGElasticPulltoRefresh */,
 				188F32EC1E3B68EA00BB2B9D /* AHKActionSheet */,
 				FAA8936F1E38817C0007AAB5 /* ContactPicker */,
@@ -1989,6 +2024,8 @@
 				FAA3BE121DE2D08300A15F75 /* queries-white.png in Resources */,
 				FAFFDEEA1E3B7B9C00B26741 /* edit-50x50.png in Resources */,
 				FADE7CEC1DFBFD2100528B36 /* logout.png in Resources */,
+				1832BE731E3C968E0011547E /* plainicon.com-43958-114d-256px.png in Resources */,
+				18776B271E3F6EA000BAE40D /* phone-book.png in Resources */,
 				FAA88F6D1E1D006500DC752C /* loan-blue.png in Resources */,
 				FA4B86FE1E10FFCE00E49FA7 /* replay.png in Resources */,
 				4556C0241E03F25B0024D349 /* Jaipur.png in Resources */,
@@ -2027,6 +2064,7 @@
 				4556C0281E03F25B0024D349 /* Pune.png in Resources */,
 				45DC23751DD9BF7500BCE1BF /* LaunchScreen.storyboard in Resources */,
 				45170B781DEEE2DC00AE47D7 /* placeholder-Image.png in Resources */,
+				18377CDC1E406B5800CB526B /* sidebar.png in Resources */,
 				FAA3BE0D1DE2D08300A15F75 /* bids-blue.png in Resources */,
 				FADE7CEE1DFBFD2100528B36 /* report.png in Resources */,
 				45624DC61E0BE3DD00D30367 /* checked.png in Resources */,
@@ -2142,6 +2180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18776B1A1E3F44EB00BAE40D /* CompareViewController.m in Sources */,
 				FAAB88991DE5C6AA007553F2 /* UIProgressView+AFNetworking.m in Sources */,
 				FAC21DD51E02727400778FBE /* BidDetailTableViewCell.m in Sources */,
 				FA472CFF1DDC2368005CFB59 /* IQKeyboardManager.m in Sources */,
@@ -2167,6 +2206,7 @@
 				4515894C1E24DE59004D2526 /* EditContactViewController.m in Sources */,
 				FAC21DDB1E0272C200778FBE /* ApplyFundingTableViewCell.m in Sources */,
 				FAAB88901DE5C6AA007553F2 /* AFURLConnectionOperation.m in Sources */,
+				18776B1E1E3F45FA00BAE40D /* CompareTableViewCell.m in Sources */,
 				FA472CF51DDC2368005CFB59 /* IQDropDownTextField.m in Sources */,
 				FABE39551DEEE18A0090075E /* SideDrawerTableViewCell.m in Sources */,
 				FAAB88931DE5C6AA007553F2 /* AFURLSessionManager.m in Sources */,
