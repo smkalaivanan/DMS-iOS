@@ -14,9 +14,7 @@
 {
     NSString *base64String;
     NSUserDefaults *defaults;
-    
     AppDelegate *appDelegate;
-
 }
 @end
 
@@ -24,9 +22,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    defaults  = [NSUserDefaults standardUserDefaults];
+    appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     save.hidden=YES;
-    
     ObjShared.manageFooterArray = [[NSArray alloc] initWithObjects:@"profile-blue.png",
                    @"branches-blue.png",
                    @"contact-blue.png",
@@ -39,31 +37,32 @@
                                   @"Users",
                                   @"Subscription",nil];
     
-    appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    email.userInteractionEnabled = NO;
+    profileName.userInteractionEnabled = NO;
+    passoword.userInteractionEnabled = NO;
+    phone.userInteractionEnabled = NO;
+    imgPicker.hidden = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     //Shared
-    
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
-    defaults  = [NSUserDefaults standardUserDefaults];
-
-    [profileImg setImageWithURL:[NSURL URLWithString:[defaults valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    //asigning data from delegate
+    [profileImg setImageWithURL:[NSURL URLWithString:[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
+    profileName.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_name"];
+    email.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_email"];
+    phone.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_mobile"];
     
-    profileName.text=[defaults valueForKey:@"dealerName"];
-    
-    email.text=[defaults valueForKey:@"dealer_email"];
-    
-    phone.text=[defaults valueForKey:@"dealer_mobile"];
-    
-    NSLog(@"default---->%@",defaults);
+    save.layer.cornerRadius = 10;
+    save.layer.masksToBounds = YES;
+    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
+    profileImg.clipsToBounds = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -82,7 +81,6 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"DashboardCollectionViewCell";
-    
     DashboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     cell.footIcon.image = [UIImage imageNamed:[ObjShared.manageFooterArray objectAtIndex:indexPath.row]];
@@ -97,7 +95,6 @@
     {
         cell.foorLabel.textColor = UIColorFromRGB(0X8397BC);
     }
-    
     return cell;
 }
 
@@ -112,7 +109,6 @@
     {
         profileViewController *profileVC =[self.storyboard instantiateViewControllerWithIdentifier:@"profileViewController"];
         [[self navigationController] pushViewController:profileVC animated:NO];
-        
     }
     else if (indexPath.row==1)
     {
@@ -144,20 +140,15 @@
 
 -(IBAction)save:(id)sender
 {
-    edit.hidden=NO;
-    save.hidden=YES;
-    imgPicker.hidden=YES;
-    profileName.userInteractionEnabled=NO;
-    passoword.userInteractionEnabled=NO;
-    phone.userInteractionEnabled=NO;
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",profileName.text,@"delaer_name",phone.text,@"mobile_number",base64String,@"profile_image", nil];
+    [ObjShared callWebServiceWith_DomainName:@"edit_account" postData:para];
 }
 -(IBAction)edit:(id)sender
 {
-    save.hidden=NO;
     edit.hidden=YES;
+    save.hidden=NO;
     imgPicker.hidden=NO;
     profileName.userInteractionEnabled=YES;
-    passoword.userInteractionEnabled=YES;
     phone.userInteractionEnabled=YES;
 }
 
@@ -177,10 +168,8 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    //    NSLog(@"info-->%@",info);
     UIImage *chosenimage = info[UIImagePickerControllerOriginalImage];
     profileImg.image = chosenimage;
-    
     UIImage *image = chosenimage;
     UIImage *tempImage = nil;
     CGSize targetSize = CGSizeMake(200,200);
@@ -192,30 +181,43 @@
     thumbnailRect.size.height = targetSize.height;
     
     [image drawInRect:thumbnailRect];
-    
     tempImage = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
     chosenimage = tempImage;
     NSData *dataImage = [[NSData alloc] init];
     dataImage = UIImageJPEGRepresentation(chosenimage, 0);
-    //    NSLog(@"new size %lu", (unsigned long)[dataImage length]);
     base64String = [dataImage base64EncodedStringWithOptions:0];
-        NSLog(@"%@", base64String);
-    
-    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
-    profileImg.clipsToBounds = YES;
-    
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction)changePassword:(id)sender
 {
     ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
-    
     [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:YES];
+}
+#pragma mark -W.S Delegate Call
 
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        edit.hidden=NO;
+        save.hidden=YES;
+        imgPicker.hidden=YES;
+        profileName.userInteractionEnabled=NO;
+        phone.userInteractionEnabled=NO;
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {}
+}
+- (void)failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 @end

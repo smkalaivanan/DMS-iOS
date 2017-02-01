@@ -11,6 +11,7 @@
 @interface EdituserViewController ()<UIPickerViewDelegate,UIPickerViewDataSource>
 {
     NSArray *roles;
+    NSString *rows;
 }
 @end
 
@@ -20,14 +21,13 @@
 {
     [super viewDidLoad];
     
-    roles=[[NSArray alloc]initWithObjects:@"Manager",@"Viewer",@"Editor",@"Owner", nil];
+    roles=[[NSArray alloc]initWithObjects:@"Select role",@"Manager",@"Viewer",@"Editor",@"Owner", nil];
     
     UIPickerView *picker = [[UIPickerView alloc] init];
     picker.dataSource = self;
     picker.delegate = self;
     picker.backgroundColor=[UIColor clearColor];
     role.inputView = picker;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,15 +38,21 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     //Shared
-    
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    save.layer.cornerRadius = 10;
+    save.layer.masksToBounds = YES;
+}
+-(void)callMakeid
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",profileName.text,@"dealer_name",phone.text,@"mobilenumber",email.text,@"dealer_mail",rows,@"user_role",@"addnewuser",@"page_name", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_add_user" postData:para];
 }
 
+#pragma PickerView
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return roles.count;
 }
@@ -62,7 +68,15 @@
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     role.text = roles[row];
-    [role resignFirstResponder];
+    rows = [NSString stringWithFormat:@"%ld",(long)row];
+    if (row == 0)
+    {
+        role.textColor = [UIColor grayColor];
+    }
+    else
+    {
+        role.textColor = [UIColor blackColor];
+    }
 }
 
 #pragma mark - Collection View delegate
@@ -90,7 +104,6 @@
     {
         cell.foorLabel.textColor = UIColorFromRGB(0X8397BC);
     }
-    
     return cell;
 }
 
@@ -119,8 +132,8 @@
     }
     else if (indexPath.row==3)
     {
-        myUsersViewController *userVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myUsersViewController"];
-        [[self navigationController] pushViewController:userVC animated:NO];
+//        myUsersViewController *userVC =[self.storyboard instantiateViewControllerWithIdentifier:@"myUsersViewController"];
+//        [[self navigationController] pushViewController:userVC animated:NO];
     }
     else if (indexPath.row==4)
     {
@@ -135,15 +148,95 @@
 {
     return ObjShared.collectionZ;
 }
+#pragma Email Validator
+-(BOOL)isValidEmail:(NSString *)emailid
+{
+    BOOL stricterFilter = NO;
+    NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+    NSString *laxString = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:emailid];
+}
+
+#pragma mark -textfield delegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
 
 -(IBAction)save:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:NO];
+    if (phone.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Mobile number can't be empty"];
+    }
+    else if (profileName.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Name can't be empty"];
+    }
+    else if (phone.text.length < 10)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid mobile number"];
+    }
+    else if (phone.text.length > 10)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid mobile number"];
+    }
+    else if (email.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Email id can't be empty"];
+    }
+    else if (![self isValidEmail:email.text])
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Invalid email"];
+    }
+    else if ([role.text isEqualToString:@"Select role"])
+    {
+        [AppDelegate showAlert:@"Required" withMessage:@"Please select user role"];
+    }
+    else
+    {
+        [self callMakeid];
+    }
 }
 -(IBAction)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:NO];
     
+}
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Success!!" message:[dict objectForKey:@"message"] preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       [self.navigationController popViewControllerAnimated:NO];
+                                   }];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert!" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
 @end

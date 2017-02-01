@@ -135,21 +135,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         {
             ObjShared.LoginDict=dictor;
             NSLog(@"login page--->%@",ObjShared.LoginDict);
-            
             defaluts  = [NSUserDefaults standardUserDefaults];
-            
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_name"]] forKey:@"dealerName"];
-           
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"user_id"]] forKey:@"user_id"];
-
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_img"]] forKey:@"dealer_img"];
-
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_address"]] forKey:@"dealer_address"];
-
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_email"]] forKey:@"dealer_email"];
-
-            [defaluts setObject:[NSString stringWithFormat:@"%@",[dictor valueForKey:@"dealer_mobile"]] forKey:@"dealer_mobile"];
-
+            [defaluts setObject:ObjShared.LoginDict forKey:@"login_dict"];
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
 
             LandingViewController *landingVC =[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];

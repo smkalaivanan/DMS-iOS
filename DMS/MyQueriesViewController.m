@@ -44,7 +44,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // Dispose of any resources that can be recreated.
 }
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -73,7 +72,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [queriesTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
     
     [queriesTable dg_setPullToRefreshBackgroundColor:queriesTable.backgroundColor];
-
 }
 
 -(void)callMakeid

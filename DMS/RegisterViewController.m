@@ -8,20 +8,20 @@
 
 #import "RegisterViewController.h"
 #import "LoginViewController.h"
+#import "registrationTableViewCell.h"
 
 @interface RegisterViewController ()
 {
     NSString *sub;
     UIPickerView *cityPicker;
     NSArray * cityArray;
+    UIActivityIndicatorView *loadingIndicator;
+    registrationTableViewCell *branchCell;
 }
 @end
 
 @implementation RegisterViewController
-
-
-#pragma AlertController
-
+@synthesize registerTableview;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -36,8 +36,7 @@
     signUp.layer.shadowOpacity = 0.2;
     signUp.layer.shadowRadius = 2;
     signUp.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
-    
-    
+
     // Button color change in range
     NSMutableAttributedString * butString = [[NSMutableAttributedString alloc]
                                              initWithString:@"Already have an account ? Sign In"];
@@ -47,36 +46,7 @@
     [signinPressed setAttributedTitle:butString
                       forState:UIControlStateNormal];
     
-    [self web];
-    
 }
-
-
-
-- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
- navigationType:(UIWebViewNavigationType)navigationType {
-    if ([request.URL  isEqual: @"http://52.220.105.165/works/Mobile/Cardealer/register-new.html"])
-    {
-        //do close window magic here!!
-        [self stopLoading];
-        return NO;
-    }
-    return YES;
-}
--(void)stopLoading{
-    [webView removeFromSuperview];
-}
-
--(void)web
-{
-    NSURL *url=[NSURL URLWithString:@"http://52.220.105.165/works/Mobile/Cardealer/register-new.html"];
-    NSURLRequest *request=[NSURLRequest requestWithURL:url];
-    [webView loadRequest:request];
-}
-
-
-
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -88,12 +58,85 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [registerTableview dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [registerTableview reloadData];
+            [weakSelf.registerTableview dg_stopLoading];
+        });
+    }
+                                          loadingView:loadingView];
+    
+    [registerTableview dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    
+    [registerTableview dg_setPullToRefreshBackgroundColor:registerTableview.backgroundColor];
+    
+}
+-(void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [loadingIndicator startAnimating];
+}
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [loadingIndicator stopAnimating];
+    NSString *currentURL = branchCell.webScreen.request.URL.absoluteString;
+    NSLog(@"current url ---> %@",currentURL);
+    
+    if ([currentURL isEqualToString:@"http://52.221.57.201/doapiregister"])
+    {backButton.hidden =NO;}
+    else
+    {backButton.hidden = YES;}
 }
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma UITableView-Sample
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * cellIdentifier = @"registrationTableViewCell";
+    
+    branchCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+    branchCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    //Webview URL request
+    NSString *stringurl=[NSString stringWithFormat:@"http://52.221.57.201/doapiregister"];
+    NSURL *url=[NSURL URLWithString:stringurl];
+    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:15.0];
+    [branchCell.webScreen loadRequest:theRequest];
+    branchCell.webScreen.delegate = self;
+    
+    branchCell.webScreen.scrollView.scrollEnabled = NO;
+    branchCell.webScreen.scrollView.bounces = NO;
+    loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width /2, self.view.frame.size.height/2, 20,20)];
+    [loadingIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    [loadingIndicator setHidesWhenStopped:YES];
+    [branchCell.webScreen addSubview:loadingIndicator];
+    
+    return branchCell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"selected row----> %ld",(long)indexPath.row);
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return self.view.frame.size.height;
+}
+
 
 -(void)alert
 {
@@ -173,13 +216,10 @@
 {
     return YES;
 }
-
 #pragma mark -W.S Delegate Call
 - (void) successfulResponseFromServer:(NSDictionary *)dict
 {
-    
     NSLog(@"in success");
-    
     NSLog(@"Dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
@@ -205,9 +245,7 @@
                                    ];
         
         [alertController addAction:okAction];
-        
         [self presentViewController:alertController animated:YES completion:nil];
-
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {

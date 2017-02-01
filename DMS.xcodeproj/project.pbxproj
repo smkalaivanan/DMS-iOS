@@ -25,6 +25,7 @@
 		188F330F1E3B82A900BB2B9D /* DGElasticPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188F330A1E3B82A900BB2B9D /* DGElasticPullToRefreshView.m */; };
 		18A746C91E388D4C00DB2337 /* no-internet-connection.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A746C81E388D4C00DB2337 /* no-internet-connection.png */; };
 		18A746CC1E388EEE00DB2337 /* NoInternetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A746CB1E388EEE00DB2337 /* NoInternetViewController.m */; };
+		18F12B7E1E41F6D200897F69 /* registrationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F12B7D1E41F6D200897F69 /* registrationTableViewCell.m */; };
 		450215231DE459EC000356EE /* search-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215221DE459EC000356EE /* search-box.png */; };
 		450215251DE45A4B000356EE /* search-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215241DE45A4B000356EE /* search-icon.png */; };
 		450215271DE45B10000356EE /* image1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450215261DE45B10000356EE /* image1.png */; };
@@ -328,6 +329,8 @@
 		18A746C81E388D4C00DB2337 /* no-internet-connection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-internet-connection.png"; sourceTree = "<group>"; };
 		18A746CA1E388EEE00DB2337 /* NoInternetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoInternetViewController.h; sourceTree = "<group>"; };
 		18A746CB1E388EEE00DB2337 /* NoInternetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoInternetViewController.m; sourceTree = "<group>"; };
+		18F12B7C1E41F6D200897F69 /* registrationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registrationTableViewCell.h; sourceTree = "<group>"; };
+		18F12B7D1E41F6D200897F69 /* registrationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = registrationTableViewCell.m; sourceTree = "<group>"; };
 		450215221DE459EC000356EE /* search-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-box.png"; sourceTree = "<group>"; };
 		450215241DE45A4B000356EE /* search-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-icon.png"; sourceTree = "<group>"; };
 		450215261DE45B10000356EE /* image1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image1.png; sourceTree = "<group>"; };
@@ -1271,6 +1274,8 @@
 			children = (
 				FA472CC71DDC19F4005CFB59 /* RegisterViewController.h */,
 				FA472CC81DDC19F4005CFB59 /* RegisterViewController.m */,
+				18F12B7C1E41F6D200897F69 /* registrationTableViewCell.h */,
+				18F12B7D1E41F6D200897F69 /* registrationTableViewCell.m */,
 			);
 			name = "Register Screen";
 			sourceTree = "<group>";
@@ -2282,6 +2287,7 @@
 				4536881D1E12FDA600144F5E /* InventoryTableViewCell.m in Sources */,
 				FA472CC61DDC19E5005CFB59 /* LoginViewController.m in Sources */,
 				FA472CF81DDC2368005CFB59 /* IQTitleBarButtonItem.m in Sources */,
+				18F12B7E1E41F6D200897F69 /* registrationTableViewCell.m in Sources */,
 				453688101E12FA6300144F5E /* SellApplyLoanViewController.m in Sources */,
 				188F330F1E3B82A900BB2B9D /* DGElasticPullToRefreshView.m in Sources */,
 				45651D691DE5782F0082262A /* TLTagsControl.m in Sources */,

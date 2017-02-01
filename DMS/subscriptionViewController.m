@@ -9,7 +9,6 @@
 #import "subscriptionViewController.h"
 
 @interface subscriptionViewController ()
-
 @end
 
 @implementation subscriptionViewController
@@ -23,7 +22,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 -(IBAction)sidemMenu:(id)sender
 {
@@ -40,8 +38,9 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    save.layer.cornerRadius = 10;
+    save.layer.masksToBounds = YES;
 }
-
 
 #pragma mark - Collection View delegate
 
@@ -113,8 +112,6 @@
     return ObjShared.collectionZ;
 }
 
-
-
 #pragma UITableView-Sample
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -133,7 +130,6 @@
     return subCell;
     
 }
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);

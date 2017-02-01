@@ -36,6 +36,8 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    save.layer.cornerRadius = 10;
+    save.layer.masksToBounds = YES;
 }
 
 #pragma mark - Collection View delegate

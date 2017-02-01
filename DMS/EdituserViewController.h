@@ -21,6 +21,7 @@
     IBOutlet UITextField *email;
     IBOutlet UITextField *role;
     IBOutlet UITextField *phone;
+    IBOutlet UIButton *save;
 }
 -(IBAction)save:(id)sender;
 -(IBAction)back:(id)sender;

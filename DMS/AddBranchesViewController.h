@@ -23,6 +23,7 @@
     IBOutlet UITextField *address;
     IBOutlet UITextField *pincode;
     IBOutlet UIButton *city;
+    IBOutlet UIButton * save;
 }
 
 -(IBAction)save:(id)sender;

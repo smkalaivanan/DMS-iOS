@@ -22,5 +22,5 @@
 }
 -(IBAction)sidemMenu:(id)sender;
 -(IBAction)add:(id)sender;
-
+@property (nonatomic,retain) IBOutlet UITableView * userTableView;
 @end

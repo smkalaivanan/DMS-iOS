@@ -32,7 +32,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSDictionary *modelDict;
     NSString *modelID, *newTrim;
     NSMutableDictionary *param;
-    NSUserDefaults *searchSave;
 }
 @property CZPickerView *pickerWithImage;
 @property CZPickerView *pickerWithValue;
@@ -46,7 +45,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    searchSave  = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     ObjShared = [SharedClass sharedInstance];
     
@@ -73,29 +71,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                   @"SUV",
                   @"Wagon", nil];
     
-//    NSLog(@"outer ---> %@",ObjShared.Cityname);
-//    NSLog(@"outer ---> %@",newTrim);
-//    NSLog(@"outer ---> %@",ObjShared.siteNameArray);
-
-    
-//    if ([searchSave valueForKey:@"city_name"] != 0)
-//    {
-//        ObjShared.Cityname=[searchSave valueForKey:@"city_name"];
-//        newTrim=[searchSave valueForKey:@"site_name"];
-//        ObjShared.siteName= [NSString stringWithFormat:@"%lu sites selected",(unsigned long)[[searchSave valueForKey:@"site_name_array"] count]];
-//        ObjShared.siteNameArray =[searchSave valueForKey:@"site_city_array"];
-//        
-//        NSLog(@"main ---> %@",ObjShared.Cityname);
-//        NSLog(@"main ---> %@",newTrim);
-//        NSLog(@"main ---> %@",ObjShared.siteNameArray);
-//        
-//    }
-//    else
-//    {
-        ObjShared.Cityname=@"Select City";
-        ObjShared.siteName=@"Select sites";
-        NSLog(@"search default ----> %@",[searchSave valueForKey:@"city_name"]);
-//    }
+    ObjShared.Cityname=@"Select City";
+    ObjShared.siteName=@"Select sites";
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -122,8 +99,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     [showWithoutFooter setTitle:ObjShared.Cityname forState:UIControlStateNormal];
     [showWithMultipleSelection setTitle:ObjShared.siteName forState:UIControlStateNormal];
-    [self callMethod];
-    
+    if ([ObjShared.appDict count] == 0 || NULL)
+    {
+        [self callMethod];
+    }
     NSLog(@"city--->%@",ObjShared.Cityname);
     NSLog(@"hello world");
 }

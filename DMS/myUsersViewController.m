@@ -10,18 +10,21 @@
 #import "EdituserViewController.h"
 
 @interface myUsersViewController ()
-
+{
+    NSMutableArray *rightUtilityButton;
+    NSDictionary * myuserDict;
+}
 @end
 
 @implementation myUsersViewController
+@synthesize userTableView;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [self HMSegmentTagController];
+    rightUtilityButton = [NSMutableArray new];
 
-    
     // Do any additional setup after loading the view.
 }
 
@@ -33,19 +36,22 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     //Shared
-    
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self callMakeid];
 }
-
+-(void)callMakeid
+{
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewuserlist",@"page_name", nil];
+    [ObjShared callWebServiceWith_DomainName:@"api_view_user" postData:para];
+    NSLog(@"para ----> %@",para);
+}
 -(void)HMSegmentTagController
 {
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-    
     // Minimum code required to use the segmented control with the default styling.
     HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"Trending", @"News", @"Library",@"Trending"]];
     segmentedControl.frame = CGRectMake(0, 0, viewWidth, segmentViewButton.frame.size.height);
@@ -58,7 +64,6 @@
     segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
     
     [segmentViewButton addSubview:segmentedControl];
-    
 }
 
 - (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
@@ -75,7 +80,6 @@
 {
     
 }
-
 
 -(IBAction)sidemMenu:(id)sender
 {
@@ -156,7 +160,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[myuserDict valueForKey:@"branch_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -166,22 +170,20 @@
     myUserTableViewCell *userCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     userCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    NSMutableArray *rightUtilityButton = [NSMutableArray new];
-    
+    userCell.userId.text = [NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"branch_list"] valueForKey:@"branch_id"] objectAtIndex:indexPath.row]];
+    userCell.role.text = [NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"branch_list"] valueForKey:@"user_email"] objectAtIndex:indexPath.row]];
+    userCell.branch.text = [[[myuserDict valueForKey:@"branch_list"] valueForKey:@"user_role"] objectAtIndex:indexPath.row];
     
     [rightUtilityButton sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:0.008f green:0.208f blue:0.569f alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"edit-50x50.png"]];
-    
+                                            icon:[UIImage imageNamed:@"edit-50x50.png"]];
     [rightUtilityButton sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
                                                 icon:[UIImage imageNamed:@"edit-50x50.png"]];
-
     userCell.rightUtilityButtons = rightUtilityButton;
     userCell.delegate = self;
     
     return userCell;
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -218,4 +220,28 @@
             break;
     }
 }
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"Dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        myuserDict = dict;
+        [userTableView reloadData];
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"Alert!" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {
+    }
+}
+
+- (void) failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 @end

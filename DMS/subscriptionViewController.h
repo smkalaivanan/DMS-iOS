@@ -16,7 +16,9 @@
 
 
 @interface subscriptionViewController : UIViewController
-
+{
+    IBOutlet UIButton *save;
+}
 -(IBAction)sidemMenu:(id)sender;
 
 

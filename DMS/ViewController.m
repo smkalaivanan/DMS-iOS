@@ -104,7 +104,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     //push to register page
     RegisterViewController *registerVc =[self.storyboard instantiateViewControllerWithIdentifier:@"RegisterViewController"];
-    [[self navigationController] pushViewController:registerVc animated:NO];
+    [[self navigationController] pushViewController:registerVc animated:YES];
     
 }
 
