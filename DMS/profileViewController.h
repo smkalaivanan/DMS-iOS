@@ -15,19 +15,5 @@
 
 
 @interface profileViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-{
-    IBOutlet UIImageView *profileImg;
-    IBOutlet UITextField *profileName;
-    IBOutlet UITextField *email;
-    IBOutlet UITextField *passoword;
-    IBOutlet UITextField *phone;
-    IBOutlet UIButton *edit;
-    IBOutlet UIButton *save;
-    IBOutlet UIButton *imgPicker;
-}
 -(IBAction)sidemMenu:(id)sender;
--(IBAction)save:(id)sender;
--(IBAction)edit:(id)sender;
-- (IBAction)pic:(id)sender;
--(IBAction)changePassword:(id)sender;
 @end

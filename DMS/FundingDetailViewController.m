@@ -71,27 +71,27 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //    3 DISMISS
     //    4 REVOKE
     
-    if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"0"])
+    if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"PENDING"])
     {
         statusLabel.text = @"PENDING";
         statusLabel.textColor = [UIColor redColor];
     }
-    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"1"])
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"INPROGRESS"])
     {
         statusLabel.text = @"INPROGRESS";
     }
-    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"2"])
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"COMPLETED"])
     {
         statusLabel.text = @"COMPLETED";
         statusLabel.textColor = [UIColor greenColor];
         revokeButton.hidden = YES;
     }
-    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"3"])
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"DISMISS"])
     {
         statusLabel.text = @"DISMISSED";
         revokeButton.hidden = YES;
     }
-    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"4"])
+    else if ([[NSString stringWithFormat:@"%@",[ObjShared.applyFundingPageDict objectForKey:@"Status"]] isEqualToString: @"REVOKE"])
     {
         statusLabel.text = @"REVOKED";
         revokeButton.hidden = YES;

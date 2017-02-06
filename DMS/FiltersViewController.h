@@ -11,6 +11,5 @@
 @interface FiltersViewController : UIViewController
 {
     NSArray *keyArray;
-
 }
 @end

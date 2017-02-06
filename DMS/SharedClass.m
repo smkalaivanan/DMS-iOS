@@ -40,15 +40,11 @@
 
 + (void)NavigateTo:(UIViewController*)destinationVC inNavigationViewController:(UINavigationController*)navigationController animated:(BOOL)animated
 {
-    
     //Update slider
     //  [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
-    
-    
     BOOL VCfound = NO;
     NSArray *viewControllers = navigationController.viewControllers;
     NSInteger indexofVC = 0;
-    
     for (UIViewController *vc in viewControllers)
     {
         if ([vc isKindOfClass:[destinationVC class]])
@@ -58,9 +54,7 @@
             VCfound = YES;
             break;
         }
-        
     }
-    
     if (VCfound == YES)
     {
         destinationVC = nil;
@@ -70,11 +64,7 @@
     {
         [navigationController pushViewController:destinationVC animated:animated];
     }
-    
 }
-
-
-
 #pragma mark -Check Internet
 
 //Check Internet

@@ -156,7 +156,7 @@
     }
     else if (emailId.text.length==0)
     {
-        sub=@"Please enter the E-mail name";
+        sub=@"Please enter the E-mail-Id";
     }
     else if (![self isValidEmail:emailId.text])
     {

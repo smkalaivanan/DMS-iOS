@@ -8,11 +8,14 @@
 
 #import "myUsersViewController.h"
 #import "EdituserViewController.h"
+#import "headerUserTableViewCell.h"
 
 @interface myUsersViewController ()
 {
-    NSMutableArray *rightUtilityButton;
+    NSMutableArray *tagRoles;
     NSDictionary * myuserDict;
+    NSString * roleId;
+    headerUserTableViewCell * header;
 }
 @end
 
@@ -22,10 +25,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self HMSegmentTagController];
-    rightUtilityButton = [NSMutableArray new];
-
     // Do any additional setup after loading the view.
+    tagRoles = [[NSMutableArray alloc]init];
+    tagRoles=[[ObjShared.tagName valueForKey:@"User_role_list"]valueForKey:@"master_role_name"];
+    roleId = @"1";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,11 +44,24 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
+    [self HMSegmentTagController];
     [self callMakeid];
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    __weak typeof(self) weakSelf = self;
+    [userTableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self callMakeid];
+            [weakSelf.userTableView dg_stopLoading];
+        });
+    }
+    loadingView:loadingView];
+    [userTableView dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    [userTableView dg_setPullToRefreshBackgroundColor:userTableView.backgroundColor];
 }
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewuserlist",@"page_name", nil];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"viewuserlist",@"page_name",roleId,@"role_id", nil];
     [ObjShared callWebServiceWith_DomainName:@"api_view_user" postData:para];
     NSLog(@"para ----> %@",para);
 }
@@ -53,7 +69,7 @@
 {
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     // Minimum code required to use the segmented control with the default styling.
-    HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:@[@"Trending", @"News", @"Library",@"Trending"]];
+    HMSegmentedControl *segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:tagRoles];
     segmentedControl.frame = CGRectMake(0, 0, viewWidth, segmentViewButton.frame.size.height);
     segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
     [segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
@@ -66,20 +82,22 @@
     [segmentViewButton addSubview:segmentedControl];
 }
 
-- (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
+- (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl
+{
     NSLog(@"Selected index %ld (via UIControlEventValueChanged)", (long)segmentedControl.selectedSegmentIndex);
+    roleId=[NSString stringWithFormat:@"%ld",(long)segmentedControl.selectedSegmentIndex + 1];
+    [self callMakeid];
 }
 
-- (void)uisegmentedControlChangedValue:(UISegmentedControl *)segmentedControl {
+- (void)uisegmentedControlChangedValue:(UISegmentedControl *)segmentedControl
+{
     NSLog(@"Selected index %ld", (long)segmentedControl.selectedSegmentIndex);
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    
-}
+{}
 
 -(IBAction)sidemMenu:(id)sender
 {
@@ -160,7 +178,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[myuserDict valueForKey:@"branch_list"] count];
+    return [[myuserDict valueForKey:@"user_list"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -170,16 +188,21 @@
     myUserTableViewCell *userCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
     userCell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    userCell.userId.text = [NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"branch_list"] valueForKey:@"branch_id"] objectAtIndex:indexPath.row]];
-    userCell.role.text = [NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"branch_list"] valueForKey:@"user_email"] objectAtIndex:indexPath.row]];
-    userCell.branch.text = [[[myuserDict valueForKey:@"branch_list"] valueForKey:@"user_role"] objectAtIndex:indexPath.row];
+    userCell.userId.text =[NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"user_list"] valueForKey:@"user_email"] objectAtIndex:indexPath.row]];
+    userCell.role.text = [[[myuserDict valueForKey:@"user_list"] valueForKey:@"user_role"] objectAtIndex:indexPath.row];
+
+    userCell.branch.text = [NSString stringWithFormat:@"%@",[[[myuserDict valueForKey:@"user_list"] valueForKey:@"branch_id"] objectAtIndex:indexPath.row]];
+    
+    NSMutableArray *rightUtilityButton;
+    rightUtilityButton = [NSMutableArray new];
+
     
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:0.008f green:0.208f blue:0.569f alpha:1.0f]
+     [UIColor colorWithRed:0.800f green:0.800f blue:0.800f alpha:1.0f]
                                             icon:[UIImage imageNamed:@"edit-50x50.png"]];
     [rightUtilityButton sw_addUtilityButtonWithColor:
-     [UIColor colorWithRed:0.020f green:0.263f blue:0.706f alpha:1.0f]
-                                                icon:[UIImage imageNamed:@"edit-50x50.png"]];
+     [UIColor colorWithRed:1.000f green:0.000f blue:0.000f alpha:1.0f]
+                                                icon:[UIImage imageNamed:@"delete-50x50.png"]];
     userCell.rightUtilityButtons = rightUtilityButton;
     userCell.delegate = self;
     
@@ -189,6 +212,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected row----> %ld",(long)indexPath.row);
+}
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 47;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    header = [tableView dequeueReusableCellWithIdentifier:@"headerUserTableViewCell"];
+    [header.buyButton addTarget:self
+                              action:@selector(buy:) forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+-(void)buy:(UIButton *)sender
+{
+    NSLog(@"Buy action");
 }
 -(void)headerBuyButton:(UIButton *)sender
 {
@@ -202,6 +240,7 @@
 
 - (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
 {
+    NSIndexPath *cellIndexPath = [userTableView indexPathForCell:cell];
     switch (index)
     {
         case 0:
@@ -235,13 +274,11 @@
         [AppDelegate showAlert:@"Alert!" withMessage:[dict valueForKey:@"message"]];
     }
     else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
-    {
-    }
+    {}
 }
 
 - (void) failResponseFromServer
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
-
 @end

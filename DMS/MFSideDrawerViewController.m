@@ -63,7 +63,6 @@
 
     nameLab.text=[NSString stringWithFormat:@"%@",[ObjShared.LoginDict objectForKey:@"dealer_name"]];
     addressLab.text=[NSString stringWithFormat:@"%@",[ObjShared.LoginDict objectForKey:@"dealer_address"]];
-    
     [profileImg setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     profileImg.layer.cornerRadius = profileImg.frame.size.width / 2 ;
     profileImg.layer.masksToBounds = YES;

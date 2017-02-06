@@ -8,9 +8,16 @@
 
 #import "EditContactViewController.h"
 
-@interface EditContactViewController ()<WCSContactPickerDelegate>
+@interface EditContactViewController ()<WCSContactPickerDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
 {
     NSString *base64String;
+    NSString *sub;
+    NSMutableArray * newRoleArray;
+    NSString *typeId;
+    NSString *rows;
+    UIImage *chosenimage;
+
+
 }
 @end
 
@@ -19,6 +26,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    UIPickerView *picker = [[UIPickerView alloc] init];
+    picker.dataSource = self;
+    picker.delegate = self;
+    picker.backgroundColor=[UIColor clearColor];
+    contactType.inputView = picker;
+    newRoleArray = [[NSMutableArray alloc] init];
+    [newRoleArray addObjectsFromArray:[ObjShared.tagName valueForKey:@"dealer_contact_type"]];
+
+    if (ObjShared.editContact == 1)
+    {
+        contactType.text=[ObjShared.contactArray valueForKey:@"contact_type"];
+        contactOwner.text=[ObjShared.contactArray valueForKey:@"contact_owner"];
+        profileName.text=[ObjShared.contactArray valueForKey:@"name"];
+        email.text=[ObjShared.contactArray valueForKey:@"email"];
+        phone.text=[ObjShared.contactArray valueForKey:@"mobilenum"];
+        address.text=[ObjShared.contactArray valueForKey:@"address"];
+        
+        [profileImg setImageWithURL:[NSURL URLWithString:[ObjShared.contactArray valueForKey:@"contactimage"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    }
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,7 +68,59 @@
     ObjShared.sharedDelegate = (id)self;
     save.layer.cornerRadius = 10;
     save.layer.masksToBounds = YES;
+    
 }
+
+
+#pragma PickerView
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return newRoleArray.count;
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return  1;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [newRoleArray valueForKey:@"contact_type"][row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    contactType.text = [NSString stringWithFormat:@"%@",[newRoleArray valueForKey:@"contact_type"][row]];
+    typeId = [NSString stringWithFormat:@"%@",[newRoleArray valueForKey:@"contact_type_id"][row]];
+
+    rows = [NSString stringWithFormat:@"%ld",(long)row];
+    if (row == 0)
+    {
+        contactType.textColor = [UIColor grayColor];
+    }
+    else
+    {
+        contactType.textColor = [UIColor blackColor];
+    }
+}
+
+
+
+
+#pragma mark -IsValid Email
+
+-(BOOL)isValidEmail:(NSString *)emails
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailPredicate evaluateWithObject:emails];
+}
+
+#pragma mark -textfield delegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 #pragma mark - Collection View delegate
 
@@ -113,7 +195,59 @@
 
 -(IBAction)save:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self base64Converter];
+
+//    if(contactOwner.text.length == 0)
+//    {
+//        sub=@"Please enter the ";
+//        
+//    }
+//    else if(contactType.text.length == 0)
+//    {
+//        
+//    }
+//    else if(profileName.text.length == 0)
+//    {
+//        
+//    }
+//    else if(phone.text.length == 0)
+//    {
+//        
+//    }
+//    else if(email.text.length == 0)
+//    {
+//        sub=@"Please enter the E-mail-Id";
+//        
+//    }
+//    else if (![self isValidEmail:email.text])
+//    {
+//        sub=[NSString stringWithFormat:@"Invaild Email-Id"];
+//        
+//    }
+//    
+//    else if(address.text.length == 0)
+//    {
+//        
+//    }
+    if(ObjShared.editContact == 0)
+    {
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"addcontact",@"page_name",typeId,@"contact_type",contactOwner.text,@"contactowner",profileName.text,@"contactname", phone.text,@"contactnumber",email.text,@"contactmailid",address.text,@"contactaddress",[ObjShared.contactArray valueForKey:@"contact_id"],@"contact_id",base64String,@"contact_image",nil];
+        NSLog(@"para--->%@",para);
+        [ObjShared callWebServiceWith_DomainName:@"api_update_contact" postData:para];
+        
+    }
+    else if(ObjShared.editContact == 1)
+    {
+        NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"editcontact",@"page_name",typeId,@"contact_type",contactOwner.text,@"contactowner",profileName.text,@"contactname", phone.text,@"contactnumber",email.text,@"contactmailid",address.text,@"contactaddress",base64String,@"contact_image",nil];
+        
+        NSLog(@"para--->%@",para);
+        
+        [ObjShared callWebServiceWith_DomainName:@"api_add_contact" postData:para];
+        
+    }
+    
+//    [AppDelegate showAlert:@"Required !!" withMessage:sub];
+    
 }
 -(IBAction)back:(id)sender
 {
@@ -130,12 +264,10 @@
     [self presentViewController:picker animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+
+-(void)base64Converter
 {
-    //    NSLog(@"info-->%@",info);
-    UIImage *chosenimage = info[UIImagePickerControllerOriginalImage];
     profileImg.image = chosenimage;
-    
     UIImage *image = chosenimage;
     UIImage *tempImage = nil;
     CGSize targetSize = CGSizeMake(200,200);
@@ -147,21 +279,19 @@
     thumbnailRect.size.height = targetSize.height;
     
     [image drawInRect:thumbnailRect];
-    
     tempImage = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
     chosenimage = tempImage;
     NSData *dataImage = [[NSData alloc] init];
     dataImage = UIImageJPEGRepresentation(chosenimage, 0);
-    //    NSLog(@"new size %lu", (unsigned long)[dataImage length]);
     base64String = [dataImage base64EncodedStringWithOptions:0];
-    //    NSLog(@"%@", base64String);
     
-    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
-    profileImg.clipsToBounds = YES;
-    
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    chosenimage = info[UIImagePickerControllerOriginalImage];
+    profileImg.image = chosenimage;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -211,14 +341,33 @@
     
     NSLog(@"address -----> %@",contact.addressString);
 
-    
-    
-    
-    
     NSLog(@"Number -----> %@",contact.phones[0]);
     NSLog(@"Name ------> %@",newString);
     
 }
+
+#pragma mark -W.S Delegate Call
+
+- (void) successfulResponseFromServer:(NSDictionary *)dict
+{
+    NSLog(@"dict--->%@",dict);
+    if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+  
+    }
+    else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
+    {
+        [AppDelegate showAlert:@"No Records" withMessage:[dict valueForKey:@"message"]];
+    }
+    else if (![[NSString stringWithFormat:@"%@",[dict objectForKey:@"Result"]] isEqualToString:@"(null)"]  || dict != nil)
+    {}
+}
+- (void)failResponseFromServer
+{
+    [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
 
 
 

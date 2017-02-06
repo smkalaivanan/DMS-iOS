@@ -10,8 +10,8 @@
 
 @interface EdituserViewController ()<UIPickerViewDelegate,UIPickerViewDataSource>
 {
-    NSArray *roles;
     NSString *rows;
+    NSMutableArray * newRoleArray;
 }
 @end
 
@@ -20,14 +20,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    roles=[[NSArray alloc]initWithObjects:@"Select role",@"Manager",@"Viewer",@"Editor",@"Owner", nil];
-    
     UIPickerView *picker = [[UIPickerView alloc] init];
     picker.dataSource = self;
     picker.delegate = self;
     picker.backgroundColor=[UIColor clearColor];
     role.inputView = picker;
+    newRoleArray = [[NSMutableArray alloc] init];
+    [newRoleArray addObject:@"Select role"];
+    [newRoleArray addObjectsFromArray:[[ObjShared.tagName valueForKey:@"User_role_list"]valueForKey:@"master_role_name"]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,7 +54,7 @@
 
 #pragma PickerView
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return roles.count;
+    return newRoleArray.count;
 }
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
@@ -62,12 +62,12 @@
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return roles[row];
+    return newRoleArray[row];
 }
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    role.text = roles[row];
+    role.text = newRoleArray[row];
     rows = [NSString stringWithFormat:@"%ld",(long)row];
     if (row == 0)
     {

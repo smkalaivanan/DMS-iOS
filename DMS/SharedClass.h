@@ -45,11 +45,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @property (nonatomic, retain) NSDictionary * searchPageDict;
 @property (nonatomic, retain) NSDictionary * applyFundingPageDict,*sellApplyFundingDict;
 @property (nonatomic, retain) NSDictionary * bidCaridDetail;
+@property (nonatomic, retain) NSDictionary * tagName;
 
 @property (nonatomic, retain) NSString * Cityname;
 @property (nonatomic, retain) NSString * siteName;
 @property (nonatomic, retain) NSString * stateId;
-
 
 @property (nonatomic,retain) NSArray *footerArray, *inventoryFooterArray, *manageFooterArray;
 @property (nonatomic,retain) NSArray *footerText, *inventoryFooterText,*manageFooterText;
@@ -57,9 +57,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @property (nonatomic,retain) NSMutableArray *array;
 @property (nonatomic,retain) NSMutableArray *branchArray;
+@property (nonatomic,retain) NSMutableArray *contactArray;
+
 
 
 @property (nonatomic) int editBranch;
+@property (nonatomic) int editContact;
+
 
 
 

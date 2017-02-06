@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MessageSideDrawerViewController : UIViewController<SharedDelegate>
-
+@property(nonatomic,retain)IBOutlet UITableView * messageTable;
 @end

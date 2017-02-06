@@ -15,12 +15,12 @@
     NSString * tableString;
     NSString * tableTime;
     UIImage * tableImage;
-    IBOutlet UITableView * messageTable;
     AppDelegate * appDelegate;
 }
 @end
 
 @implementation MessageSideDrawerViewController
+@synthesize messageTable;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,7 +32,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     //Shared
     ObjShared = nil;
     ObjShared = [SharedClass sharedInstance];
@@ -41,8 +40,19 @@
     tableString = @"successfully updated the password to database";
     tableTime = @"13 hours ago";
     tableImage = [UIImage imageNamed:@"message-icon-chat.png"];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    __weak typeof(self) weakSelf = self;
+    [messageTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.messageTable dg_stopLoading];
+        });
+    }
+    loadingView:loadingView];
+    [messageTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    [messageTable dg_setPullToRefreshBackgroundColor:messageTable.backgroundColor];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -64,7 +74,6 @@
         tableImage = [UIImage imageNamed:@"chat-icon-message"];
         [messageTable reloadData];
     }
-    
 }
 
 #pragma UITableView-Sample
@@ -81,18 +90,14 @@
     return 10;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * cellIdentifier = @"MessageSideDrawerTableViewCell";
-    
     MessageSideDrawerTableViewCell * messageSD =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
-    
     messageSD.selectionStyle = UITableViewCellSelectionStyleNone;
     messageSD.messageLabel.text = tableString;
     messageSD.timeStampLabel.text = tableTime;
     messageSD.imageHolder.image = tableImage;
-    
     return messageSD;
 }
 

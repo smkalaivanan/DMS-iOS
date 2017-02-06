@@ -14,9 +14,13 @@
 
 @implementation AddBranchesViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
+    
+    ObjShared.Cityname=@"Select City";
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -45,6 +49,7 @@
     save.layer.cornerRadius = 10;
     save.layer.masksToBounds = YES;
 }
+
 #pragma mark - Collection View delegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -147,6 +152,11 @@
         [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Phone Number"];
         
     }
+    else if (phone.text.length == 0 )
+    {
+        [AppDelegate showAlert:@"Error" withMessage:@"Please Enter the Phone Number"];
+        
+    }
     else if(ObjShared.editBranch ==0)
     {
         NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",@"addbranch",@"page_name",dealerName.text,@"dealer_name",phone.text,@"mobilenumber",address.text,@"branch_address",ObjShared.stateId,@"dealer_state",city.titleLabel.text,@"dealer_city",pincode.text,@"dealer_pincode",email.text,@"dealer_mail", nil];
@@ -164,6 +174,7 @@
 
 -(IBAction)city:(id)sender
 {
+    [city setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     SelectCityViewController *cityVC=[self.storyboard instantiateViewControllerWithIdentifier:@"SelectCityViewController"];
     [self presentViewController:cityVC animated:NO completion: nil];
 }
@@ -180,7 +191,6 @@
     if ([[dict valueForKey:@"Result"]isEqualToString:@"1"])
     {
         [self.navigationController popViewControllerAnimated:YES];
-
     }
     else if ([[dict valueForKey:@"Result"]isEqualToString:@"0"])
     {

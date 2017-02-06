@@ -9,13 +9,17 @@
 #import "profileViewController.h"
 #import "ChangePasswordViewController.h"
 #import "AppDelegate.h"
+#import "ProfileTableViewCell.h"
 
 @interface profileViewController ()
 {
     NSString *base64String;
     NSUserDefaults *defaults;
     AppDelegate *appDelegate;
+    ProfileTableViewCell * profileTableCell;
+    UIImage *chosenimage;
 }
+@property(nonatomic,retain)IBOutlet UITableView * proTable;
 @end
 
 @implementation profileViewController
@@ -24,7 +28,6 @@
     [super viewDidLoad];
     defaults  = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    save.hidden=YES;
     ObjShared.manageFooterArray = [[NSArray alloc] initWithObjects:@"profile-blue.png",
                    @"branches-blue.png",
                    @"contact-blue.png",
@@ -37,11 +40,10 @@
                                   @"Users",
                                   @"Subscription",nil];
     
-    email.userInteractionEnabled = NO;
-    profileName.userInteractionEnabled = NO;
-    passoword.userInteractionEnabled = NO;
-    phone.userInteractionEnabled = NO;
-    imgPicker.hidden = YES;
+    profileTableCell.email.userInteractionEnabled = NO;
+    profileTableCell.profileName.userInteractionEnabled = NO;
+    profileTableCell.passoword.userInteractionEnabled = NO;
+    profileTableCell.phone.userInteractionEnabled = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -53,16 +55,22 @@
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
     
-    //asigning data from delegate
-    [profileImg setImageWithURL:[NSURL URLWithString:[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.jpg"]];
-    profileName.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_name"];
-    email.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_email"];
-    phone.text=[[defaults valueForKey:@"login_dict"]valueForKey:@"dealer_mobile"];
+    profileTableCell.save.layer.cornerRadius = 10;
+    profileTableCell.save.layer.masksToBounds = YES;
     
-    save.layer.cornerRadius = 10;
-    save.layer.masksToBounds = YES;
-    profileImg.layer.cornerRadius = profileImg.frame.size.width / 2;
-    profileImg.clipsToBounds = YES;
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    __weak typeof(self) weakSelf = self;
+    [_proTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_proTable reloadData];
+            profileTableCell.edit.hidden=NO;
+            [weakSelf.proTable dg_stopLoading];
+        });
+    }
+    loadingView:loadingView];
+    [_proTable dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
+    [_proTable dg_setPullToRefreshBackgroundColor:_proTable.backgroundColor];
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,39 +145,9 @@
 {
     return ObjShared.collectionZ;
 }
-
--(IBAction)save:(id)sender
+-(void)base64Converter
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",profileName.text,@"delaer_name",phone.text,@"mobile_number",base64String,@"profile_image", nil];
-    [ObjShared callWebServiceWith_DomainName:@"edit_account" postData:para];
-}
--(IBAction)edit:(id)sender
-{
-    edit.hidden=YES;
-    save.hidden=NO;
-    imgPicker.hidden=NO;
-    profileName.userInteractionEnabled=YES;
-    phone.userInteractionEnabled=YES;
-}
-
--(IBAction)sidemMenu:(id)sender
-{
-    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
-}
-
-- (IBAction)pic:(id)sender
-{
-    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
-    picker.delegate=self;
-    picker.allowsEditing= NO;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self presentViewController:picker animated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *chosenimage = info[UIImagePickerControllerOriginalImage];
-    profileImg.image = chosenimage;
+    profileTableCell.profileImg.image = chosenimage;
     UIImage *image = chosenimage;
     UIImage *tempImage = nil;
     CGSize targetSize = CGSizeMake(200,200);
@@ -187,14 +165,94 @@
     NSData *dataImage = [[NSData alloc] init];
     dataImage = UIImageJPEGRepresentation(chosenimage, 0);
     base64String = [dataImage base64EncodedStringWithOptions:0];
+
+}
+-(void)save:(UIButton *)sender
+{
+    [self base64Converter];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",profileTableCell.profileName.text,@"delaer_name",profileTableCell.phone.text,@"mobile_number",base64String,@"profile_image",@"updateprofile",@"page_name", nil];
+    [ObjShared callWebServiceWith_DomainName:@"edit_account" postData:para];
+    
+    NSLog(@"para ----> %@",para);
+}
+-(void)edit:(UIButton *)sender
+{
+    profileTableCell.edit.hidden=YES;
+    profileTableCell.save.hidden=NO;
+    profileTableCell.imgPicker.hidden=NO;
+    profileTableCell.profileName.userInteractionEnabled=YES;
+    profileTableCell.phone.userInteractionEnabled=YES;
+}
+
+-(IBAction)sidemMenu:(id)sender
+{
+    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+}
+
+- (void)pic:(UIButton *)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate=self;
+    picker.allowsEditing= NO;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    chosenimage = info[UIImagePickerControllerOriginalImage];
+    profileTableCell.profileImg.image = chosenimage;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
--(IBAction)changePassword:(id)sender
+-(void)changePassword:(UIButton *)sender
 {
     ChangePasswordViewController *changeVC=[self.storyboard instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
     [SharedClass NavigateTo:changeVC inNavigationViewController:appDelegate.navigationController animated:YES];
 }
+#pragma UITableView-Sample
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * cellIdentifier = @"ProfileTableViewCell";
+    
+    profileTableCell =[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath ];
+    profileTableCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [profileTableCell.save addTarget:self
+                         action:@selector(save:) forControlEvents:UIControlEventTouchUpInside];
+    [profileTableCell.imgPicker addTarget:self
+                              action:@selector(pic:) forControlEvents:UIControlEventTouchUpInside];
+    [profileTableCell.chgPassword addTarget:self
+                                   action:@selector(changePassword:) forControlEvents:UIControlEventTouchUpInside];
+    [profileTableCell.edit addTarget:self
+                                     action:@selector(edit:) forControlEvents:UIControlEventTouchUpInside];
+    profileTableCell.save.hidden = YES;
+    profileTableCell.imgPicker.hidden = YES;
+    
+    //asigning data from delegate
+    profileTableCell.profileImg.layer.cornerRadius = profileTableCell.profileImg.frame.size.width / 2;
+    profileTableCell.profileImg.layer.masksToBounds = YES;
+    [profileTableCell.profileImg setImageWithURL:[NSURL URLWithString:[ObjShared.LoginDict valueForKey:@"dealer_img"]] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    profileTableCell.profileName.text=[ObjShared.LoginDict valueForKey:@"dealer_name"];
+    profileTableCell.email.text=[ObjShared.LoginDict valueForKey:@"dealer_email"];
+    profileTableCell.phone.text=[ObjShared.LoginDict valueForKey:@"dealer_mobile"];
+    
+    return profileTableCell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return _proTable.frame.size.height-5;
+}
+
 #pragma mark -W.S Delegate Call
 
 - (void) successfulResponseFromServer:(NSDictionary *)dict
@@ -202,11 +260,19 @@
     NSLog(@"dict--->%@",dict);
     if ([[dict objectForKey:@"Result"]isEqualToString:@"1"])
     {
-        edit.hidden=NO;
-        save.hidden=YES;
-        imgPicker.hidden=YES;
-        profileName.userInteractionEnabled=NO;
-        phone.userInteractionEnabled=NO;
+        profileTableCell.edit.hidden=NO;
+        profileTableCell.save.hidden=YES;
+        profileTableCell.imgPicker.hidden=YES;
+        profileTableCell.profileName.userInteractionEnabled=NO;
+        profileTableCell.phone.userInteractionEnabled=NO;
+        
+        ObjShared.LoginDict=dict;
+        NSLog(@"login page--->%@",ObjShared.LoginDict);
+        defaults  = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:ObjShared.LoginDict forKey:@"login_dict"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateProfile" object: nil];
+        
+        [_proTable reloadData];
     }
     else if ([[dict objectForKey:@"Result"]isEqualToString:@"0"])
     {
@@ -218,6 +284,19 @@
 - (void)failResponseFromServer
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
+}
+
+- (IBAction)takePhoto:(id)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    picker.showsCameraControls = NO;
+    [self presentViewController:picker animated:YES
+                     completion:^ {
+                         [picker takePicture];
+                     }];
 }
 
 @end

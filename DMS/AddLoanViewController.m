@@ -60,7 +60,7 @@
 
 -(void)callMakeid
 {
-    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",userNameField.text,@"customer_name",userContactField.text,@"customer_mobile",userEmailField.text,@"customer_emailid",userPanField.text,@"customer_pan",userAmountField.text,@"customer_amount",@"applyloanpage",@"page_name", nil];
+    NSMutableDictionary *para = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[ObjShared.LoginDict valueForKey:@"user_id"],@"session_user_id",userNameField.text,@"customer_name",userContactField.text,@"customer_mobile",userEmailField.text,@"customer_emailid",userPanField.text,@"customer_pan",userAmountField.text,@"amount",@"applyloanpage",@"page_name", nil];
     [ObjShared callWebServiceWith_DomainName:@"add_inventoryloan" postData:para];
 }
 
@@ -134,10 +134,63 @@
 
 -(IBAction)submitButton:(id)sender
 {
-    NSLog(@"The key is tapped");
-    [self callMakeid];
+    if (userNameField.text.length == 0 || userNameField.text.length < 25)
+    {
+        [AppDelegate showAlert:@"Alert" withMessage:@"Invalid user name"];
+    }
+    else if (![self validatePhone:[NSString stringWithFormat:@"+%@",userContactField.text]] || userContactField.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Alert" withMessage:@"Invalid contact number"];
+    }
+    else if (![self isValidEmail:userEmailField.text] || userEmailField.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Alert" withMessage:@"Invalid email"];
+    }
+    else if (![self validatePanCardNumber:userPanField.text])
+    {
+        [AppDelegate showAlert:@"Alert" withMessage:@"Invalid PAN number"];
+    }
+    else if (userAmountField.text.length == 0)
+    {
+        [AppDelegate showAlert:@"Alert" withMessage:@"Invalid amount"];
+    }
+    else
+    {
+        [self callMakeid];
+    }
+}
+//PAN validation
+- (BOOL) validatePanCardNumber: (NSString *) cardNumber {
+    NSString *emailRegex = @"^[A-Z]{5}[0-9]{4}[A-Z]$";
+    NSPredicate *cardTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [cardTest evaluateWithObject:cardNumber];
 }
 
+//PhoneNUmber Validation
+- (BOOL)validatePhone:(NSString *)phoneNumber
+{
+    NSString *phoneRegex = @"^((\\+)|(00))[0-9]{10}$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
+    return [phoneTest evaluateWithObject:phoneNumber];
+}
+
+//Email Validation
+-(BOOL)isValidEmail:(NSString *)email
+{
+    BOOL stricterFilter = NO;
+    NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+    NSString *laxString = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:email];
+}
+
+#pragma mark -textfield delegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
 #pragma mark -W.S Delegate Call
 
 - (void) successfulResponseFromServer:(NSDictionary *)dict

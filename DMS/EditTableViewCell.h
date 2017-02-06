@@ -16,6 +16,9 @@
 @property(nonatomic,retain) IBOutlet UILabel *mobile;
 @property(nonatomic,retain) IBOutlet UILabel *email;
 @property(nonatomic,retain) IBOutlet UILabel *place;
+@property(nonatomic,retain) IBOutlet UIImageView *userImg;
+
+
 
 
 @end
