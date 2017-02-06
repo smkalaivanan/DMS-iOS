@@ -62,12 +62,88 @@
         [container setRightMenuViewController:rightSideMenuViewController];
     [container setCenterViewController:navigationController];
     
-    return YES;
+    /* Initialize Hotline*/
+    
+    HotlineConfig *config = [[HotlineConfig alloc]initWithAppID:@"76d60240-e80b-40ec-8f59-e27c29a2c9e8"  andAppKey:@"d5fe0c9e-13d9-472c-87eb-2ea909047520"];
+    
+    [[Hotline sharedInstance] initWithConfig:config];
+    
+    // Setup user info
+    HotlineUser *user = [HotlineUser sharedInstance];
+    user.name = @"John Doe";
+    user.email = @"john@example.com";
+    user.phoneCountryCode = @"+91";
+    user.phoneNumber = @"1232343231";
+    
+    [[Hotline sharedInstance] updateUser:user];
+    
+    //Update user properties with custom key
+    [[Hotline sharedInstance] updateUserProperties:@{
+                                                     @"paid_user" : @"yes",
+                                                     @"plan" : @"blossom" }];
+    
+    NSLog(@"Unread messages count :%d", (int)[[Hotline sharedInstance]unreadCount]);
+    
+    //Check unread messages for the user
+    [[Hotline sharedInstance]unreadCountWithCompletion:^(NSInteger count) {
+        NSLog(@"Unread count (Async) : %d", (int)count);
+    }];
 
+    
+    /* Enable remote notifications */
+    
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        UIUserNotificationSettings *settings =
+        [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
+    }
+    else{
+        
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        
+    }
+    
+    [self.window makeKeyAndVisible]; // or similar code to set a visible view
+    
+    /*  Set your view before the following snippet executes */
+    
+    /* Handle remote notifications */
+    if ([[Hotline sharedInstance]isHotlineNotification:launchOptions]) {
+        [[Hotline sharedInstance]handleRemoteNotification:launchOptions
+                                              andAppstate:application.applicationState];
+    }
+    
+    /* Any other code to be executed on app launch */
+    
+    /* Reset badge app count if so desired */
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:(int)[[Hotline sharedInstance]unreadCount]];
+    
+    return YES;
 }
 
 
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    /* Reset badge app count if so desired */
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+}
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSLog(@"token --- %@",deviceToken);
+    [[Hotline sharedInstance] updateDeviceToken:deviceToken];
+}
+
+- (void) application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)info{
+    if ([[Hotline sharedInstance]isHotlineNotification:info])
+    {
+        [[Hotline sharedInstance]handleRemoteNotification:info andAppstate:app.applicationState];
+    }
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:(int)[[Hotline sharedInstance]unreadCount]];
+
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -75,6 +151,9 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:(int)[[Hotline sharedInstance]unreadCount]];
+
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -82,11 +161,6 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-}
-
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 

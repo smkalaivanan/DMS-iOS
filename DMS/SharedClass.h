@@ -17,6 +17,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "UIImageView+AFNetworking.h"
 #import "SWTableViewCell.h"
 #import "DGElasticPullToRefresh.h"
+#import "HotlineSDK/Hotline.h"
 
 @protocol  SharedDelegate <NSObject>
 

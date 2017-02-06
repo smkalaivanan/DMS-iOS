@@ -68,6 +68,12 @@
 {
     [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
 }
+- (IBAction)showFeedbackOverlay:(id)sender {
+    [[Hotline sharedInstance] showFAQs:self];
+}
 
+- (IBAction)showFeedbackOverlay1:(id)sender {
+    [[Hotline sharedInstance] showConversations:self];
+}
 
 @end

@@ -45,7 +45,6 @@
                       range:NSMakeRange(butString.length - 7,7)];
     [signinPressed setAttributedTitle:butString
                       forState:UIControlStateNormal];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -60,19 +59,15 @@
     
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
-    
     __weak typeof(self) weakSelf = self;
-    
     [registerTableview dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [registerTableview reloadData];
             [weakSelf.registerTableview dg_stopLoading];
         });
     }
-                                          loadingView:loadingView];
-    
+    loadingView:loadingView];
     [registerTableview dg_setPullToRefreshFillColor:UIColorFromRGB(0X173E84)];
-    
     [registerTableview dg_setPullToRefreshBackgroundColor:registerTableview.backgroundColor];
     
 }
