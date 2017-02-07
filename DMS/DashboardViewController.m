@@ -505,6 +505,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return YES;
 }
-
-
+-(IBAction)hornSound:(id)sender
+{
+    SystemSoundID soundID;
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"horn" ofType:@"mp3"];
+    NSURL *soundUrl = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID ((CFURLRef) CFBridgingRetain(soundUrl) , &soundID);
+    AudioServicesPlaySystemSound(soundID);
+}
 @end

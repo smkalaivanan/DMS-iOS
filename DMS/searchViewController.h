@@ -10,8 +10,6 @@
 #import "SearchTableViewCell.h"
 #import "headerTableViewCell.h"
 #import "DashboardCollectionViewCell.h"
-#import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
 #import "AHKActionSheet.h"
 
 @interface searchViewController : UIViewController<SharedDelegate>

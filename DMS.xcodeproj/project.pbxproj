@@ -29,6 +29,7 @@
 		188F330F1E3B82A900BB2B9D /* DGElasticPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188F330A1E3B82A900BB2B9D /* DGElasticPullToRefreshView.m */; };
 		18A746C91E388D4C00DB2337 /* no-internet-connection.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A746C81E388D4C00DB2337 /* no-internet-connection.png */; };
 		18A746CC1E388EEE00DB2337 /* NoInternetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A746CB1E388EEE00DB2337 /* NoInternetViewController.m */; };
+		18BBCC8D1E499A6F00ED5119 /* horn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 18BBCC8C1E499A6F00ED5119 /* horn.mp3 */; };
 		18F12B7E1E41F6D200897F69 /* registrationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F12B7D1E41F6D200897F69 /* registrationTableViewCell.m */; };
 		18F7D8B41E48494500001981 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F7D8B31E48494500001981 /* Foundation.framework */; };
 		18F7D8B61E484DD000001981 /* libFDHotlineSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F7D8B51E484DD000001981 /* libFDHotlineSDK.a */; };
@@ -352,6 +353,7 @@
 		18A746C81E388D4C00DB2337 /* no-internet-connection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-internet-connection.png"; sourceTree = "<group>"; };
 		18A746CA1E388EEE00DB2337 /* NoInternetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoInternetViewController.h; sourceTree = "<group>"; };
 		18A746CB1E388EEE00DB2337 /* NoInternetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoInternetViewController.m; sourceTree = "<group>"; };
+		18BBCC8C1E499A6F00ED5119 /* horn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = horn.mp3; sourceTree = "<group>"; };
 		18F12B7C1E41F6D200897F69 /* registrationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registrationTableViewCell.h; sourceTree = "<group>"; };
 		18F12B7D1E41F6D200897F69 /* registrationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = registrationTableViewCell.m; sourceTree = "<group>"; };
 		18F7D8B31E48494500001981 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -870,6 +872,15 @@
 			name = Filter;
 			sourceTree = "<group>";
 		};
+		18BBCC8E1E499A7400ED5119 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				FAAB88651DE56F96007553F2 /* beep.mp3 */,
+				18BBCC8C1E499A6F00ED5119 /* horn.mp3 */,
+			);
+			name = Sound;
+			sourceTree = "<group>";
+		};
 		18D967441E44662F00E444AB /* FiltersTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -885,7 +896,6 @@
 				452431721DF7E8E9003A056C /* alert.png */,
 				181E76761E2F6EFE00DDFE96 /* alert-red.png */,
 				452431701DF7E8BE003A056C /* compare.png */,
-				FAAB88651DE56F96007553F2 /* beep.mp3 */,
 				45651D651DE562420082262A /* details.png */,
 				4502152A1DE45CC9000356EE /* like-white.png */,
 				450215281DE45CC1000356EE /* like-red.png */,
@@ -1463,6 +1473,7 @@
 		45CD13241DDB3C850094BC71 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				18BBCC8E1E499A7400ED5119 /* Sound */,
 				FAFFDECC1E3B58C100B26741 /* Manage Footer icon */,
 				FAA88F6E1E1D009200DC752C /* sell footer icon */,
 				453687EF1E12B8D000144F5E /* New Icon set */,
@@ -2086,6 +2097,7 @@
 				TargetAttributes = {
 					45DC235E1DD9BF7400BCE1BF = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = STQBEF7U48;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -2224,6 +2236,7 @@
 				45BA1C241DDC345400FE74E5 /* user.png in Resources */,
 				459527131DFAC03E0050E52B /* cityImage.png in Resources */,
 				18651CAE1E30E488007326C2 /* add-icon.png in Resources */,
+				18BBCC8D1E499A6F00ED5119 /* horn.mp3 in Resources */,
 				45BA1C221DDC344C00FE74E5 /* password.png in Resources */,
 				FADE7CED1DFBFD2100528B36 /* Manage.png in Resources */,
 				4556C0261E03F25B0024D349 /* Kolkata.png in Resources */,
@@ -2718,7 +2731,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = DMS/DMS.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = STQBEF7U48;
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -2731,7 +2744,7 @@
 					"$(PROJECT_DIR)/Pods/HotlineSDK/HotlineSDK",
 				);
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.falconnect.dms;
+				PRODUCT_BUNDLE_IDENTIFIER = com.falconnect.dmstest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2744,7 +2757,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = DMS/DMS.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = STQBEF7U48;
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -2757,7 +2770,7 @@
 					"$(PROJECT_DIR)/Pods/HotlineSDK/HotlineSDK",
 				);
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.falconnect.dms;
+				PRODUCT_BUNDLE_IDENTIFIER = com.falconnect.dmstest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

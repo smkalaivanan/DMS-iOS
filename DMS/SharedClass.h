@@ -18,6 +18,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #import "SWTableViewCell.h"
 #import "DGElasticPullToRefresh.h"
 #import "HotlineSDK/Hotline.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 @protocol  SharedDelegate <NSObject>
 
