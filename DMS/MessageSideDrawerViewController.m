@@ -111,4 +111,9 @@
     return YES;
 }
 
+-(void)dealloc
+{
+    [messageTable dg_removePullToRefresh];
+}
+
 @end
