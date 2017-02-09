@@ -32,9 +32,15 @@
     [super tearDown];
 }
 
+
 - (void)testExample {
     // Use recording to get started writing UI tests.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"Sign In"] tap];
+    [app.textFields[@"Username / Email ID"] tap];
 }
 
 @end

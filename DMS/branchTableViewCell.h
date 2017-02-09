@@ -11,7 +11,6 @@
 @interface branchTableViewCell : SWTableViewCell
 
 @property(nonatomic,retain) IBOutlet UILabel *dealerName;
-@property(nonatomic,retain) IBOutlet UILabel *dealerShipName;
 @property(nonatomic,retain) IBOutlet UILabel *address;
 @property(nonatomic,retain) IBOutlet UILabel *mobile;
 @property(nonatomic,retain) IBOutlet UILabel *email;

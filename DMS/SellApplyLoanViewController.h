@@ -12,6 +12,5 @@
 
 @property(nonatomic,retain) IBOutlet UITableView * sellApplyTabel;
 -(IBAction)AddButton:(id)sender;
--(IBAction)revokeAddFundings:(id)sender;
 
 @end

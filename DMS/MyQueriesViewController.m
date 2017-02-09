@@ -221,4 +221,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
+
+-(void)dealloc
+{
+    [queriesTable dg_removePullToRefresh];
+}
+
+
+
 @end

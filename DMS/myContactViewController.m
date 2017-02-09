@@ -300,5 +300,11 @@
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
+-(void)dealloc
+{
+    [contactTable dg_removePullToRefresh];
+}
+
+
 
 @end

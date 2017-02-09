@@ -38,9 +38,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(UpdateProfile) name:@"UpdateProfile"  object:nil];
     
-    menu=[[NSArray alloc]initWithObjects:@"Home",@"Buy",@"Sell",@"Manage",@"Communication",@"Report",@"Contact",@"Logout", nil];
+    menu=[[NSArray alloc]initWithObjects:@"Home",@"Buy",@"Sell",@"Manage",@"Communication",@"Report",@"Contact",@"FAQ",@"Chat",@"Logout", nil];
     
-    menuImg=[[NSArray alloc]initWithObjects:@"home.png",@"sell.png",@"Buy.png",@"Manage.png",@"communication.png",@"report.png",@"MenuContact.png",@"logout.png", nil];
+    menuImg=[[NSArray alloc]initWithObjects:@"home.png",@"sell.png",@"Buy.png",@"Manage.png",@"communication.png",@"report.png",@"MenuContact.png",@"MenuContact.png",@"MenuContact.png",@"logout.png", nil];
     
     // Do any additional setup after loading the view.
 }
@@ -53,7 +53,6 @@
     ObjShared = [SharedClass sharedInstance];
     ObjShared.sharedDelegate = nil;
     ObjShared.sharedDelegate = (id)self;
-    
 }
 
 #pragma mark -Update Profile
@@ -103,44 +102,45 @@
     NSLog(@"indexpath-->%ld",(long)indexPath.row);
     if (indexPath.row == 0)
     {
-        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
         LandingViewController *landingVC=[self.storyboard instantiateViewControllerWithIdentifier:@"LandingViewController"];
         [SharedClass NavigateTo:landingVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 1)
     {
-        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
         DashboardViewController *dashVC=[self.storyboard instantiateViewControllerWithIdentifier:@"DashboardViewController"];
         [SharedClass NavigateTo:dashVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 2)
     {
-        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
         InventoryViewController *inventVC=[self.storyboard instantiateViewControllerWithIdentifier:@"InventoryViewController"];
         [SharedClass NavigateTo:inventVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
     else if (indexPath.row == 3)
     {
-        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
         
         profileViewController *profileVC=[self.storyboard instantiateViewControllerWithIdentifier:@"profileViewController"];
         [SharedClass NavigateTo:profileVC inNavigationViewController:appDelegate.navigationController animated:false];
     }
-    else if (indexPath.row == 4)
+    else if (indexPath.row == 7)
     {
-        [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
-
-        CompareViewController *compareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"CompareViewController"];
-        [SharedClass NavigateTo:compareVC inNavigationViewController:appDelegate.navigationController animated:false];
+//
+//        CompareViewController *compareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"CompareViewController"];
+//        [SharedClass NavigateTo:compareVC inNavigationViewController:appDelegate.navigationController animated:false];
+        [[Hotline sharedInstance] showFAQs:self];
+    }
+    else if (indexPath.row == 8)
+    {
+        [[Hotline sharedInstance] showConversations:self];
     }
     else
     {
-    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
     }
-    
+   
+    [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -249,4 +249,11 @@
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
+
+
+-(void)dealloc
+{
+    [self.branchTable dg_removePullToRefresh];
+}
+
 @end

@@ -202,5 +202,9 @@
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
+-(void)dealloc
+{
+    [sellPostingtable dg_removePullToRefresh];
+}
 
 @end

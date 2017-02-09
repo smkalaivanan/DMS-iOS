@@ -36,7 +36,7 @@
     
     ObjShared.manageFooterText = [[NSArray alloc] initWithObjects:@"Profile",
                                   @"Branches",
-                                  @"Contact",
+                                  @"Contacts",
                                   @"Users",
                                   @"Subscription",nil];
     
@@ -147,7 +147,6 @@
 }
 -(void)base64Converter
 {
-    profileTableCell.profileImg.image = chosenimage;
     UIImage *image = chosenimage;
     UIImage *tempImage = nil;
     CGSize targetSize = CGSizeMake(200,200);
@@ -167,6 +166,7 @@
     base64String = [dataImage base64EncodedStringWithOptions:0];
 
 }
+
 -(void)save:(UIButton *)sender
 {
     [self base64Converter];
@@ -175,6 +175,7 @@
     
     NSLog(@"para ----> %@",para);
 }
+
 -(void)edit:(UIButton *)sender
 {
     profileTableCell.edit.hidden=YES;
@@ -298,5 +299,11 @@
                          [picker takePicture];
                      }];
 }
+
+-(void)dealloc
+{
+    [self.proTable dg_removePullToRefresh];
+}
+
 
 @end

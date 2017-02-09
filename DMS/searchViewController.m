@@ -61,8 +61,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     footerText = [[NSArray alloc] initWithObjects:@"Search",
                   @"Saved Cars",
-                  @"My Queries",
-                  @"Bids Posted",
+                  @"Queries",
+                  @"Bids",
                   @"Funding",nil];
     
     tags = [search_Dict valueForKey:@"top_note"];
@@ -266,7 +266,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else
     {
-        [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-White.png"] forState:UIControlStateNormal];
+        [searchCell.heart setBackgroundImage:[UIImage imageNamed:@"like-white.png"] forState:UIControlStateNormal];
 //        NSLog(@"liky:%@",like);
     }
     
@@ -621,4 +621,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                 [self callingapi];                            }];
     [actionSheet show];
 }
+
+
+-(void)dealloc
+{
+    [searchTable dg_removePullToRefresh];
+}
+
 @end

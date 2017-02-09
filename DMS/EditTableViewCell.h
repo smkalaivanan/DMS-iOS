@@ -18,7 +18,4 @@
 @property(nonatomic,retain) IBOutlet UILabel *place;
 @property(nonatomic,retain) IBOutlet UIImageView *userImg;
 
-
-
-
 @end

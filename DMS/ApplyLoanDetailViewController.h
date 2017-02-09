@@ -14,6 +14,5 @@
     IBOutlet UILabel * statusLabel;
     IBOutlet UITableView * detailFundingTable;
     IBOutlet UIButton * revokeButton;
-    IBOutlet UIButton * redLabel;
 }
 @end

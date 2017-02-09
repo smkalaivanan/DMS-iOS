@@ -152,6 +152,10 @@
 {
     return ObjShared.collectionZ;
 }
+-(void)dealloc
+{
+    [autionTable dg_removePullToRefresh];
+}
 
 
 

@@ -194,4 +194,10 @@
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
 
+-(void)dealloc
+{
+    [sellQueriesTable dg_removePullToRefresh];
+}
+
+
 @end

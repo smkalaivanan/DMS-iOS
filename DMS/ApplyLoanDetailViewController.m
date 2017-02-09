@@ -61,12 +61,12 @@
     if ([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"COMPLETED"])
     {
         statusLabel.textColor = [UIColor greenColor];
-        redLabel.hidden = YES;
+        revokeButton.hidden = YES;
     }
     else if ([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"REVOKE"] || [[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"DISMISS"])
     {
         statusLabel.textColor = [UIColor redColor];
-        redLabel.hidden = YES;
+        revokeButton.hidden = YES;
     }
     else if([[ObjShared.sellApplyFundingDict valueForKey:@"status"] isEqualToString:@"INPROGRESS"])
     {

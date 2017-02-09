@@ -200,4 +200,10 @@
     return ObjShared.collectionZ;
 }
 
+-(void)dealloc
+{
+    [inventoryTable dg_removePullToRefresh];
+}
+
+
 @end

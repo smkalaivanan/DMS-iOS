@@ -191,10 +191,7 @@
     [[self navigationController] pushViewController:addLoanVC animated:NO];
     
 }
--(IBAction)revokeAddFundings:(id)sender
-{
-    NSLog(@"revoke");
-}
+
 #pragma mark -W.S Delegate Call
 
 - (void) successfulResponseFromServer:(NSDictionary *)dict
@@ -219,4 +216,10 @@
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
+
+-(void)dealloc
+{
+    [sellApplyTabel dg_removePullToRefresh];
+}
+
 @end

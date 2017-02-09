@@ -285,7 +285,6 @@
     NSData *dataImage = [[NSData alloc] init];
     dataImage = UIImageJPEGRepresentation(chosenimage, 0);
     base64String = [dataImage base64EncodedStringWithOptions:0];
-    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

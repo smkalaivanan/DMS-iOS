@@ -12,7 +12,6 @@
 @interface DashboardViewController : UIViewController<SharedDelegate>
 {
     NSArray * type;
-    NSArray * vehicleType;
     IBOutlet UIButton * showWithMultipleSelection;
     IBOutlet UIButton * showWithoutFooter;
     IBOutlet UIButton * showBudget;

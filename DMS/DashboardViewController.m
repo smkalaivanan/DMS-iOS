@@ -58,19 +58,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     ObjShared.footerText = [[NSArray alloc] initWithObjects:@"Search",
                             @"Saved Cars",
-                            @"My Queries",
-                            @"Bids Posted",
+                            @"Queries",
+                            @"Bids",
                             @"Funding",
                             nil];
     
-    vehicleType =[[NSArray alloc] initWithObjects:
-                  @"Sedan",
-                  @"Coupe",
-                  @"Hatchback",
-                  @"Minivan",
-                  @"SUV",
-                  @"Wagon", nil];
-    
+        
     ObjShared.Cityname=@"Select City";
     ObjShared.siteName=@"Select sites";
 }

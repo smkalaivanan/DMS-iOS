@@ -23,12 +23,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
     ObjShared = [SharedClass sharedInstance];
-    
-
-
     keyArray = [[NSArray alloc] initWithObjects:
                 @"Car Sites",
                 @"Listing Type",
@@ -40,8 +35,6 @@
                 @"Budget",
                 @"Body Type",
                 nil];
-    
-    
     [self callMethod];
     
     // Do any additional setup after loading the view.

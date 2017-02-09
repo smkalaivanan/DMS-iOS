@@ -281,4 +281,10 @@
 {
     [AppDelegate showAlert:@"Error" withMessage:@"Check Your Internet Connection"];
 }
+
+-(void)dealloc
+{
+    [userTableView dg_removePullToRefresh];
+}
+
 @end
